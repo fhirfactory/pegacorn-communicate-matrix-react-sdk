@@ -36,6 +36,7 @@ import EventTilePreview from '../../../elements/EventTilePreview';
 import StyledRadioGroup from "../../../elements/StyledRadioGroup";
 import classNames from 'classnames';
 import { SettingLevel } from "../../../../../settings/SettingLevel";
+import { settingsPaneSettings } from "../../../../../static_config/config.js";
 
 interface IProps {
 }
@@ -401,13 +402,17 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 "Set the name of a font installed on your system & %(brand)s will attempt to use it.",
                 { brand },
             );
-            advanced = <>
-                <SettingsFlag
+            let compactLayout;
+            if (!settingsPaneSettings.appearance.move_compact_layout_out_of_advanced) {
+                compactLayout = <SettingsFlag
                     name="useCompactLayout"
                     level={SettingLevel.DEVICE}
                     useCheckbox={true}
                     disabled={this.state.useIRCLayout}
-                />
+                />;
+            }
+            advanced = <>
+                {compactLayout}
                 <SettingsFlag
                     name="useIRCLayout"
                     level={SettingLevel.DEVICE}
@@ -445,16 +450,37 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
     render() {
         const brand = SdkConfig.get().brand;
-
+        let fontSettings;
+        if (!settingsPaneSettings.appearance.disable_font_scaling_settings) {
+            fontSettings = this.renderFontSection();
+        }
+        let themeSettings;
+        if (!settingsPaneSettings.appearance.disable_theme_settings) {
+            themeSettings = this.renderThemeSection();
+        }
+        let compactLayout;
+        if (settingsPaneSettings.appearance.move_compact_layout_out_of_advanced) {
+            compactLayout = <SettingsFlag
+                name="useCompactLayout"
+                level={SettingLevel.DEVICE}
+                useCheckbox={true}
+                disabled={this.state.useIRCLayout}
+            />;
+        }
+        let advancedSettings;
+        if (!settingsPaneSettings.appearance.disable_advanced_settings) {
+            advancedSettings = this.renderAdvancedSection();
+        }
         return (
             <div className="mx_SettingsTab mx_AppearanceUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Customise your appearance")}</div>
                 <div className="mx_SettingsTab_SubHeading">
                     {_t("Appearance Settings only affect this %(brand)s session.", { brand })}
                 </div>
-                {this.renderThemeSection()}
-                {this.renderFontSection()}
-                {this.renderAdvancedSection()}
+                {themeSettings}
+                {fontSettings}
+                {compactLayout}
+                {advancedSettings}
             </div>
         );
     }

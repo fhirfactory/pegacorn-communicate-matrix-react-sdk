@@ -45,6 +45,7 @@ import EncryptionPanel from "./EncryptionPanel";
 import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
 import { verifyUser, legacyVerifyUser, verifyDevice } from '../../../verification';
 import {Action} from "../../../dispatcher/actions";
+import {settingsPaneSettings} from "../../../static_config/config.js";
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -1342,7 +1343,7 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
         }
     }
 
-    const securitySection = (
+    const securitySection = (!settingsPaneSettings.security.disable_session_editing) && (
         <div className="mx_UserInfo_container">
             <h3>{ _t("Security") }</h3>
             <p>{ text }</p>

@@ -29,6 +29,7 @@ import {sleep} from "../../../../../utils/promise";
 import dis from "../../../../../dispatcher/dispatcher";
 import {privateShouldBeEncrypted} from "../../../../../createRoom";
 import {SettingLevel} from "../../../../../settings/SettingLevel";
+import {settingsPaneSettings} from "../../../../../static_config/config.js";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
@@ -191,6 +192,10 @@ export default class SecurityUserSettingsTab extends React.Component {
     };
 
     _renderCurrentDeviceInfo() {
+        if (settingsPaneSettings.security.disable_crypto_menu) {
+            return;
+        }
+
         const SettingsFlag = sdk.getComponent('views.elements.SettingsFlag');
 
         const client = MatrixClientPeg.get();
@@ -289,7 +294,7 @@ export default class SecurityUserSettingsTab extends React.Component {
         const EventIndexPanel = sdk.getComponent('views.settings.EventIndexPanel');
 
         const KeyBackupPanel = sdk.getComponent('views.settings.KeyBackupPanel');
-        const keyBackup = (
+        let keyBackup = (
             <div className='mx_SettingsTab_section'>
                 <span className="mx_SettingsTab_subheading">{_t("Key backup")}</span>
                 <div className='mx_SettingsTab_subsectionText'>
@@ -297,20 +302,26 @@ export default class SecurityUserSettingsTab extends React.Component {
                 </div>
             </div>
         );
+        if (settingsPaneSettings.security.disable_key_backup_menu) {
+            keyBackup = null;
+        }
 
-        const eventIndex = (
+        let eventIndex = (
             <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{_t("Message search")}</span>
                 <EventIndexPanel />
             </div>
         );
+        if (settingsPaneSettings.security.disable_indexing_menu) {
+            eventIndex = null;
+        }
 
         // XXX: There's no such panel in the current cross-signing designs, but
         // it's useful to have for testing the feature. If there's no interest
         // in having advanced details here once all flows are implemented, we
         // can remove this.
         const CrossSigningPanel = sdk.getComponent('views.settings.CrossSigningPanel');
-        const crossSigning = (
+        let crossSigning = (
                 <div className='mx_SettingsTab_section'>
                     <span className="mx_SettingsTab_subheading">{_t("Cross-signing")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
@@ -318,6 +329,30 @@ export default class SecurityUserSettingsTab extends React.Component {
                     </div>
                 </div>
             );
+        if (settingsPaneSettings.security.disable_cross_signing_menu) {
+            crossSigning = null;
+        }
+
+        let analytics = <div className='mx_SettingsTab_section'>
+            <span className="mx_SettingsTab_subheading">{_t("Analytics")}</span>
+            <div className='mx_SettingsTab_subsectionText'>
+                {_t(
+                    "%(brand)s collects anonymous analytics to allow us to improve the application.",
+                    { brand },
+                )}
+                &nbsp;
+                {_t("Privacy is important to us, so we don't collect any personal or " +
+                    "identifiable data for our analytics.")}
+                <AccessibleButton className="mx_SettingsTab_linkBtn" onClick={Analytics.showDetailsModal}>
+                    {_t("Learn more about how we use analytics.")}
+                </AccessibleButton>
+            </div>
+            <SettingsFlag name='analyticsOptIn' level={SettingLevel.DEVICE}
+                        onChange={this._updateAnalytics} />
+        </div>;
+        if (settingsPaneSettings.security.disable_analytics_menu) {
+            analytics = null;
+        }
 
         const E2eAdvancedPanel = sdk.getComponent('views.settings.E2eAdvancedPanel');
 
@@ -329,6 +364,19 @@ export default class SecurityUserSettingsTab extends React.Component {
             </div>;
         }
 
+        let devicesDescription = _t(
+            "Manage the names of and sign out of your sessions below or " +
+            "<a>verify them in your User Profile</a>.", {},
+            {
+                a: sub => <AccessibleButton kind="link" onClick={this._onGoToUserProfileClick}>
+                    {sub}
+                </AccessibleButton>,
+            },
+        );
+        if (settingsPaneSettings.security.disable_session_editing) {
+            devicesDescription = null;
+        }
+
         return (
             <div className="mx_SettingsTab mx_SecurityUserSettingsTab">
                 {warning}
@@ -336,15 +384,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Where you’re logged in")}</span>
                     <span>
-                        {_t(
-                            "Manage the names of and sign out of your sessions below or " +
-                            "<a>verify them in your User Profile</a>.", {},
-                            {
-                                a: sub => <AccessibleButton kind="link" onClick={this._onGoToUserProfileClick}>
-                                    {sub}
-                                </AccessibleButton>,
-                            },
-                        )}
+                        {devicesDescription}
                     </span>
                     <div className='mx_SettingsTab_subsectionText'>
                         {_t("A session's public name is visible to people you communicate with")}
@@ -355,23 +395,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                 {eventIndex}
                 {crossSigning}
                 {this._renderCurrentDeviceInfo()}
-                <div className='mx_SettingsTab_section'>
-                    <span className="mx_SettingsTab_subheading">{_t("Analytics")}</span>
-                    <div className='mx_SettingsTab_subsectionText'>
-                        {_t(
-                            "%(brand)s collects anonymous analytics to allow us to improve the application.",
-                            { brand },
-                        )}
-                        &nbsp;
-                        {_t("Privacy is important to us, so we don't collect any personal or " +
-                            "identifiable data for our analytics.")}
-                        <AccessibleButton className="mx_SettingsTab_linkBtn" onClick={Analytics.showDetailsModal}>
-                            {_t("Learn more about how we use analytics.")}
-                        </AccessibleButton>
-                    </div>
-                    <SettingsFlag name='analyticsOptIn' level={SettingLevel.DEVICE}
-                                  onChange={this._updateAnalytics} />
-                </div>
+                {analytics}
                 {this._renderIgnoredUsers()}
                 {this._renderManageInvites()}
                 <E2eAdvancedPanel />

@@ -37,6 +37,7 @@ import {abbreviateUrl} from "../../../../../utils/UrlUtils";
 import { getThreepidsWithBindStatus } from '../../../../../boundThreepids';
 import Spinner from "../../../elements/Spinner";
 import {SettingLevel} from "../../../../../settings/SettingLevel";
+import {settingsPaneSettings} from "../../../../../static_config/config.js";
 
 export default class GeneralUserSettingsTab extends React.Component {
     static propTypes = {
@@ -278,6 +279,15 @@ export default class GeneralUserSettingsTab extends React.Component {
             passwordChangeForm = null;
         }
 
+        if (settingsPaneSettings.general.disable_password_change) {
+            return (
+                <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_accountSection">
+                    <span className="mx_SettingsTab_subheading">{_t("Account")}</span>
+                    {threepidSection}
+                </div>
+            );
+        }
+
         return (
             <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_accountSection">
                 <span className="mx_SettingsTab_subheading">{_t("Account")}</span>
@@ -351,6 +361,9 @@ export default class GeneralUserSettingsTab extends React.Component {
     }
 
     _renderManagementSection() {
+        if (settingsPaneSettings.general.disable_account_deactivation) {
+            return;
+        }
         // TODO: Improve warning text for account deactivation
         return (
             <div className="mx_SettingsTab_section">
@@ -366,6 +379,9 @@ export default class GeneralUserSettingsTab extends React.Component {
     }
 
     _renderIntegrationManagerSection() {
+        if (settingsPaneSettings.general.disable_integration_manager) {
+            return;
+        }
         const SetIntegrationManager = sdk.getComponent("views.settings.SetIntegrationManager");
 
         return (
@@ -383,16 +399,26 @@ export default class GeneralUserSettingsTab extends React.Component {
                 width="18" height="18" alt={_t("Warning")} />
             : null;
 
+        let languageSection;
+        if (!settingsPaneSettings.general.disable_language_selection) {
+            languageSection = this._renderLanguageSection();
+        }
+
+        let disableAccountTitle;
+        if (!settingsPaneSettings.general.disable_account_deactivation) {
+            disableAccountTitle = <div className="mx_SettingsTab_heading">{_t("Deactivate account")}</div>;
+        }
+
         return (
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("General")}</div>
                 {this._renderProfileSection()}
                 {this._renderAccountSection()}
-                {this._renderLanguageSection()}
+                {languageSection}
                 <div className="mx_SettingsTab_heading">{discoWarning} {_t("Discovery")}</div>
                 {this._renderDiscoverySection()}
                 {this._renderIntegrationManagerSection() /* Has its own title */}
-                <div className="mx_SettingsTab_heading">{_t("Deactivate account")}</div>
+                {disableAccountTitle}
                 {this._renderManagementSection()}
             </div>
         );

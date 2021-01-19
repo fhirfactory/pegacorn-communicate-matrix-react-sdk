@@ -32,6 +32,7 @@ import SdkConfig from "../../../SdkConfig";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import AccessibleButton from "../elements/AccessibleButton";
 import {SettingLevel} from "../../../settings/SettingLevel";
+import {settingsPaneSettings} from "../../../static_config/config.js";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -570,6 +571,9 @@ export default createReactClass({
             ];
             for (const i in vectorRuleIds) {
                 const vectorRuleId = vectorRuleIds[i];
+                if (settingsPaneSettings.notifications.hidden_notification_rules.indexOf(vectorRuleId) > -1) {
+                    continue;
+                }
 
                 if (vectorRuleId === '_keywords') {
                     // keywords needs a special handling

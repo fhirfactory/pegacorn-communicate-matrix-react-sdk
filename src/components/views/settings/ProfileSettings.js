@@ -21,6 +21,7 @@ import Field from "../elements/Field";
 import {User} from "matrix-js-sdk";
 import { getHostingLink } from '../../../utils/HostingLink';
 import * as sdk from "../../../index";
+import {settingsPaneSettings} from "../../../static_config/config.js";
 
 export default class ProfileSettings extends React.Component {
     constructor() {
@@ -141,6 +142,27 @@ export default class ProfileSettings extends React.Component {
             </span>;
         }
 
+        let displayNameSection;
+        let saveButton;
+        if (settingsPaneSettings.general.disable_display_name_editing) {
+            displayNameSection = (
+                <div>
+                    <span className="mx_SettingsTab_subheading">{_t("Display Name")}</span>
+                    <p>{this.state.displayName}</p>
+                </div>
+            );
+        } else {
+            displayNameSection = (<Field label={_t("Display Name")}
+            type="text" value={this.state.displayName} autoComplete="off"
+            onChange={this._onDisplayNameChanged} />);
+            saveButton = (
+                <AccessibleButton onClick={this._saveProfile} kind="primary"
+                disabled={!this.state.enableProfileSave}>
+                    {_t("Save")}
+                </AccessibleButton>
+            );
+        }
+
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const AvatarSetting = sdk.getComponent('settings.AvatarSetting');
         return (
@@ -153,9 +175,7 @@ export default class ProfileSettings extends React.Component {
                             {this.state.userId}
                             {hostingSignup}
                         </p>
-                        <Field label={_t("Display Name")}
-                               type="text" value={this.state.displayName} autoComplete="off"
-                               onChange={this._onDisplayNameChanged} />
+                        {displayNameSection}
                     </div>
                     <AvatarSetting
                         avatarUrl={this.state.avatarUrl}
@@ -164,10 +184,7 @@ export default class ProfileSettings extends React.Component {
                         uploadAvatar={this._uploadAvatar}
                         removeAvatar={this._removeAvatar} />
                 </div>
-                <AccessibleButton onClick={this._saveProfile} kind="primary"
-                                  disabled={!this.state.enableProfileSave}>
-                    {_t("Save")}
-                </AccessibleButton>
+                {saveButton}
             </form>
         );
     }

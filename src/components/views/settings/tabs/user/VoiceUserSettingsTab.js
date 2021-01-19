@@ -25,6 +25,7 @@ import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../../index";
 import Modal from "../../../../../Modal";
 import {SettingLevel} from "../../../../../settings/SettingLevel";
+import {settingsPaneSettings} from "../../../../../static_config/config.js";
 
 export default class VoiceUserSettingsTab extends React.Component {
     constructor() {
@@ -205,6 +206,29 @@ export default class VoiceUserSettingsTab extends React.Component {
             }
         }
 
+        let horizontalMirror;
+        if (!settingsPaneSettings.voice_and_video.disable_mirror_video_feed) {
+            horizontalMirror = <SettingsFlag name='VideoView.flipVideoHorizontally' level={SettingLevel.ACCOUNT} />;
+        }
+
+        let allowPeerToPeer;
+        if (!settingsPaneSettings.voice_and_video.disable_allow_peer_to_peer) {
+            allowPeerToPeer = <SettingsFlag
+                name='webRtcAllowPeerToPeer'
+                level={SettingLevel.DEVICE}
+                onChange={this._changeWebRtcMethod}
+            />;
+        }
+
+        let allowFallbackICEServer;
+        if (!settingsPaneSettings.voice_and_video.disable_allow_fallback_call_server) {
+            allowFallbackICEServer = <SettingsFlag
+                name='fallbackICEServerAllowed'
+                level={SettingLevel.DEVICE}
+                onChange={this._changeFallbackICEServerAllowed}
+            />;
+        }
+
         return (
             <div className="mx_SettingsTab mx_VoiceUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Voice & Video")}</div>
@@ -213,17 +237,9 @@ export default class VoiceUserSettingsTab extends React.Component {
                     {speakerDropdown}
                     {microphoneDropdown}
                     {webcamDropdown}
-                    <SettingsFlag name='VideoView.flipVideoHorizontally' level={SettingLevel.ACCOUNT} />
-                    <SettingsFlag
-                        name='webRtcAllowPeerToPeer'
-                        level={SettingLevel.DEVICE}
-                        onChange={this._changeWebRtcMethod}
-                    />
-                    <SettingsFlag
-                        name='fallbackICEServerAllowed'
-                        level={SettingLevel.DEVICE}
-                        onChange={this._changeFallbackICEServerAllowed}
-                    />
+                    {horizontalMirror}
+                    {allowPeerToPeer}
+                    {allowFallbackICEServer}
                 </div>
             </div>
         );

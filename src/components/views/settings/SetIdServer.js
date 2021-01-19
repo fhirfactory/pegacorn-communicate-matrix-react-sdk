@@ -27,6 +27,7 @@ import IdentityAuthClient from "../../../IdentityAuthClient";
 import {abbreviateUrl, unabbreviateUrl} from "../../../utils/UrlUtils";
 import { getDefaultIdentityServerUrl, doesIdentityServerHaveTerms } from '../../../utils/IdentityServerUtils';
 import {timeout} from "../../../utils/promise";
+import {settingsPaneSettings} from "../../../static_config/config.js";
 
 // We'll wait up to this long when checking for 3PID bindings on the IS.
 const REACHABILITY_TIMEOUT = 10000; // ms
@@ -343,6 +344,25 @@ export default class SetIdServer extends React.Component {
         const idServerUrl = this.state.currentClientIdServer;
         let sectionTitle;
         let bodyText;
+
+        if (settingsPaneSettings.general.disable_identity_server_changes) {
+            return (
+                <div>
+                    <span className="mx_SettingsTab_subheading">
+                        {_t("Identity Server (%(server)s)", { server: abbreviateUrl(idServerUrl) })}
+                    </span>
+                    <span className="mx_SettingsTab_subsectionText">
+                        {_t(
+                            "You are currently using <server></server> to discover and be discoverable by " +
+                            "existing contacts you know.",
+                            {},
+                            { server: sub => <b>{abbreviateUrl(idServerUrl)}</b> },
+                        )}
+                    </span>
+                </div>
+            );
+        }
+
         if (idServerUrl) {
             sectionTitle = _t("Identity Server (%(server)s)", { server: abbreviateUrl(idServerUrl) });
             bodyText = _t(

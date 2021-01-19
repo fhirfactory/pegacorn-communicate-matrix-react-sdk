@@ -45,6 +45,7 @@ import IconizedContextMenu, {
 import TagOrderStore from "../../stores/TagOrderStore";
 import * as fbEmitter from "fbemitter";
 import FlairStore from "../../stores/FlairStore";
+import {settingsPaneSettings,userMenuSettings} from "../../static_config/config.js";
 
 interface IProps {
     isMinimized: boolean;
@@ -253,7 +254,28 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 />
             );
         }
-
+        let themeButton;
+        if (!settingsPaneSettings.appearance.disable_theme_settings) {
+            themeButton = <AccessibleTooltipButton
+                className="mx_UserMenu_contextMenu_themeButton"
+                onClick={this.onSwitchThemeClick}
+                title={this.state.isDarkTheme ? _t("Switch to light mode") : _t("Switch to dark mode")}
+            >
+                <img
+                    src={require("../../../res/img/element-icons/roomlist/dark-light-mode.svg")}
+                    alt={_t("Switch theme")}
+                    width={16}
+                />
+            </AccessibleTooltipButton>
+        }
+        let feedbackItem;
+        if (!userMenuSettings.disable_feedback_option) {
+            feedbackItem = <IconizedContextMenuOption
+                    iconClassName="mx_UserMenu_iconMessage"
+                    label={_t("Feedback")}
+                    onClick={this.onProvideFeedback}
+                />;
+        }
         return <IconizedContextMenu
             // -20 to overlap the context menu by just over the width of the `...` icon and make it look connected
             left={this.state.contextMenuPosition.width + this.state.contextMenuPosition.left - 20}
@@ -270,17 +292,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                             {MatrixClientPeg.get().getUserId()}
                         </span>
                 </div>
-                <AccessibleTooltipButton
-                    className="mx_UserMenu_contextMenu_themeButton"
-                    onClick={this.onSwitchThemeClick}
-                    title={this.state.isDarkTheme ? _t("Switch to light mode") : _t("Switch to dark mode")}
-                >
-                    <img
-                        src={require("../../../res/img/element-icons/roomlist/dark-light-mode.svg")}
-                        alt={_t("Switch theme")}
-                        width={16}
-                    />
-                </AccessibleTooltipButton>
+                {themeButton}
             </div>
             {hostingLink}
             <IconizedContextMenuOptionList>
@@ -305,11 +317,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     label={_t("Archived rooms")}
                     onClick={this.onShowArchived}
                 /> */}
-                <IconizedContextMenuOption
-                    iconClassName="mx_UserMenu_iconMessage"
-                    label={_t("Feedback")}
-                    onClick={this.onProvideFeedback}
-                />
+                {feedbackItem}
             </IconizedContextMenuOptionList>
             <IconizedContextMenuOptionList red>
                 <IconizedContextMenuOption

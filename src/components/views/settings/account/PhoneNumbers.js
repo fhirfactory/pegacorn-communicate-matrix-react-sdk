@@ -25,6 +25,7 @@ import AddThreepid from "../../../../AddThreepid";
 import CountryDropdown from "../../auth/CountryDropdown";
 import * as sdk from '../../../../index';
 import Modal from '../../../../Modal';
+import {settingsPaneSettings} from "../../../../static_config/config.js";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -92,6 +93,14 @@ export class ExistingPhoneNumber extends React.Component {
                                       className="mx_ExistingPhoneNumber_confirmBtn">
                         {_t("Cancel")}
                     </AccessibleButton>
+                </div>
+            );
+        }
+
+        if (settingsPaneSettings.general.disable_phone_editing) {
+            return (
+                <div className="mx_ExistingPhoneNumber">
+                    <span className="mx_ExistingPhoneNumber_address">+{this.props.msisdn.address}</span>
                 </div>
             );
         }
@@ -256,6 +265,14 @@ export default class PhoneNumbers extends React.Component {
             isSmall={true}
             showPrefix={true}
         />;
+
+        if (settingsPaneSettings.general.disable_phone_editing) {
+            return (
+                <div className="mx_PhoneNumbers">
+                    {existingPhoneElements}
+                </div>
+            );
+        }
 
         return (
             <div className="mx_PhoneNumbers">

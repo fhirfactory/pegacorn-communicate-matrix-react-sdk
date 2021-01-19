@@ -27,6 +27,7 @@ import * as sdk from "../../../../../";
 import PlatformPeg from "../../../../../PlatformPeg";
 import * as KeyboardShortcuts from "../../../../../accessibility/KeyboardShortcuts";
 import UpdateCheckButton from "../../UpdateCheckButton";
+import {settingsPaneSettings} from "../../../../../static_config/config.js";
 
 export default class HelpUserSettingsTab extends React.Component {
     static propTypes = {
@@ -166,7 +167,9 @@ export default class HelpUserSettingsTab extends React.Component {
                 </a>,
             },
         );
-        if (SdkConfig.get().welcomeUserId && getCurrentLanguage().startsWith('en')) {
+        if (SdkConfig.get().welcomeUserId &&
+        getCurrentLanguage().startsWith('en') &&
+        !settingsPaneSettings.about.disable_bot_button) {
             faqText = (
                 <div>
                     {_t(
@@ -200,45 +203,64 @@ export default class HelpUserSettingsTab extends React.Component {
         olmVersion = olmVersion ? `${olmVersion[0]}.${olmVersion[1]}.${olmVersion[2]}` : '<not-enabled>';
 
         let updateButton = null;
-        if (this.state.canUpdate) {
+        if (this.state.canUpdate && !settingsPaneSettings.about.disable_update_button) {
             updateButton = <UpdateCheckButton />;
+        }
+
+        let bugMenu;
+        if (!settingsPaneSettings.about.disable_bug_reporting_menu) {
+            bugMenu = <div className="mx_SettingsTab_section">
+                        <span className='mx_SettingsTab_subheading'>{_t('Bug reporting')}</span>
+                        <div className='mx_SettingsTab_subsectionText'>
+                            {
+                                _t( "If you've submitted a bug via GitHub, debug logs can help " +
+                                    "us track down the problem. Debug logs contain application " +
+                                    "usage data including your username, the IDs or aliases of " +
+                                    "the rooms or groups you have visited and the usernames of " +
+                                    "other users. They do not contain messages.",
+                                )
+                            }
+                            <div className='mx_HelpUserSettingsTab_debugButton'>
+                                <AccessibleButton onClick={this._onBugReport} kind='primary'>
+                                    {_t("Submit debug logs")}
+                                </AccessibleButton>
+                            </div>
+                            <div className='mx_HelpUserSettingsTab_debugButton'>
+                                <AccessibleButton onClick={this._onClearCacheAndReload} kind='danger'>
+                                    {_t("Clear cache and reload")}
+                                </AccessibleButton>
+                            </div>
+                            {
+                                _t( "To report a Matrix-related security issue, please read the Matrix.org " +
+                                    "<a>Security Disclosure Policy</a>.", {},
+                                    {
+                                        'a': (sub) =>
+                                            <a href="https://matrix.org/security-disclosure-policy/"
+                                            rel="noreferrer noopener" target="_blank">{sub}</a>,
+                                    })
+                            }
+                        </div>
+                    </div>;
+        }
+
+        let olmData;
+        if (!settingsPaneSettings.about.hide_olm_version) {
+            olmData = <span>{_t("olm version:")} {olmVersion}<br /></span>;
+        }
+
+        let accessTokenData;
+        if (!settingsPaneSettings.about.hide_access_token) {
+            accessTokenData = <span>{_t("Access Token:") + ' '}
+            <AccessibleButton element="span" onClick={this._showSpoiler}
+                              data-spoiler={MatrixClientPeg.get().getAccessToken()}>
+                &lt;{ _t("click to reveal") }&gt;
+            </AccessibleButton></span>;
         }
 
         return (
             <div className="mx_SettingsTab mx_HelpUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Help & About")}</div>
-                <div className="mx_SettingsTab_section">
-                    <span className='mx_SettingsTab_subheading'>{_t('Bug reporting')}</span>
-                    <div className='mx_SettingsTab_subsectionText'>
-                        {
-                            _t( "If you've submitted a bug via GitHub, debug logs can help " +
-                                "us track down the problem. Debug logs contain application " +
-                                "usage data including your username, the IDs or aliases of " +
-                                "the rooms or groups you have visited and the usernames of " +
-                                "other users. They do not contain messages.",
-                            )
-                        }
-                        <div className='mx_HelpUserSettingsTab_debugButton'>
-                            <AccessibleButton onClick={this._onBugReport} kind='primary'>
-                                {_t("Submit debug logs")}
-                            </AccessibleButton>
-                        </div>
-                        <div className='mx_HelpUserSettingsTab_debugButton'>
-                            <AccessibleButton onClick={this._onClearCacheAndReload} kind='danger'>
-                                {_t("Clear cache and reload")}
-                            </AccessibleButton>
-                        </div>
-                        {
-                            _t( "To report a Matrix-related security issue, please read the Matrix.org " +
-                                "<a>Security Disclosure Policy</a>.", {},
-                                {
-                                    'a': (sub) =>
-                                        <a href="https://matrix.org/security-disclosure-policy/"
-                                        rel="noreferrer noopener" target="_blank">{sub}</a>,
-                                })
-                        }
-                    </div>
-                </div>
+                {bugMenu}
                 <div className='mx_SettingsTab_section'>
                     <span className='mx_SettingsTab_subheading'>{_t("FAQ")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
@@ -252,7 +274,7 @@ export default class HelpUserSettingsTab extends React.Component {
                     <span className='mx_SettingsTab_subheading'>{_t("Versions")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
                         {_t("%(brand)s version:", { brand })} {appVersion}<br />
-                        {_t("olm version:")} {olmVersion}<br />
+                        {olmData}
                         {updateButton}
                     </div>
                 </div>
@@ -263,11 +285,7 @@ export default class HelpUserSettingsTab extends React.Component {
                     <div className='mx_SettingsTab_subsectionText'>
                         {_t("Homeserver is")} <code>{MatrixClientPeg.get().getHomeserverUrl()}</code><br />
                         {_t("Identity Server is")} <code>{MatrixClientPeg.get().getIdentityServerUrl()}</code><br />
-                        {_t("Access Token:") + ' '}
-                        <AccessibleButton element="span" onClick={this._showSpoiler}
-                                          data-spoiler={MatrixClientPeg.get().getAccessToken()}>
-                            &lt;{ _t("click to reveal") }&gt;
-                        </AccessibleButton>
+                        {accessTokenData}
                     </div>
                 </div>
             </div>

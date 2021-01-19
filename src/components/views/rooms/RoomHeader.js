@@ -34,6 +34,7 @@ import E2EIcon from './E2EIcon';
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import {DefaultTagID} from "../../../stores/room-list/models";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import {roomHeaderSettings} from "../../../static_config/config.js";
 
 export default createReactClass({
     displayName: 'RoomHeader',
@@ -272,7 +273,8 @@ export default createReactClass({
         }
 
         let manageIntegsButton;
-        if (this.props.room && this.props.room.roomId && this.props.inRoom) {
+        const integrationsEnabled = !(roomHeaderSettings.disable_manage_integrations);
+        if (this.props.room && this.props.room.roomId && this.props.inRoom && integrationsEnabled) {
             manageIntegsButton = <ManageIntegsButton room={this.props.room} />;
         }
 

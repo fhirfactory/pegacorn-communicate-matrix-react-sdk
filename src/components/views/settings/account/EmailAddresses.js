@@ -25,6 +25,7 @@ import * as Email from "../../../../email";
 import AddThreepid from "../../../../AddThreepid";
 import * as sdk from '../../../../index';
 import Modal from '../../../../Modal';
+import {settingsPaneSettings} from "../../../../static_config/config.js";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -97,6 +98,14 @@ export class ExistingEmailAddress extends React.Component {
                                       className="mx_ExistingEmailAddress_confirmBtn">
                         {_t("Cancel")}
                     </AccessibleButton>
+                </div>
+            );
+        }
+
+        if (settingsPaneSettings.general.disable_email_editing) {
+            return (
+                <div className="mx_ExistingEmailAddress">
+                    <span className="mx_ExistingEmailAddress_email">{this.props.email.address}</span>
                 </div>
             );
         }
@@ -229,6 +238,14 @@ export default class EmailAddresses extends React.Component {
                       {_t("Continue")}
                   </AccessibleButton>
               </div>
+            );
+        }
+
+        if (settingsPaneSettings.general.disable_email_editing) {
+            return (
+                <div className="mx_EmailAddresses">
+                    {existingEmailElements}
+                </div>
             );
         }
 

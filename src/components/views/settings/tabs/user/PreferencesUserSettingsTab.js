@@ -23,6 +23,7 @@ import Field from "../../../elements/Field";
 import * as sdk from "../../../../..";
 import PlatformPeg from "../../../../../PlatformPeg";
 import {SettingLevel} from "../../../../../settings/SettingLevel";
+import {settingsPaneSettings} from "../../../../../static_config/config.js";
 
 export default class PreferencesUserSettingsTab extends React.Component {
     static ROOM_LIST_SETTINGS = [
@@ -167,28 +168,14 @@ export default class PreferencesUserSettingsTab extends React.Component {
                 label={_t('Show tray icon and minimize window to it on close')} />;
         }
 
-        return (
-            <div className="mx_SettingsTab mx_PreferencesUserSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Preferences")}</div>
-
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Room list")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
-                </div>
-
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Composer")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS)}
-                </div>
-
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Timeline")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
-                </div>
-
+        let advancedSettings;
+        if (!settingsPaneSettings.preferences.disable_advanced_settings) {
+            advancedSettings = (
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Advanced")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.ADVANCED_SETTINGS)}
+                    {this._renderGroup(PreferencesUserSettingsTab.ADVANCED_SETTINGS.filter(x => {
+                        return settingsPaneSettings.preferences.disabled_advanced_settings.indexOf(x) == -1;
+                    }))}
                     {minimizeToTrayOption}
                     {autoHideMenuOption}
                     {autoLaunchOption}
@@ -208,6 +195,34 @@ export default class PreferencesUserSettingsTab extends React.Component {
                         value={this.state.readMarkerOutOfViewThresholdMs}
                         onChange={this._onReadMarkerOutOfViewThresholdMs} />
                 </div>
+            );
+        }
+
+        return (
+            <div className="mx_SettingsTab mx_PreferencesUserSettingsTab">
+                <div className="mx_SettingsTab_heading">{_t("Preferences")}</div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Room list")}</span>
+                    {this._renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
+                </div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Composer")}</span>
+                    {this._renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS.filter(x => {
+                            return settingsPaneSettings.preferences.disabled_composer_settings.indexOf(x) == -1;
+                        }))}
+                </div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Timeline")}</span>
+                    {this._renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS.filter(x => {
+                        return settingsPaneSettings.preferences.disabled_timeline_settings.indexOf(x) == -1;
+                    }))}
+                </div>
+
+                {advancedSettings}
+
             </div>
         );
     }

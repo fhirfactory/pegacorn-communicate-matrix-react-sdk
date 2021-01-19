@@ -22,6 +22,7 @@ import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {formatDate} from '../../../DateUtils';
 import StyledCheckbox from '../elements/StyledCheckbox';
+import {settingsPaneSettings} from "../../../static_config/config.js";
 
 export default class DevicesPanelEntry extends React.Component {
     constructor(props) {
@@ -67,23 +68,32 @@ export default class DevicesPanelEntry extends React.Component {
             myDeviceClass = " mx_DevicesPanel_myDevice";
         }
 
+        let deviceName = <EditableTextContainer initialValue={device.display_name}
+            onSubmit={this._onDisplayNameChanged}
+            placeholder={device.device_id}
+        />;
+        let selectionCheckbox = (
+            <div className="mx_DevicesPanel_deviceButtons">
+                <StyledCheckbox onChange={this.onDeviceToggled} checked={this.props.selected} />
+            </div>
+        );
+        if (settingsPaneSettings.security.disable_session_editing) {
+            deviceName = <span>{device.display_name}</span>;
+            selectionCheckbox = null;
+        }
+
         return (
             <div className={"mx_DevicesPanel_device" + myDeviceClass}>
                 <div className="mx_DevicesPanel_deviceId">
                     { device.device_id }
                 </div>
                 <div className="mx_DevicesPanel_deviceName">
-                    <EditableTextContainer initialValue={device.display_name}
-                        onSubmit={this._onDisplayNameChanged}
-                        placeholder={device.device_id}
-                    />
+                    {deviceName}
                 </div>
                 <div className="mx_DevicesPanel_lastSeen">
                     { lastSeen }
                 </div>
-                <div className="mx_DevicesPanel_deviceButtons">
-                    <StyledCheckbox onChange={this.onDeviceToggled} checked={this.props.selected} />
-                </div>
+                {selectionCheckbox}
             </div>
         );
     }

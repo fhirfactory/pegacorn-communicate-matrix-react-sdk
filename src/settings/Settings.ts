@@ -217,7 +217,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable Emoji suggestions while typing'),
-        default: true,
+        default: false,
         invertedSettingName: 'MessageComposerInput.dontSuggestEmoji',
     },
     // TODO: Wire up appropriately to UI (FTUE notifications)
@@ -245,13 +245,13 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "showAvatarChanges": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
         displayName: _td('Show avatar changes'),
-        default: true,
+        default: false,
         invertedSettingName: 'hideAvatarChanges',
     },
     "showDisplaynameChanges": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
         displayName: _td('Show display name changes'),
-        default: true,
+        default: false,
         invertedSettingName: 'hideDisplaynameChanges',
     },
     "showReadReceipts": {
@@ -268,7 +268,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "alwaysShowTimestamps": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Always show message timestamps'),
-        default: false,
+        default: true,
     },
     "autoplayGifsAndVideos": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -278,7 +278,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "alwaysShowEncryptionIcons": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Always show encryption icons'),
-        default: true,
+        default: false,
     },
     "showRoomRecoveryReminder": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -299,7 +299,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "TextualBody.enableBigEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable big emoji in chat'),
-        default: true,
+        default: false,
         invertedSettingName: 'TextualBody.disableBigEmoji',
     },
     "MessageComposerInput.isRichTextEnabled": {
@@ -334,7 +334,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "TagPanel.enableTagPanel": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable Community Filter Panel'),
-        default: true,
+        default: false,
         invertedSettingName: 'TagPanel.disableTagPanel',
     },
     "theme": {
@@ -366,7 +366,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td('Allow Peer-to-Peer for 1:1 calls'),
-        default: true,
+        default: false,
         invertedSettingName: 'webRtcForceTURN',
     },
     "webrtc_audiooutput": {
@@ -493,7 +493,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "promptBeforeInviteUnknownUsers": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Prompt before sending invites to potentially invalid matrix IDs'),
-        default: true,
+        default: false,
     },
     "showDeveloperTools": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -542,7 +542,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             "does not offer one (your IP address would be shared during a call)",
         ),
         // This is a tri-state value, where `null` means "prompt the user".
-        default: null,
+        default: false,
     },
     "sendReadReceipts": {
         supportedLevels: LEVELS_ROOM_SETTINGS,
