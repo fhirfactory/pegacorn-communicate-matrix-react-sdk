@@ -139,7 +139,7 @@ already. This project has not yet been migrated to Yarn 2, so please ensure
 `yarn --version` shows a version from the 1.x series.
 
 `matrix-react-sdk` depends on `matrix-js-sdk`. To make use of changes in the
-latter and to ensure tests run against the develop branch of `matrix-js-sdk`,
+later and to ensure tests run against the develop branch of `matrix-js-sdk`,
 you should set up `matrix-js-sdk`:
 
 ```bash
