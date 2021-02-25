@@ -351,7 +351,7 @@ export default class MessageContextMenu extends React.Component {
             );
         }
 
-        if (isSent && this.state.canRedact) {
+        if (isSent && this.state.canRedact && mxEvent.getType() === 'm.room.message') {
             redactButton = (
                 <MenuItem className="mx_MessageContextMenu_field" onClick={this.onRedactClick}>
                     { _t('Remove') }
