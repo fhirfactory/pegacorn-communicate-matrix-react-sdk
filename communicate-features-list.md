@@ -1,0 +1,110 @@
+# About
+This document outlines list of features implemented for pegacorn-communicate project and relevant configurations changed as a part of user stories.
+
+### OOTB Feature items
+OOTB user stories signify a feature which is out of box and do not need modification.
+
+### OOTB Modified Feature items
+Communicate uses OOTB modified user stories which means that feature needs to have values customised in order to fulfill requirement of a given user story.
+
+## Features
+### Feature: 188662
+Web: As an Authenticated Practitioner, I should be able to personalise the Voice & Video Settings, so that I can control certain system behaviours that will maximise my user experience.
+
+Out of box features
+The following user settings are controlled by the specified configuration values in the config-communicate.json file:
+* Audio output - controlled by the OOTB webrtc_audiooutput setting, no change required for this story
+* Microphone - controlled by the OOTB webrtc_audioinput setting, no change required for this story
+* Camera - controlled by the OOTB webrtc_videoinput setting, no change required for this story
+
+Customized Features through our values inserted through communicate-config.json and UI.Feature
+* Mirror local video feed (new config item ShowSettingMirrorLocalVideoFeed to toggle if this setting is visible) - controlled by the OOTB VideoView.flipVideoHorizontally setting, which defaults to false, so no override config value is required.
+* Allow Peer-to-Peer for 1:1 calls (new config item ShowSettingAllowPeerToPeerForOneToOneCalls to toggle if this setting is visible) - controlled by the OOTB webRtcAllowPeerToPeer setting, which defaults to true, so a config override was attempted to be added to set this to false, however this didn't appear to work, so instead the inverse OOTB webRtcForceTURN setting was set the true, to override the default for webRtcAllowPeerToPeer and set it to be false)
+* Allow fallback call assist server (new config item ShowSettingAllowFallbackCallAssist to toggle if this setting is visible) - controlled by the OOTB fallbackICEServerAllowed setting, which defaults to null (prompt the user), so a config override has been added to set this to false
+
+### Feature:188496
+Web: As an Authenticated Practitioner, I should not be able to view certain Settings that are not applicable or do not need to be displayed to the user, so that I only see applicable settings
+- Flair gets removed automatically when you disable Community. As such, this feature was available out of the box with a config change.
+- Community is not enabled by default (NOTE: on https://app.element.io they have enabled Flair), so Flair is disabled by default.
+**config**
+Community feature controls Flair feature at the moment in Setting.ts and this switch is turned off via communicate-config.json by using `"UIFeature.communities": false`.
+
+### Feature: 188663
+
+1. Where you're logged in (Tab)
+My Sessions
+Display each active session for user is a default behavior on web. A bolderized text on particular session represents current session while other sessions in list are from past session. Session last time active shows timeline of session as well on right. This could be simplified to AEST or ADCST format but this user story would not capture that kind of change so it has not been modified at the moment.
+
+Disable delete session option
+This options was active by default and has been disabled by hiding the tick box using SecurityAllowSessionEdit flag which triggers delete session button and delete button only appears next to each session  when tickbox is shown and can be activated with click.
+Rename session
+SecurityAllowSessionEdit has been used to block user from editing session id as a part of change. Default behavior was user could edit session id which appears under SessionID column on top.
+
+Sign out of session
+The sign out prompt message has been switched off using SecurityAllowSessionEdit flag but there was no sign out option in Security tab by default so this can be assumed OOTB.
+
+Verify them in your User Profile
+This is triggered from Verify them in your User Profile link which takes user to their profile screen on right side panel has been turned off ( SecurityAllowSessionEdit )
+
+2. Advanced
+Logged in as:
+Home server & Identity Server
+Requirement mentions on web there would be Advanced Tab with Home server and Identity Server as OOTB but it does not seem to  have it. Instead this setting might have moved go General setting. General setting would show username, identity server, Homeserver detail.
+At the time of doing this user story, on web application these texts/labels were not available anywhere to be seen in advanced tab so assuming that it might have been removed over the time by matrix, no additional development work was done.
+3. Cryptography(not visible)
+Entire cryptography section has been hidden as we dont have anything to show after hiding everything mentioned in user story so in future if changes occur then we would potentially switch on some feature.
+Public name
+This label was not found in UI or anywhere in code in cryptography section so no change was made.
+Session ID
+Session id was visible in UI and has been hidden with AdvancedSetting OOTB already controls this and is set to false in our config file.
+Session Key
+Session Key was visible in UI and has been hidden with AdvancedSetting OOTB config already controls whether to hide or show this and is set to false in our config file.
+Encrypt to verified sessions only
+This label was not found in UI or anywhere in code in cryptography section so no change was made.
+
+4. Cryptography Key backup(not visible)
+No action is required to existing code as no reference to any of this behavior was found including cryptography key backup option which is not available at the moment. Maybe over the time this feature was discontinued from matrix.
+Recover encrypted messages from backup
+Deleted backup of encrypted messages
+Export room keys
+Import room keys
+
+Cross-signing(not visible)
+Reset cross signing
+Cross signing setting is switched off by using ShowEncryptionSetting flag in config file which was out of the box and no changes required.
+
+Integrations(not visible)
+There is no evidence of integration manager in UI in Privacy setting. Having said that, integration manager is part of General user setting so even though as a part of this user story its not actionable, General user setting change implemented showIntegration flag in our config file that hides integration manager options.
+
+Allow integrations
+Integration manager
+
+Integration has been switched off and hidden in General setting using ShowIntegration.
+
+Message search - desktop
+There is nothing to control message search so no change has been made in terms of hiding message search from UI from Security setting.
+
+Analytics(not visible)
+Send analytics data has been turned off by changing pwik definition on config file as well as by adding additional condition where text and toggle would be activated in Advanced setting rule with extra rule : ShowShareAnalyticsInformation.
+Report a bug(not visible) has been turned off by Disabled_bug_report_endpoint_url. To turn it on , process would be to remove 'Disabled' from config. bug_report_endpoint_url switch provides url where we update our bug, breaking that variable in config would automatically hide this toggle option on UI. To minimise code changes, no further tweaks has been made in code as this is sufficient.
+Rage Shake to report bug: Breaking bug_report_end_url  would be sufficient to hide this from menu so "report bug change" has turned it off when above changes was made.
+Submit debug logs
+Its no longer part of this user story, instead its part of Help and About setting.
+Clear cache and reload
+Its a part of "Help and About" setting so no action required in Security setting.
+Labs(not visible)
+Lab setting is not separate feature in UI but controls whether experimental features to be made available to user. This is controlled by flag showLabSettings which is set to false. So, if a feature is experimental it wont be shown to user.
+Lazy load room members
+There was no changes required to turn off this feature as it seems to be discontinued in current state of codebase in element-web.
+Create conference calls with JITSI
+It is not a separate setting option to turn JITSI off and on. However, what server is used for JITSI is controlled by config.
+In order to enable JITSI conference call and be able to use it, a config needs to be passed on our custom config. jitsi.preferredDomain controls JITSI conference calls. OOTB behavior would be that it defaults to matrix JITSI server. This is future discussion as how we want to handle this. JITSI config value jitsi  has been changed to jitsi to disconnect our UI to jitsi server domain.
+Data save mode
+There was no evidence of anything in codebase in setting to mention this was available in web.
+Send voice messages
+There was no evidence of anything in codebase in setting to mention this was available in web.
+
+
+
+
+

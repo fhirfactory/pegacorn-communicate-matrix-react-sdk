@@ -24,6 +24,8 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import {SSOAuthEntry} from "../auth/InteractiveAuthEntryComponents";
+import SettingsStore from '../../../settings/SettingsStore';
+import { UIFeature } from '../../../settings/UIFeature';
 
 export default class DevicesPanel extends React.Component {
     constructor(props) {
@@ -222,9 +224,9 @@ export default class DevicesPanel extends React.Component {
                     <div className="mx_DevicesPanel_deviceId">{ _t("ID") }</div>
                     <div className="mx_DevicesPanel_deviceName">{ _t("Public Name") }</div>
                     <div className="mx_DevicesPanel_deviceLastSeen">{ _t("Last seen") }</div>
-                    <div className="mx_DevicesPanel_deviceButtons">
+                    {SettingsStore.getValue(UIFeature.SecurityAllowSessionEdits) && <div className="mx_DevicesPanel_deviceButtons">
                         { this.state.selectedDevices.length > 0 ? deleteButton : null }
-                    </div>
+                    </div>}
                 </div>
                 { devices.map(this._renderDevice) }
             </div>
