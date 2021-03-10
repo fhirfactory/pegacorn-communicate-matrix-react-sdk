@@ -256,7 +256,7 @@ export default class HelpUserSettingsTab extends React.Component {
                     <span className='mx_SettingsTab_subheading'>{_t("Versions")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
                         {_t("%(brand)s version:", { brand })} {appVersion}<br />
-                        {!SettingsStore.getValue(UIFeature.ShowSimplifiedVersionInformation) && <>
+                        {SettingsStore.getValue(UIFeature.ShowSimplifiedVersionInformation) && <>
                             {_t("olm version:")} {olmVersion}<br />
                             {updateButton}
                         </>}

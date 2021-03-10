@@ -30,7 +30,7 @@ Web: As an Authenticated Practitioner, I should not be able to view certain Sett
 Community feature controls Flair feature at the moment in Setting.ts and this switch is turned off via communicate-config.json by using `"UIFeature.communities": false`.
 
 ### Feature: 188663
-
+Web: As an Authenticated Practitioner, I should be able to personalise the Security & Privacy Settings, so that I can control certain system behaviours that will maximise my user experience
 1. Where you're logged in (Tab)
 My Sessions
 Display each active session for user is a default behavior on web. A bolderized text on particular session represents current session while other sessions in list are from past session. Session last time active shows timeline of session as well on right. This could be simplified to AEST or ADCST format but this user story would not capture that kind of change so it has not been modified at the moment.
@@ -103,7 +103,33 @@ Data save mode
 There was no evidence of anything in codebase in setting to mention this was available in web.
 Send voice messages
 There was no evidence of anything in codebase in setting to mention this was available in web.
+### Feature: 188664
+Web: As an Authenticated Practitioner, I should be able to personalise the Help & About Settings, so that I can control certain system behaviors that will maximise my user experience
+FAQ
+Display FAQS
+User Setting doc mentions about making FAQ title is displayed but bot is hidden which would otherwise lead to element's help page.
+Keyboard shortcuts ( display allowable keyboard)
+No change has been made for default behavior as by default keyboard shortcuts are displayed.
+Technically KeyboardShortcuts file in javascript toggles display of modal on the screen displaying what keys are allowed/disallowed. Should there be a requirements in future to control which shortcuts are allowed/disallowed specifically , change is would be possible but not part of this user story.
+Versions
+Version
+OLM version ( i.e. hide option for OLM version)
+Default behavior was to show OLM version. Its been hidden using ShowSimplifiedVersionInformation which can toggle the version information show/hide based on value we pass in from config.
+Check for update ( i.e. hide option for check for update)
+Check for update option has been hidden with ShowSimpliefiedVersionInformation flag.
+Legal
 
+Legal information comes from providing external links url in config file into terms_and_conditions_links in json config field. It takes url input to show external links and text input to display external link which corresponds to text.
+Privacy at the moment defaults to element's terms' and condition page whereas Terms and Conditions doesnt have anything at the moment.
+Third-party notices did not need code changes as no references were found to say third party notice.
+Cookie policy has been hidden as per user story requirement.
+Advanced(not visible)
+Keep media - not available anymore by default maybe discontinued by matrix over time
+Clear media cache is controlled by ShowAdvancedAboutInformation flag which also hides homserver, identity server and access token detail not been mentioned in this user story anywhere and were available in web.
+Clear cache
+Mark all messages as read - This option is not available in help setting.
+Credit
+By default credit info credits authors of font, emoji at the moment. Credit information is already on screen and set to default. There is no copyright info to refer to at this stage.
 
 
 

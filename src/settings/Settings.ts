@@ -807,7 +807,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     [UIFeature.ShowSimplifiedVersionInformation]: {
         supportedLevels: LEVELS_UI_FEATURE,
-        default: false,
+        default: true,
     },
     [UIFeature.ShowAdvancedAboutInformation]: {
         supportedLevels: LEVELS_UI_FEATURE,
