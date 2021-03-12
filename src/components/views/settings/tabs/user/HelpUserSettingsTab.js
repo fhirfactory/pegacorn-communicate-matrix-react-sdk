@@ -264,13 +264,12 @@ export default class HelpUserSettingsTab extends React.Component {
                 </div>
                 {this._renderLegal()}
                 {this._renderCredits()}
-                {SettingsStore.getValue(UIFeature.ShowAdvancedAboutInformation) &&
-                    <div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
+                {<div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
                         <span className='mx_SettingsTab_subheading'>{_t("Advanced")}</span>
                         <div className='mx_SettingsTab_subsectionText'>
                             {_t("Homeserver is")} <code>{MatrixClientPeg.get().getHomeserverUrl()}</code><br />
-                            {_t("Identity Server is")} <code>{MatrixClientPeg.get().getIdentityServerUrl()}</code><br />
-                            {_t("Access Token:") + ' '}
+                            {_t("Identity Server is")} <code>{MatrixClientPeg.get().getIdentityServerUrl() || 'Not found'}</code><br />
+                            {SettingsStore.getValue(UIFeature.ShowAdvancedAboutInformation) && <> {_t("Access Token:") + ' '}
                             <AccessibleButton element="span" onClick={this._showSpoiler}
                                             data-spoiler={MatrixClientPeg.get().getAccessToken()}>
                                 &lt;{ _t("click to reveal") }&gt;
@@ -280,6 +279,7 @@ export default class HelpUserSettingsTab extends React.Component {
                                     {_t("Clear cache and reload")}
                                 </AccessibleButton>
                             </div>
+                            </>}
                         </div>
                     </div>
                 }
