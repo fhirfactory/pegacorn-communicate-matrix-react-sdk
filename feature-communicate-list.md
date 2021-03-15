@@ -30,7 +30,7 @@ Web: As an Authenticated Practitioner, I should not be able to view certain Sett
 Community feature controls Flair feature at the moment in Setting.ts and this switch is turned off via communicate-config.json by using `"UIFeature.communities": false`.
 
 ### Feature: 188663
-Web: As an Authenticated Practitioner, I should be able to personalise the Security & Privacy Settings, so that I can control certain system behaviours that will maximise my user experience
+Web: As an Authenticated Practitioner, I should be able to personalise the Security & Privacy Settings, so that I can control certain system behaviours that will maximise my user experience.
 1. Where you're logged in (Tab)
 My Sessions
 Display each active session for user is a default behavior on web. A bolderized text on particular session represents current session while other sessions in list are from past session. Session last time active shows timeline of session as well on right. This could be simplified to AEST or ADCST format but this user story would not capture that kind of change so it has not been modified at the moment.
@@ -103,8 +103,9 @@ Data save mode
 There was no evidence of anything in codebase in setting to mention this was available in web.
 Send voice messages
 There was no evidence of anything in codebase in setting to mention this was available in web.
+
 ### Feature: 188664
-Web: As an Authenticated Practitioner, I should be able to personalise the Help & About Settings, so that I can control certain system behaviors that will maximise my user experience
+Web: As an Authenticated Practitioner, I should be able to personalise the Help & About Settings, so that I can control certain system behaviors that will maximise my user experience.
 FAQ
 Display FAQS
 User Setting doc mentions about making FAQ title is displayed but bot is hidden which would otherwise lead to element's help page.
@@ -134,9 +135,8 @@ Clear cache
 Mark all messages as read - This option is not available in help setting.
 Credit
 By default credit info credits authors of font, emoji at the moment. Credit information is already on screen and set to default. There is no copyright info to refer to at this stage.
-
 ### Feature: 188488
-
+Web: As an Authenticated Practitioner, I should be able to personalise the General Settings, so that I can control certain system behaviours that will maximise my user experience.
 Profile Picture -  Following expectations were in user story and are met by user story by default. These items in list are not configurable and are available in feature by default.
 System can open file location while browsing looking for profile image
 System can give preview of profile picture before you can save. Before saving profile picture you could see profile picture then decide whether or not to save your new profile image. Not clicking save button will allow you to save another image or revert back to old image.
@@ -148,9 +148,94 @@ Phone Number - Its uneditable by user and a list of phone numbers are managed by
 Country code for phone number - Default behavior would give option to user to change country code from drop down and was set to "GB" which is United Kingdom, has been changed now to "AU" for australia in config file. CountryDropdown file reads defaultCountryCode in order to display default country code.
 Password - This option has been hidden using ShowPasswordReset config item. Default behavior was to show password reset option in UI.
 Local contacts (not visible)
-Phonebook country - This has been hidden using EditphoneNumbers . Default behavior showed phonenumber being editable and country code being selectable. User story needed it to be hidden and country set to australia.
+Phonebook country - This has been hidden using EditphoneNumbers . Default behavior was form number and country code was editable. User story needed it to be hidden and country set to australia.
 Use emails and phone numbers to discover users
 Discovery - This setting allows user to be discoverable by their username/password. This feature has been turned off using ShowDiscoverySection config value and can be re-instated if need it be.
+### Feature: 188661
+Web: As an Authenticated Practitioner, I should be able to personalise the Preference Settings, so that I can control certain system behaviours that will maximise my user experience
+
+Following preference settings were expected to be turned on by default and be toggled when user tries to toggle
+Room List
+Show shortcuts to recently viewed rooms above the room list ( controls whether recently viewed rooms are displayed above the room list)
+enabled by default, so no code changes was required.
+Timeline
+Show rooms with unread messages first (controls whether chats with missed messages are shown first.)
+enabled but hidden by default from matrix for some reason, but for this user story, it has been shown using RoomList.orderByImportance flag, which is passed into array which populates these list of preference settings.
+Enable emoji suggestions while typing (controls whether emojis are suggested as you type)
+Enabled by default using MessageComposer.suggestEmoji , disabled from our custom config with inverted flag of same setting MessageComposer.dontSuggestEmoji set to true ino ur config, to meet user story requirement. If suggestEmoji was set to false, it would not have disabled this notification setting. Inverted needs to be used where it has been configured.
+Send message with enter (Controls whether a message is sent using the <Enter> key.
+This is default behavior on web as well and value is set to off so no changes required (MessageComposer.ctrlEnterToSend) controls this value, can be enabled if needed for default.
+Markdown formatting (Controls whether messages using markdown syntax are formatted before they are sent)
+There is a bug in android and iOS for this feature which says this feature does not properly work, web does not have a control on markdown translation from config yet. There are commands set up not to translate markdown in messages and html. Not sure whether to implement this completely. Considering there is a bug, I believe we should not implement this feature.
+Auto-play GIFs and videos (Controls whether GIFs and Videos are played automatically)
+This setting is turned off by default so changes required in our config. It can be turned on using autoplayGifsAndVideos.
+Inline URL preview (Controls how URL links are displayed within the chat)
+This setting is turned on by default using (urlPreviewEnabled) switch/flag so no changes required.
+Default compression ( Controls the media file size)
+Assuming this is android setting, no changes has been done. On web, no camera/media setting is available in codebase to control compression, should there be need, it might become complex to implement whole lot of work around this. In iOS and Android prompt is presented to specify compression when camera is activated but it is not the case in web so it has been left off to default. In front end there is no evidence of controlling media file compression.
+Hidden Settings
+Note:  All preference setting hidden on panel are passed values into preferencePaneHiddenFlag in our custom config.
+Show rooms with missed notifications
+Not available on web by default so no changes has been made
+Language (controls the language)
+There is no language control in preference but setting might have moved to general setting which has language selection option and has been hidden using showLanguageField flag. language flag in setting in frontend controls which language to be set in default and has been set to "en" which translates to English by default.
+Flair
+Flair setting is turned off by default when community is turned off. No changes required on web.
+Automatically replace plain text emoji (MessageComposerInput.autoReplaceEmoji)
+Automatically replace plain text Emoji
+By default its disabled , its now ben hidden by using autoReplaceEmoji flag inside preferencePaneHiddenFlag array in config.
+Enable emoji suggestions while typing
+By default, this setting is enabled, it has been disabled using suggestEmoji flag.
+Enable big emoji in chat
+This setting was enabled by default , now it has been disabled using TextualBody.enableBigEmoji set to false, also hidden by passing this into preferencePaneHiddenFlag array.
+Vibrate when mentioning a user
+Expected result is to disable and hide this setting but since web doesn't have this out of box, no change required
+Send typing notifications
+Enabled by default but it has been disabled and hidden using sendTypingNotifications set to false and pass value into preferencePaneHiddenFlag.
+Show typing notifications
+Enabled by default, with showTypingNotifications set to false, hidden by including value into preference array in config.
+Show read receipts
+Enabled by default, by using showReadReceipts set to false in config, hidden by including into array above.
+Show timestamp for all messages
+Disabled by default, needed to be enabled by default, done so by using alwaysShowTimestamp , hiding it under timeline is controlled by showTimelineSetting flag.
+Show timestamps in 12-hour format
+Disabled by default, so enabled by customisation showTwelveHourTimestamps  value set to false, using hidden by passing showTwelveHourTimestamps into array and view in UI is controlled by showTimelineSetting flag which we have set to false to hide bulk of setting in Timeline section.
+Enable automatic language detection for syntax highlighting
+Disabled by default, hidden by our custom config with enableSyntaxHighlightLanguageDetection flag.
+Show placeholder for deleted messages
+This did not require change as it is not user controllable setting , already done by default in web and already invisible as setting did not exist in view by default and it fulfills requirement.
+Show join and leave events
+Enabled by default as needed, hidden with showJoinLeaves flag passed into pref.. flag.
+Show account events
+This pref. setting is not present on web so no changes has been made to default.
+Show avatar changes
+Enabled by default, needed to be disabled for user story, done by changing showAvatar
+Show display name changes
+Enabled by default, needed to be display and hidden for user story, done by using showDisplaynameChanges set to false, and included into array.
+Show preview/thumbnails for images
+Already enabled by default as expected by user story, but hidden with showImages config item from our config.
+Show the info area
+Not visible by default, not supported or controllable via preference setting on web so no changes has been made and it defaults to default behavior.
+Default media source
+Feature not available in web and only available in android, no change of default is expected/required as specified in user setting document.
+Play shutter sound
+Feature not available on web but available in android , not expected to be implemented as well, so no change has been made.
+Preview media before sending
+Feature not available on web , not expected to be implemented as well, so no change has been made. Feature is available on android.
+Always show encryption icons
+Feature was on long time ago on web, but has been discontinued, so no changes made to default which fulfills criteria as well.
+Show avatars in user and room mentions
+Enabled by default, expected to be hidden and disabled, done so by setting value for Pill.shouldShowPillAvatar to false.
+Enable community filter panel
+Enabled by default, expected to be disabled and hidden for this user story, done so by using TagPanel.enableTagPanel flag  into preferencePaneHiddenFlag , and using General_Setting array to hide/show and also hidden by using setting value to false for PreferencesShowGeneralSection in our config.
+Prompt before sending invites to potentially invalid matrix id's
+Enabled by default, needed to be turned off and invisible in UI for user story, done so by using promptBeforeInviteUnknownUsers to disable this option, and check that on General_Setting array to hide it.
+Autocomplete delay
+Already set to 200 by default, no change, change was needed to hide this, done so by using PreferencesShowGeneralSection which is set to false in our config, General_Setting to check if value is included from config which checks against preferencePaneHiddenFlag array from config.
+Read marker lifetime delay
+Default value is 3000, same is expectation in setting, no change made on that, also this is hidden by using PreferencesShowGeneralSection with our config which hides whole General section in Preference.
+Read marker off-screen lifetime delay
+Default value is set to 30,000 as expected by user story, hidden by custom config using PreferencesShowGeneralSection
 
 
 

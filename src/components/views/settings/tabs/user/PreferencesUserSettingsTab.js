@@ -56,7 +56,8 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'showImages',
         'showChatEffects',
         'Pill.shouldShowPillAvatar',
-        'ctrlFForSearch'
+        'ctrlFForSearch',
+        "RoomList.orderByImportance"
     ].filter(z => SettingsStore.getValue(UIFeature.PreferencesPaneHiddenFlags).indexOf(z) === -1);
 
     static GENERAL_SETTINGS = [
