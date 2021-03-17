@@ -88,11 +88,10 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         // show the right values for things.
 
         const themeChoice: string = SettingsStore.getValue("theme");
-        const excludeDefault = SettingsStore.getValue(UIFeature.ChangeTheme);
         const systemThemeExplicit: boolean = SettingsStore.getValueAt(
-            SettingLevel.DEVICE, "use_system_theme", null, false, excludeDefault);
+            SettingLevel.DEVICE, "use_system_theme", null, false, true);
         const themeExplicit: string = SettingsStore.getValueAt(
-            SettingLevel.DEVICE, "theme", null, false, excludeDefault);
+            SettingLevel.DEVICE, "theme", null, false, true);
 
         // If the user has enabled system theme matching, use that.
         if (systemThemeExplicit) {
@@ -221,7 +220,6 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
     }
 
     private renderThemeSection() {
-        if (!SettingsStore.getValue(UIFeature.ChangeTheme)) return null;
         const themeWatcher = new ThemeWatcher();
         let systemThemeSection: JSX.Element;
         if (themeWatcher.isSystemThemeSupported()) {
@@ -299,7 +297,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
     private renderFontSection() {
         return (SettingsStore.getValue(UIFeature.ChangeFont)) &&
-       <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_fontScaling">
+        <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_fontScaling">
 
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
             <EventTilePreview
@@ -366,8 +364,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     useCheckbox={true}
                     disabled={this.state.layout == Layout.IRC}
                 />
-                {SettingsStore.getValue(UIFeature.PullUpIRCLayoutCheckbox) &&
-                <StyledCheckbox
+                {SettingsStore.getValue(UIFeature.PullUpIRCLayoutCheckbox) &&                <StyledCheckbox
                     checked={this.state.layout == Layout.IRC}
                     onChange={(ev) => this.onIRCLayoutChange(ev.target.checked)}
                 >
