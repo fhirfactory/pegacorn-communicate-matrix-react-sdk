@@ -230,7 +230,6 @@ export default class SecurityUserSettingsTab extends React.Component {
                 onChange={this._updateBlacklistDevicesFlag}
             />;
         }
-        if(SettingsStore.getValue(UIFeature.AdvancedSettings)) return null;
         return (
             <div className='mx_SettingsTab_section'>
                 <span className='mx_SettingsTab_subheading'>{_t("Cryptography")}</span>
