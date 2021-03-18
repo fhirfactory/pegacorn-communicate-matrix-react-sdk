@@ -88,10 +88,11 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         // show the right values for things.
 
         const themeChoice: string = SettingsStore.getValue("theme");
+        const excludeDefault = SettingsStore.getValue(UIFeature.ChangeTheme);
         const systemThemeExplicit: boolean = SettingsStore.getValueAt(
-            SettingLevel.DEVICE, "use_system_theme", null, false, true);
+            SettingLevel.DEVICE, "use_system_theme", null, false, excludeDefault);
         const themeExplicit: string = SettingsStore.getValueAt(
-            SettingLevel.DEVICE, "theme", null, false, true);
+            SettingLevel.DEVICE, "theme", null, false, excludeDefault);
 
         // If the user has enabled system theme matching, use that.
         if (systemThemeExplicit) {
@@ -220,6 +221,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
     }
 
     private renderThemeSection() {
+        if (!SettingsStore.getValue(UIFeature.ChangeTheme)) return null;
         const themeWatcher = new ThemeWatcher();
         let systemThemeSection: JSX.Element;
         if (themeWatcher.isSystemThemeSupported()) {
@@ -296,8 +298,9 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
     }
 
     private renderFontSection() {
-        return (SettingsStore.getValue(UIFeature.ChangeFont)) &&
-        <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_fontScaling">
+        const defaultFontSize = SettingsStore.getValue(UIFeature.ShowDefaultFontSize) || 10;
+        if((!SettingsStore.getValue(UIFeature.ChangeFont))) return null;
+        return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_fontScaling">
 
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
             <EventTilePreview
@@ -309,7 +312,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 <div className="mx_AppearanceUserSettingsTab_fontSlider_smallText">Aa</div>
                 <Slider
                     values={[13, 14, 15, 16, 18]}
-                    value={parseInt(this.state.fontSize, 15)}
+                    value={parseInt(this.state.fontSize, defaultFontSize)}
                     onSelectionChange={this.onFontSizeChanged}
                     displayFunc={_ => ""}
                     disabled={this.state.useCustomFontSize}
@@ -364,13 +367,14 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     useCheckbox={true}
                     disabled={this.state.layout == Layout.IRC}
                 />
-                {SettingsStore.getValue(UIFeature.PullUpIRCLayoutCheckbox) &&                <StyledCheckbox
+                {SettingsStore.getValue(UIFeature.ShowSettingIRCStyleLayout) &&
+                <StyledCheckbox
                     checked={this.state.layout == Layout.IRC}
                     onChange={(ev) => this.onIRCLayoutChange(ev.target.checked)}
                 >
                     {_t("Enable experimental, compact IRC style layout")}
                 </StyledCheckbox>}
-                {SettingsStore.getValue(UIFeature.PullUpFontLayoutCheckbox) && <>
+                {SettingsStore.getValue(UIFeature.ShowSettingFontStyleLayout) && <>
                 <SettingsFlag
                     name="useSystemFont"
                     level={SettingLevel.DEVICE}

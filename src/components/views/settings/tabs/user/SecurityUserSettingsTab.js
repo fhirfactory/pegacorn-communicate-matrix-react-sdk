@@ -230,11 +230,10 @@ export default class SecurityUserSettingsTab extends React.Component {
                 onChange={this._updateBlacklistDevicesFlag}
             />;
         }
-
+        if(SettingsStore.getValue(UIFeature.AdvancedSettings)) return null;
         return (
             <div className='mx_SettingsTab_section'>
                 <span className='mx_SettingsTab_subheading'>{_t("Cryptography")}</span>
-                {SettingsStore.getValue(UIFeature.AdvancedSettings) &&
                 <ul className='mx_SettingsTab_subsectionText mx_SecurityUserSettingsTab_deviceInfo'>
                     <li>
                         <label>{_t("Session ID:")}</label>
@@ -244,7 +243,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                         <label>{_t("Session key:")}</label>
                         <span><code><b>{identityKey}</b></code></span>
                     </li>
-                </ul>}
+                </ul>
                 {importExportButtons}
                 {noSendUnverifiedSetting}
             </div>
@@ -342,9 +341,8 @@ export default class SecurityUserSettingsTab extends React.Component {
         }
 
         let privacySection;
-        if ((Analytics.canEnable() || CountlyAnalytics.instance.canEnable()) && SettingsStore.getValue(UIFeature.ShowShareAnalyticsInformation)) {
-            privacySection =
-            <React.Fragment>
+        if ((Analytics.canEnable() || CountlyAnalytics.instance.canEnable())) {
+            privacySection = <React.Fragment>
                 <div className="mx_SettingsTab_heading">{_t("Privacy")}</div>
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Analytics")}</span>

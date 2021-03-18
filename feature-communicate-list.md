@@ -49,16 +49,16 @@ This discussion is based on two Selection criteria. One is from this user story 
 Additional Selection Criteria
 Enable experimental, compact IRC style layout
 This is checkbox unchecked and is available by default to check/uncheck under advanced under Appearance setting tab.
-User story expects this value to be hidden from view, pullUpIRCLayoutCheckbox hides checkbox from view which is config value implemented by us to hide it from view.
+User story expects this value to be hidden from view,  ShowSettingIRCStyleLayout hides checkbox from view which is config value implemented by us to hide it from view.
 Original Selection Criteria from User Setting document
 Use more compact modern layout
 IRC Layout is shown by default under advanced tab, needs to be shown for user story, so no changes required in config.
 Font Size
-Requirement is to set value to normal ( 15), by default value was initially set to (10), its been modified by changing font size from 10 to 15 as required on renderFondSize function. As it is not supposed to be visible for user to modify , its been hidden by using changeFont custom flag that wraps UI dealing with font size scaling. Value is set to false in custom config.
-The checkbox for font under Advanced section has been hidden with pullUpFontlayoutCheckbox custom config value set to false.
+Requirement says default font size to be set to 15, whereas default value from matrix was set at 10, its been modified by changing font size from 10 to 15. In order to do that, showDefaultFontSize as required on renderFondSection function. As it is not supposed to be visible for user to modify , its been hidden by using changeFont custom flag that wraps UI dealing with font size scaling. Value is set to false in custom config.
+The checkbox for font under Advanced section has been hidden with showSettingFontStyleLayout custom config value set to false.
 Theme
 Allow you to select a visual theme
-Web user story expects it to be enabled, which was default behavior, its been hidden from view with custom config value ChangeTheme , and excludeDefault.
+Web user story expects it to be enabled, which was default behavior, its been hidden from view with custom config value ChangeTheme config value, and excludeDefault hardcoded value.
 
 Feature:188496
 Web: As an Authenticated Practitioner, I should not be able to view certain Settings that are not applicable or do not need to be displayed to the user, so that I only see applicable settings
@@ -175,77 +175,77 @@ Feature: 188663
 Web: As an Authenticated Practitioner, I should be able to personalize the Security & Privacy Settings, so that I can control certain system behaviours that will maximize my user experience.
 =====================================================
 
-1. Where you're logged in (Tab).
-My Sessions.
+1. Where you're logged in (Tab)
+My Sessions
 Display each active session for user is a default behavior on web. A bolderized text on particular session represents current session while other sessions in list are from past session. Session last time active shows timeline of session as well on right. This could be simplified to AEST or ADCST format but this user story would not capture that kind of change so it has not been modified at the moment.
 
-Disable delete session option.
+Disable delete session option
 This options was active by default and has been disabled by hiding the tick box using SecurityAllowSessionEdit flag which triggers delete session button and delete button only appears next to each session  when tickbox is shown and can be activated with click.
 Rename session
 SecurityAllowSessionEdit has been used to block user from editing session id as a part of change. Default behavior was user could edit session id which appears under SessionID column on top.
 
-Sign out of session.
+Sign out of session
 The sign out prompt message has been switched off using SecurityAllowSessionEdit flag but there was no sign out option in Security tab by default so this can be assumed OOTB.
 
-Verify them in your User Profile.
+Verify them in your User Profile
 This is triggered from Verify them in your User Profile link which takes user to their profile screen on right side panel has been turned off ( SecurityAllowSessionEdit )
 
-2. Advanced.
-Logged in as:.
-Home server & Identity Server.
-Requirement mentions on web there would be Advanced Tab with Home server and Identity Server as OOTB but it does not seem to  have it. Instead this setting might have moved go General setting. General setting would show username, identity server, Homeserver detail.
-At the time of doing this user story, on web application these texts/labels were not available anywhere to be seen in advanced tab so assuming that it might have been removed over the time by matrix, no additional development work was done.
+2. Advanced
+Logged in as:
+Home server & Identity Server
+Requirement mentions on web that there would be Advanced Tab with Home server and Identity Server as OOTB but it does not seem to  have it. Instead this setting has moved to General setting. General setting would show username, identity server, Homeserver detail.
+At the time of doing this user story, on web application these texts/labels were not available anywhere to be seen in advanced tab so seeing that it has moved from Security and About setting to General setting by matrix, no additional development work was done to display this information. In email, proposal has been agreed internally in team to move requirements out from this setting to General.
 3. Cryptography(not visible)
 Entire cryptography section has been hidden as we dont have anything to show after hiding everything mentioned in user story so in future if changes occur then we would potentially switch on some feature.
 Public name
 This label was not found in UI or anywhere in code in cryptography section so no change was made.
-Session ID.
+Session ID
 Session id was visible in UI and has been hidden with AdvancedSetting OOTB already controls this and is set to false in our config file.
-Session Key.
+Session Key
 Session Key was visible in UI and has been hidden with AdvancedSetting OOTB config already controls whether to hide or show this and is set to false in our config file.
-Encrypt to verified sessions only.
+Encrypt to verified sessions only
 This label was not found in UI or anywhere in code in cryptography section so no change was made.
 
 4. Cryptography Key backup(not visible)
 No action is required to existing code as no reference to any of this behavior was found including cryptography key backup option which is not available at the moment. Maybe over the time this feature was discontinued from matrix.
-Recover encrypted messages from backup.
-Deleted backup of encrypted messages.
-Export room keys.
-Import room keys.
+Recover encrypted messages from backup
+Deleted backup of encrypted messages
+Export room keys
+Import room keys
 
-Cross-signing(not visible).
+Cross-signing(not visible)
 Reset cross signing
 Cross signing setting is switched off by using ShowEncryptionSetting flag in config file which was out of the box and no changes required.
 
-Integrations(not visible).
+Integrations(not visible)
 There is no evidence of integration manager in UI in Privacy setting. Having said that, integration manager is part of General user setting so even though as a part of this user story its not actionable, General user setting change implemented showIntegration flag in our config file that hides integration manager options.
 
-Allow integrations.
+Allow integrations
 Integration manager
 
 Integration has been switched off and hidden in General setting using ShowIntegration.
 
-Message search - desktop.
+Message search - desktop
 There is nothing to control message search so no change has been made in terms of hiding message search from UI from Security setting.
 
-Analytics(not visible).
-Send analytics data has been turned off by changing pwik definition on config file as well as by adding additional condition where text and toggle would be activated in Advanced setting rule with extra rule : ShowShareAnalyticsInformation.
-Report a bug(not visible) has been turned off by Disabled_bug_report_endpoint_url. To turn it on , process would be to remove 'Disabled' from config. bug_report_endpoint_url switch provides url where we update our bug, breaking that variable in config would automatically hide this toggle option on UI. To minimise code changes, no further tweaks has been made in code as this is sufficient.
+Analytics(not visible)
+Send analytics data has been turned off by changing pwik definition on config file.
+Report a bug(not visible) has been turned off by Disabled_bug_report_endpoint_url. To turn it on , process would be to remove 'Disabled' from config. bug_report_endpoint_url switch provides url where we update our bug, breaking that variable in config would automatically hide this toggle option on UI. To minimize code changes, no further tweaks has been made in code as this is sufficient.
 Rage Shake to report bug: Breaking bug_report_end_url  would be sufficient to hide this from menu so "report bug change" has turned it off when above changes was made.
-Submit debug logs.
+Submit debug logs
 Its no longer part of this user story, instead its part of Help and About setting.
-Clear cache and reload.
+Clear cache and reload
 Its a part of "Help and About" setting so no action required in Security setting.
-Labs(not visible).
+Labs(not visible)
 Lab setting is not separate feature in UI but controls whether experimental features to be made available to user. This is controlled by flag showLabSettings which is set to false. So, if a feature is experimental it wont be shown to user.
-Lazy load room members.
+Lazy load room members
 There was no changes required to turn off this feature as it seems to be discontinued in current state of codebase in element-web.
 Create conference calls with JITSI  ( setting must be turned off and not visible)
 It is not a separate setting option to turn JITSI off and on. However, what server is used for JITSI is controlled by config.
 In order to enable JITSI conference call and be able to use it, a config needs to be passed on our custom config. jitsi.preferredDomain controls JITSI conference calls. OOTB behavior would be that it defaults to matrix JITSI server. This is future discussion as how we want to handle this. JITSI config value jitsi  has been changed to DISABLED_jitsi to disconnect our UI to jitsi server domain.
-Data save mode.
+Data save mode
 There was no evidence of anything in codebase in setting to mention this was available in web.
-Send voice messages.
+Send voice messages
 There was no evidence of anything in codebase in setting to mention this was available in web.
 
 Feature: 188664.
