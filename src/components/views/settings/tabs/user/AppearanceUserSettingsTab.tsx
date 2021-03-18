@@ -298,8 +298,8 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
     }
 
     private renderFontSection() {
-        const defaultFontSize = SettingsStore.getValue(UIFeature.ShowDefaultFontSize) || 10;
-        if((!SettingsStore.getValue(UIFeature.ChangeFont))) return null;
+        const defaultFontSize = SettingsStore.getValue(UIFeature.DefaultFontSize) || 10;
+        if ((!SettingsStore.getValue(UIFeature.ChangeFont))) return null;
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_fontScaling">
 
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
@@ -373,7 +373,8 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     onChange={(ev) => this.onIRCLayoutChange(ev.target.checked)}
                 >
                     {_t("Enable experimental, compact IRC style layout")}
-                </StyledCheckbox>}
+                </StyledCheckbox>
+                }
                 {SettingsStore.getValue(UIFeature.ShowSettingFontStyleLayout) && <>
                 <SettingsFlag
                     name="useSystemFont"
@@ -395,7 +396,8 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     forceTooltipVisible={true}
                     disabled={!this.state.useSystemFont}
                     value={this.state.systemFont}
-                /></>}
+                />
+                </>}
             </>;
         }
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_Advanced">

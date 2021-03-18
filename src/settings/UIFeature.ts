@@ -34,7 +34,7 @@ export enum UIFeature {
     RoomHistorySettings = "UIFeature.roomHistorySettings",
     ChangeTheme = "UIFeature.changeTheme",
     ChangeFont = "UIFeature.changeFont",
-    ShowDefaultFontSize = "UIFeature.showDefaultFontSize",
+    DefaultFontSize = "UIFeature.defaultFontSize",
     ShowSettingFontStyleLayout = "UIFeature.showSettingFontStyleLayout",
     ShowSettingIRCStyleLayout = "UIFeature.showSettingIRCStyleLayout",
     ChangeDisplayName = "UIFeature.changeDisplayName",

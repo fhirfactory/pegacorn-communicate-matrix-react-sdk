@@ -218,16 +218,17 @@ export default class DevicesPanel extends React.Component {
             </AccessibleButton>;
 
         const classes = classNames(this.props.className, "mx_DevicesPanel");
-        if (SettingsStore.getValue(UIFeature.SecurityAllowSessionEdits)) return null;
         return (
             <div className={classes}>
                 <div className="mx_DevicesPanel_header">
                     <div className="mx_DevicesPanel_deviceId">{ _t("ID") }</div>
                     <div className="mx_DevicesPanel_deviceName">{ _t("Public Name") }</div>
                     <div className="mx_DevicesPanel_deviceLastSeen">{ _t("Last seen") }</div>
+                    {SettingsStore.getValue(UIFeature.SecurityAllowSessionEdits) &&
                     <div className="mx_DevicesPanel_deviceButtons">
                         { this.state.selectedDevices.length > 0 ? deleteButton : null }
                     </div>
+                    }
                 </div>
                 { devices.map(this._renderDevice) }
             </div>
