@@ -298,8 +298,8 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
     }
 
     private renderFontSection() {
+        if (!SettingsStore.getValue(UIFeature.ChangeFont)) return null;
         const defaultFontSize = SettingsStore.getValue(UIFeature.DefaultFontSize) || 10;
-        if ((!SettingsStore.getValue(UIFeature.ChangeFont))) return null;
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_fontScaling">
 
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
