@@ -56,6 +56,5 @@ export enum UIFeature {
     SecurityAllowSessionEdits = "UIFeature.securityAllowSessionEdits",
     ShowEncryptionSettings = "UIFeature.showEncryptionSettings",
     ShowSimplifiedVersionInformation = "UIFeature.showSimplifiedVersionInformation",
-    ShowAdvancedAboutInformation = "UIFeature.showAdvancedAboutInformation",
-    ShowShareAnalyticsInformation = "UIFeature.showShareAnalyticsInformation"
+    ShowAdvancedAboutInformation = "UIFeature.showAdvancedAboutInformation"
 }
