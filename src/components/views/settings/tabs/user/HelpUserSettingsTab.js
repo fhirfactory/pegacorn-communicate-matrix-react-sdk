@@ -268,7 +268,8 @@ export default class HelpUserSettingsTab extends React.Component {
                         <span className='mx_SettingsTab_subheading'>{_t("Advanced")}</span>
                         <div className='mx_SettingsTab_subsectionText'>
                             {_t("Homeserver is")} <code>{MatrixClientPeg.get().getHomeserverUrl()}</code><br />
-                            {_t("Identity Server is")} <code>{MatrixClientPeg.get().getIdentityServerUrl() || 'not used.'}</code><br />
+                            {MatrixClientPeg.get().getIdentityServerUrl() &&
+                            _t("Identity Server is")} <code>{MatrixClientPeg.get().getIdentityServerUrl()}</code><br />
                             {SettingsStore.getValue(UIFeature.ShowAdvancedAboutInformation) && <> {_t("Access Token:") + ' '}
                             <AccessibleButton element="span" onClick={this._showSpoiler}
                                             data-spoiler={MatrixClientPeg.get().getAccessToken()}>
