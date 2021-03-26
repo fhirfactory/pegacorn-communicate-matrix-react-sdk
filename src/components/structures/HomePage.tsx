@@ -33,6 +33,8 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import MiniAvatarUploader, {AVATAR_SIZE} from "../views/elements/MiniAvatarUploader";
 import Analytics from "../../Analytics";
 import CountlyAnalytics from "../../CountlyAnalytics";
+import SettingsStore from "../../settings/SettingsStore";
+import { UIFeature } from "../../settings/UIFeature";
 
 const onClickSendDm = () => {
     Analytics.trackEvent('home_page', 'button', 'dm');
@@ -94,7 +96,7 @@ const UserWelcomeTop = () => {
 const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
     const config = SdkConfig.get();
     const pageUrl = getHomePageUrl(config);
-
+    const showLiberateToCommunicateText = SettingsStore.getValue(UIFeature.ShowLiberateToCommunicateText);
     if (pageUrl) {
         const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         return <EmbeddedPage className="mx_HomePage" url={pageUrl} scrollbar={true} />;
@@ -106,14 +108,18 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
     } else {
         const brandingConfig = config.branding;
         let logoUrl = "themes/element/img/logos/element-logo.svg";
+        let secondaryLogoUrl = SettingsStore.getValue(UIFeature.SecondaryLogoUrl);
         if (brandingConfig && brandingConfig.authHeaderLogoUrl) {
             logoUrl = brandingConfig.authHeaderLogoUrl;
         }
 
         introSection = <React.Fragment>
             <img src={logoUrl} alt={config.brand} />
+            {secondaryLogoUrl ? <img src={secondaryLogoUrl} alt={config.brand} /> : null}
             <h1>{ _t("Welcome to %(appName)s", { appName: config.brand }) }</h1>
+            {showLiberateToCommunicateText &&
             <h4>{ _t("Liberate your communication") }</h4>
+            }
         </React.Fragment>;
     }
 

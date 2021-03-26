@@ -54,5 +54,9 @@ export enum UIFeature {
     SecurityAllowSessionEdits = "UIFeature.securityAllowSessionEdits",
     ShowEncryptionSettings = "UIFeature.showEncryptionSettings",
     ShowSimplifiedVersionInformation = "UIFeature.showSimplifiedVersionInformation",
-    ShowAdvancedAboutInformation = "UIFeature.showAdvancedAboutInformation"
+    ShowAdvancedAboutInformation = "UIFeature.showAdvancedAboutInformation",
+    ShowLiberateToCommunicateText = "UIFeature.showLiberateToCommunicateText",
+    ShowSecurityKeyBackupPrompt = "UIFeature.showSecurityKeyBackupPrompt",
+    SecondaryLogoUrl = "UIFeature.secondaryLogoUrl",
+    PerformSessionVerification = "UIFeature.performSessionVerification"
 }

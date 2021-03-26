@@ -847,6 +847,21 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     [UIFeature.ShowSettingAllowFallbackCallAssist]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true
+    },
+    [UIFeature.ShowLiberateToCommunicateText]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true
+    },
+    [UIFeature.ShowSecurityKeyBackupPrompt]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true
+    },
+    [UIFeature.PerformSessionVerification]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true
+    },
+    [UIFeature.SecondaryLogoUrl]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: null
     }
 };
-

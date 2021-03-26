@@ -394,7 +394,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         const crossSigningIsSetUp = cli.getStoredCrossSigningForUser(cli.getUserId());
-        if (crossSigningIsSetUp) {
+        const performSessionVerification = () => {
+            const sessionVerificationEnabled = SettingsStore.getValue(UIFeature.PerformSessionVerification);
+            return sessionVerificationEnabled;
+        }
+        if (crossSigningIsSetUp && performSessionVerification()) {
             this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
         } else if (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
             this.setStateForNewView({ view: Views.E2E_SETUP });
