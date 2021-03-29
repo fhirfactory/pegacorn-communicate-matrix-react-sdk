@@ -84,6 +84,7 @@ import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from '../../toasts/MobileGuideToast';
 import SpaceStore from "../../stores/SpaceStore";
 import SpaceRoomDirectory from "./SpaceRoomDirectory";
+import { getE2EEWellKnown } from '../../utils/WellKnownUtils';
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -394,11 +395,18 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         const crossSigningIsSetUp = cli.getStoredCrossSigningForUser(cli.getUserId());
-        const performSessionVerification = () => {
-            const sessionVerificationEnabled = SettingsStore.getValue(UIFeature.PerformSessionVerification);
-            return sessionVerificationEnabled;
+
+        // Pulls "default" value for e2e from well-known config.
+        // This can be used to check if encryption is enabled/disabled in home-server.
+        const encryptionIsEnabled = () => {
+            if (!SettingsStore.getValue(UIFeature.LookForWellKnownConfigFromHomeServer)) {
+                return null;
+            }
+            console.log("well-known config has default e2e value set to::: ", getE2EEWellKnown().default);
+            return (getE2EEWellKnown().default === true) ? true : false;
         }
-        if (crossSigningIsSetUp && performSessionVerification()) {
+
+        if (crossSigningIsSetUp && encryptionIsEnabled()) {
             this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
         } else if (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
             this.setStateForNewView({ view: Views.E2E_SETUP });

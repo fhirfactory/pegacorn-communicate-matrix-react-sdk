@@ -58,5 +58,5 @@ export enum UIFeature {
     ShowLiberateToCommunicateText = "UIFeature.showLiberateToCommunicateText",
     ShowSecurityKeyBackupPrompt = "UIFeature.showSecurityKeyBackupPrompt",
     SecondaryLogoUrl = "UIFeature.secondaryLogoUrl",
-    PerformSessionVerification = "UIFeature.performSessionVerification"
+    LookForWellKnownConfigFromHomeServer = "UIFeature.lookForWellKnownConfigFromHomeServer"
 }
