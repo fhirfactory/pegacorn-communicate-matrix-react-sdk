@@ -27,6 +27,7 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {Key} from "../../../Keyboard";
 import {privateShouldBeEncrypted} from "../../../createRoom";
 import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
+import { getE2EEWellKnown } from '../../../utils/WellKnownUtils';
 
 export default class CreateRoomDialog extends React.Component {
     static propTypes = {
@@ -183,6 +184,12 @@ export default class CreateRoomDialog extends React.Component {
         return result;
     };
 
+    // It checks if encryption option has been enabled in homeserver, if it has been disabled
+    // in homeserver we should not show 'enable' toggle.
+    encryptionFeatureIsEnabledInHomeServer = () => {
+        return (getE2EEWellKnown()["default"] === true);
+    };
+
     static _validateRoomName = withValidation({
         rules: [
             {
@@ -235,6 +242,7 @@ export default class CreateRoomDialog extends React.Component {
                     "in private rooms & Direct Messages.");
             }
             e2eeSection = <React.Fragment>
+               { this.encryptionFeatureIsEnabledInHomeServer() &&
                 <LabelledToggleSwitch
                     label={ _t("Enable end-to-end encryption")}
                     onChange={this.onEncryptedChange}
@@ -242,6 +250,7 @@ export default class CreateRoomDialog extends React.Component {
                     className='mx_CreateRoomDialog_e2eSwitch' // for end-to-end tests
                     disabled={!this.state.canChangeEncryption}
                 />
+               }
                 <p>{ microcopy }</p>
             </React.Fragment>;
         }
