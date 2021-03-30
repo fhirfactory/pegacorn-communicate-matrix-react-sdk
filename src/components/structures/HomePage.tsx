@@ -96,7 +96,7 @@ const UserWelcomeTop = () => {
 const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
     const config = SdkConfig.get();
     const pageUrl = getHomePageUrl(config);
-    const showLiberateToCommunicateText = SettingsStore.getValue(UIFeature.ShowLiberateToCommunicateText);
+    const showLiberateYourCommunicationText = SettingsStore.getValue(UIFeature.ShowLiberateToCommunicateText);
     if (pageUrl) {
         const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         return <EmbeddedPage className="mx_HomePage" url={pageUrl} scrollbar={true} />;
@@ -120,7 +120,7 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
             <img src={logoUrl} alt={config.brand} />
             {logoUrlSecondary ? <img src={logoUrlSecondary} style={logoUrlSecondaryStyle} alt={config.brand} /> : null}
             <h1>{ _t("Welcome to %(appName)s", { appName: config.brand }) }</h1>
-            {showLiberateToCommunicateText &&
+            {showLiberateYourCommunicationText &&
             <h4>{ _t("Liberate your communication") }</h4>
             }
         </React.Fragment>;

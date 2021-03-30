@@ -399,11 +399,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // Pulls "default" value for e2e from well-known config.
         // This can be used to check if encryption is enabled/disabled in home-server.
         const encryptionIsEnabled = () => {
-            if (!SettingsStore.getValue(UIFeature.LookForWellKnownConfigFromHomeServer)) {
-                return null;
-            }
-            console.log("well-known config has default e2e value set to::: ", getE2EEWellKnown().default);
-            return (getE2EEWellKnown().default === true) ? true : false;
+            const wellKnownE2EValue = getE2EEWellKnown()['default'];
+            console.log("well-known config has default e2e value set to::: ", wellKnownE2EValue);
+            return wellKnownE2EValue === true;
         }
 
         if (crossSigningIsSetUp && encryptionIsEnabled()) {
