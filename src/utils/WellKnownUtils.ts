@@ -26,6 +26,7 @@ export interface ICallBehaviourWellKnown {
 }
 
 export interface IE2EEWellKnown {
+    enabled?: boolean;
     default?: boolean;
     secure_backup_required?: boolean;
     secure_backup_setup_methods?: SecureBackupSetupMethod[];
@@ -50,13 +51,28 @@ export function getE2EEWellKnown(): IE2EEWellKnown {
 
 export function isE2EEEnabledInWellKnown(): boolean {
     const wellKnown = getE2EEWellKnown();
-	var encryptionIsEnabled = true;
+	let encryptionIsEnabled = true;
 	if (wellKnown) {
-		const encrpytionIsDisabled = wellKnown["default"] === false;
-		encryptionIsEnabled = !encrpytionIsDisabled;
-		console.log("encryptionIsEnabled = ", encryptionIsEnabled);
+		// Compare to false, so if the value is null, encryptionIsEnabled will be true
+		const value = wellKnown["enabled"];
+		const encryptionIsDisabled = value === false;
+		encryptionIsEnabled = !encryptionIsDisabled;
+		console.log("encryptionIsEnabled=", encryptionIsEnabled, ", configValue=", value, ", typeof configValue=", typeof value);
 	}
     return encryptionIsEnabled;
+}
+
+export function isE2EEDefaultedOnInWellKnown(): boolean {
+	// If encryption is disabled then don't default encrpyion on
+    if (! isE2EEEnabledInWellKnown()) {
+		return false;
+	}
+    const e2eeWellKnown = getE2EEWellKnown();
+    if (e2eeWellKnown) {
+        const defaultDisabled = e2eeWellKnown["default"] === false;
+        return !defaultDisabled;
+    }
+    return true;
 }
 
 export function isSecureBackupRequired(): boolean {
