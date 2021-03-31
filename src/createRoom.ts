@@ -27,7 +27,7 @@ import dis from "./dispatcher/dispatcher";
 import * as Rooms from "./Rooms";
 import DMRoomMap from "./utils/DMRoomMap";
 import { getAddressType } from "./UserAddress";
-import { getE2EEWellKnown } from "./utils/WellKnownUtils";
+import { isE2EEEnabledInWellKnown } from "./utils/WellKnownUtils";
 import GroupStore from "./stores/GroupStore";
 import CountlyAnalytics from "./CountlyAnalytics";
 import { isJoinedOrNearlyJoined } from "./utils/membership";
@@ -368,10 +368,5 @@ export async function ensureDMExists(client: MatrixClient, userId: string): Prom
 }
 
 export function privateShouldBeEncrypted(): boolean {
-    const e2eeWellKnown = getE2EEWellKnown();
-    if (e2eeWellKnown) {
-        const defaultDisabled = e2eeWellKnown["default"] === false;
-        return !defaultDisabled;
-    }
-    return true;
+    return isE2EEEnabledInWellKnown();
 }

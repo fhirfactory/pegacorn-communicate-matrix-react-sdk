@@ -312,7 +312,7 @@ This prompt appears when user is already authenticated. ShowSecurityKeyBackupPro
 Remove the I trust server prompt screen
 Its been implemented through homeserver.yaml config value.
 Hide liberate your communication text
-Its been hidden with custom config value ShowLiberateToCommunicateText in our config.
+Its been hidden with custom config value ShowLiberateYourCommunicationText in our config.
 ACT government logo
 A secondary image has been used and read from config value secondaryLogoUrl. This uses standard ACT Govt Logo which is horizontal.
 ACT government logo on pre login screen

@@ -96,7 +96,7 @@ const UserWelcomeTop = () => {
 const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
     const config = SdkConfig.get();
     const pageUrl = getHomePageUrl(config);
-    const showLiberateYourCommunicationText = SettingsStore.getValue(UIFeature.ShowLiberateToCommunicateText);
+    const showLiberateYourCommunicationText = SettingsStore.getValue(UIFeature.ShowLiberateYourCommunicationText);
     if (pageUrl) {
         const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         return <EmbeddedPage className="mx_HomePage" url={pageUrl} scrollbar={true} />;

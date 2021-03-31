@@ -48,6 +48,17 @@ export function getE2EEWellKnown(): IE2EEWellKnown {
     return null;
 }
 
+export function isE2EEEnabledInWellKnown(): boolean {
+    const wellKnown = getE2EEWellKnown();
+	var encryptionIsEnabled = true;
+	if (wellKnown) {
+		const encrpytionIsDisabled = wellKnown["default"] === false;
+		encryptionIsEnabled = !encrpytionIsDisabled;
+		console.log("encryptionIsEnabled = ", encryptionIsEnabled);
+	}
+    return encryptionIsEnabled;
+}
+
 export function isSecureBackupRequired(): boolean {
     const wellKnown = getE2EEWellKnown();
     return wellKnown && wellKnown["secure_backup_required"] === true;

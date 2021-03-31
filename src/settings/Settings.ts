@@ -848,7 +848,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true
     },
-    [UIFeature.ShowLiberateToCommunicateText]: {
+    [UIFeature.ShowLiberateYourCommunicationText]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true
     },
@@ -858,7 +858,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     [UIFeature.LookForWellKnownConfigFromHomeServer]: {
         supportedLevels: LEVELS_UI_FEATURE,
-        default: true
+        default: false
     },
     [UIFeature.SecondaryLogoUrl]: {
         supportedLevels: LEVELS_UI_FEATURE,

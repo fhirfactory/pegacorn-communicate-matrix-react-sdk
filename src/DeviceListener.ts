@@ -286,7 +286,7 @@ export default class DeviceListener {
         }
         const showSecurityKeyBackupPrompt = SettingsStore.getValue(UIFeature.ShowSecurityKeyBackupPrompt);
         // Display or hide the batch toast for old unverified sessions
-        if (oldUnverifiedDeviceIds.size > 0 && showSecurityKeyBackupPrompt()) {
+        if (oldUnverifiedDeviceIds.size > 0 && showSecurityKeyBackupPrompt) {
             showBulkUnverifiedSessionsToast(oldUnverifiedDeviceIds);
         } else {
             hideBulkUnverifiedSessionsToast();
