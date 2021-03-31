@@ -33,6 +33,8 @@ import { isSecretStorageBeingAccessed, accessSecretStorage } from "./SecurityMan
 import { isSecureBackupRequired } from './utils/WellKnownUtils';
 import { isLoggedIn } from './components/structures/MatrixChat';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import SettingsStore from './settings/SettingsStore';
+import { UIFeature } from './settings/UIFeature';
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
@@ -282,9 +284,9 @@ export default class DeviceListener {
                 }
             }
         }
-
+        const showSecurityKeyBackupPrompt = SettingsStore.getValue(UIFeature.ShowSecurityKeyBackupPrompt);
         // Display or hide the batch toast for old unverified sessions
-        if (oldUnverifiedDeviceIds.size > 0) {
+        if (oldUnverifiedDeviceIds.size > 0 && showSecurityKeyBackupPrompt) {
             showBulkUnverifiedSessionsToast(oldUnverifiedDeviceIds);
         } else {
             hideBulkUnverifiedSessionsToast();

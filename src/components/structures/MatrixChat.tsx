@@ -84,6 +84,7 @@ import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from '../../toasts/MobileGuideToast';
 import SpaceStore from "../../stores/SpaceStore";
 import SpaceRoomDirectory from "./SpaceRoomDirectory";
+import { isE2EEEnabledInWellKnown } from '../../utils/WellKnownUtils';
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -394,9 +395,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         const crossSigningIsSetUp = cli.getStoredCrossSigningForUser(cli.getUserId());
-        if (crossSigningIsSetUp) {
+
+		const encrptionIsEnabled = isE2EEEnabledInWellKnown();
+		// Only need cross signing for encryption, so only prompt if encrpytion is enabled in the wellKnownConfig
+        if (encrptionIsEnabled && crossSigningIsSetUp) {
             this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
-        } else if (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
+        } else if (encrptionIsEnabled && await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
             this.setStateForNewView({ view: Views.E2E_SETUP });
         } else {
             this.onLoggedIn();
