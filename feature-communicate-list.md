@@ -317,3 +317,13 @@ ACT government logo
 A secondary image has been used and read from config value secondaryLogoUrl. This uses standard ACT Govt Logo which is horizontal.
 ACT government logo on pre login screen
 Vertical ACT government logo has been used for this purpose. A config value cant be used for this as app-web is not query that setting in front end. Only on react sdk you can use config to retrieve that value. This one uses ACT gov logo that ends with _vertical keyword.
+
+Feature: 221259
+Web: Sign In Screen Lingo Re-Branding and Update
+====================================================================================
+Technical Implementation:
+Note: These configurable parameters are stored in config-communicate.json and replaced in config.json file when app loads.
+1) Homeserver edit is controlled by configuration item disable_custom_urls which when used to true can lead to homeserver be uneditable which means read only text is displayed.
+2) Splash screen menu items UIFeature.PasswordReset and UIFeature.Registration were part of default matrix config values which has been set to true from our side to disable password reset and client's ability to create account and it will hide these two menu from splash screen.
+3) In order to hide phone number drop down menu, homeserver detail display, i-information changedSplashScreenMenuItem has been introduced in config which when value is populated its meant to control what needs to be hidden when used appropriately in implementation.
+4) Matrix default login screen before form based login screen where user would see sign in button and then sign in form would be triggered was controlled by welcome_page routing configuration in codebase which has been turned off and instead we redirect user from welcome screen in authenticated page to form based login screen with configurable parameter auto_redirect_from_welcome_screen_to_login.
