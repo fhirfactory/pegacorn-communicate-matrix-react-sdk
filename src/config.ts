@@ -2,13 +2,13 @@ import SdkConfig from "./SdkConfig";
 
 const config = SdkConfig.get();
 
-const hiddenSplashScreenMenuItem = config['hiddenSplashScreenMenuItem'];
+const hiddenLoginScreenMenuItem = config['hiddenLoginScreenMenuItem'];
 
-export const signInTextNeedsToBeReplaced = hiddenSplashScreenMenuItem?.find(x => x.includes(['changeSigninWithLoginTextLabel'])) ? true: false;
+export const signInTextNeedsToBeReplaced = hiddenLoginScreenMenuItem?.find(x => x.includes(['changeSigninWithLoginTextLabel'])) ? true: false;
 
 // background color on login screen
 // used by app-web to load a colored background instead of lake image
-export const splashScreenBackgroundColor = hiddenSplashScreenMenuItem?.find(x => x['splashScreenBackgroundColor']) || null;
+export const loginScreenBackgroundColor = hiddenLoginScreenMenuItem?.find(x => x['loginScreenBackgroundColor']) || null;
 
 // Sign in text - change to login
 export const changeSigninWithLoginTextLabel = () => {
@@ -22,10 +22,10 @@ export const changeSigninWithLoginTextLabel = () => {
 }
 
 //Phone based authentication drop down menu
-export const allowPhoneBasedAuthentication = hiddenSplashScreenMenuItem?.find(x => x.includes(['allowPhoneBasedAuthentication'])) ? false: true;
+export const allowPhoneBasedAuthentication = hiddenLoginScreenMenuItem?.find(x => x.includes(['allowPhoneBasedAuthentication'])) ? false: true;
 
 // Homeserver
-export const showHomeServerDetail = hiddenSplashScreenMenuItem?.find(x => x.includes(['showHomeServerInfoOnSplashScreen'])) ? false: true;
+export const showHomeServerDetail = hiddenLoginScreenMenuItem?.find(x => x.includes(['showHomeServerInfoOnLoginScreen'])) ? false: true;
 
 // Default footer links
-export const showDefaultFooterLinks = hiddenSplashScreenMenuItem?.find(x => x.includes(['showMatrixDefaultFooterLinks'])) ? false: true;
+export const showDefaultFooterLinks = hiddenLoginScreenMenuItem?.find(x => x.includes(['showMatrixDefaultFooterLinks'])) ? false: true;
