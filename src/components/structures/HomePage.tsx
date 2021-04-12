@@ -108,18 +108,19 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
     } else {
         const brandingConfig = config.branding;
         let logoUrl = "themes/element/img/logos/element-logo.svg";
-        let logoUrlSecondary = SettingsStore.getValue(UIFeature.SecondaryLogoUrl);
-        let logoSecondaryDescription = config['secondary_logo_description'];
+        let logoSecondaryConfig = config['logo_secondary_style'];
+        let logoSecondaryDescription = logoSecondaryConfig?.description || config.brand;
+        const logoUrlSecondary = logoSecondaryConfig?.imgUrl || null;
         if (brandingConfig && brandingConfig.authHeaderLogoUrl) {
             logoUrl = brandingConfig.authHeaderLogoUrl;
         }
-       const logoSecondaryStyle = {
-           margin: '0 10px',
-           height: '55px'
-       };
+        const logoSecondaryStyle = {
+           margin: logoSecondaryConfig?.margin || '0 10px',
+           height: logoSecondaryConfig?.height || '55px'
+       }
 
         introSection = <React.Fragment>
-            {logoUrlSecondary ? <img src={logoUrlSecondary} style={logoSecondaryStyle} alt={logoSecondaryDescription} /> : null}
+            {logoUrlSecondary && <img src={logoUrlSecondary} style={logoSecondaryStyle} alt={logoSecondaryDescription} />}
             <img src={logoUrl} alt={config.brand} />
             <h1>{ _t("Welcome to %(appName)s", { appName: config.brand }) }</h1>
             {showLiberateYourCommunicationText &&
