@@ -108,9 +108,10 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
     } else {
         const brandingConfig = config.branding;
         let logoUrl = "themes/element/img/logos/element-logo.svg";
-        let logoSecondaryConfig = config['logo_secondary_style'];
-        let logoSecondaryDescription = logoSecondaryConfig?.description || config.brand;
+        const logoSecondaryConfig = config['logo_secondary_style'];
         const logoUrlSecondary = logoSecondaryConfig?.imgUrl || null;
+        const logoSecondaryDescription = logoSecondaryConfig?.description || config.brand;
+
         if (brandingConfig && brandingConfig.authHeaderLogoUrl) {
             logoUrl = brandingConfig.authHeaderLogoUrl;
         }
