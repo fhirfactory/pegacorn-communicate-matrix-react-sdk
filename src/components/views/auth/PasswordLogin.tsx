@@ -446,12 +446,14 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                         <option key={LoginField.MatrixId} value={LoginField.MatrixId}>
                             {_t('Username')}
                         </option>
+                        {config.allowEmailBasedAuthentication &&
                         <option
                             key={LoginField.Email}
                             value={LoginField.Email}
                         >
                             {_t('Email address')}
                         </option>
+                        }
                         {config.allowPhoneBasedAuthentication &&
                         <option key={LoginField.Password} value={LoginField.Password}>
                             {_t('Phone')}

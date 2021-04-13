@@ -314,7 +314,7 @@ Its been implemented through homeserver.yaml config value.
 Hide liberate your communication text
 Its been hidden with custom config value ShowLiberateYourCommunicationText in our config.
 ACT government logo
-A secondary image has been used and read from config value secondary_logo_style.imgUrl. This uses standard ACT Govt Logo which is horizontal.
+A secondary image has been used and read from config value logo_secondary.imgUrl. This uses standard ACT Govt Logo which is horizontal.
 ACT government logo on pre login screen
 Vertical ACT government logo has been used for this purpose. A config value cant be used for this as app-web is not query that setting in front end. Only on react sdk you can use config to retrieve that value. This one uses ACT gov logo that ends with _vertical keyword.
 

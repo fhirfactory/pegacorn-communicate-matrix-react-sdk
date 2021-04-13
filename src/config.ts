@@ -11,11 +11,16 @@ const config = SdkConfig.get();
 
 const loginScreen = config['loginScreen'];
 
-export const signInTextNeedsToBeReplaced = loginScreen?.find(x => x.includes(['changeSigninWithLoginTextLabel'])) ? true : false;
+// As the config values are booleans, we use the
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator (??)
+// to safely provide a default boolean value to optional config values that provide boolean values.
+// We also use https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining (?.) to handle if the config
+// hierarchy doesn't exist
+export const signInTextNeedsToBeReplaced = loginScreen?.changeSigninToLoginTextLabel ?? false;
 
 // background color on login screen
 // used by app-web to load a colored background instead of lake image
-export const loginScreenBackgroundColor = loginScreen?.find(x => x['loginScreenBackgroundColor']) || null;
+export const loginScreenBackgroundColor = loginScreen?.backgroundColor ?? null;
 
 // Sign in text - change to login
 export const changeSigninWithLoginTextLabel = () => {
@@ -27,11 +32,14 @@ export const changeSigninWithLoginTextLabel = () => {
     }
 }
 
+//Email based authentication drop down menu
+export const allowEmailBasedAuthentication = loginScreen?.allowEmailBasedAuthentication ?? true;
+
 //Phone based authentication drop down menu
-export const allowPhoneBasedAuthentication = loginScreen?.find(x => x.includes(['allowPhoneBasedAuthentication'])) ? false : true;
+export const allowPhoneBasedAuthentication = loginScreen?.allowPhoneBasedAuthentication ?? true;
 
 // Homeserver
-export const showHomeServerDetail = loginScreen?.find(x => x.includes(['showHomeServerInfoOnLoginScreen'])) ? false : true;
+export const showHomeServerDetail = loginScreen?.showHomeServerInfo ?? true;
 
 // Default footer links
-export const showDefaultFooterLinks = loginScreen?.find(x => x.includes(['showMatrixDefaultFooterLinks'])) ? false : true;
+export const showDefaultFooterLinks = loginScreen?.showMatrixDefaultFooterLinks ?? true;
