@@ -1943,10 +1943,20 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         return fragmentAfterLogin;
     }
 
+    showWelcomeScreenBeforeLoginScreen(): boolean {
+        const auto_redirect_from_welcome_screen_to_login = SdkConfig.get()['auto_redirect_from_welcome_screen_to_login'];
+        let showWelcomeScreen = true;
+        const hideWelcomeScreen = auto_redirect_from_welcome_screen_to_login === true;
+       if( this.state.view === Views.WELCOME) {
+        showWelcomeScreen = !hideWelcomeScreen;
+       }
+       console.log("show welcome screen value:", showWelcomeScreen);
+       return showWelcomeScreen;
+    }
+
     render() {
         const fragmentAfterLogin = this.getFragmentAfterLogin();
         let view = null;
-
         if (this.state.view === Views.LOADING) {
             const Spinner = sdk.getComponent('elements.Spinner');
             view = (
@@ -2015,7 +2025,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     </div>
                 );
             }
-        } else if (this.state.view === Views.WELCOME) {
+        } else if (this.state.view === Views.WELCOME && this.showWelcomeScreenBeforeLoginScreen()) {
             const Welcome = sdk.getComponent('auth.Welcome');
             view = <Welcome />;
         } else if (this.state.view === Views.REGISTER && SettingsStore.getValue(UIFeature.Registration)) {
@@ -2047,7 +2057,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     {...this.getServerProperties()}
                 />
             );
-        } else if (this.state.view === Views.LOGIN) {
+        } else if (this.state.view === Views.LOGIN || !this.showWelcomeScreenBeforeLoginScreen()) {
             const showPasswordReset = SettingsStore.getValue(UIFeature.PasswordReset);
             const Login = sdk.getComponent('structures.auth.Login');
             view = (

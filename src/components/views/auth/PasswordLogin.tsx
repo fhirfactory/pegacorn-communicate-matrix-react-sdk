@@ -26,6 +26,7 @@ import withValidation from "../elements/Validation";
 import * as Email from "../../../email";
 import Field from "../elements/Field";
 import CountryDropdown from "./CountryDropdown";
+import * as config from '../../../config';
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -404,6 +405,10 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
         }
     }
 
+    componentDidUpdate(){
+        return config.changeSigninWithLoginTextLabel();
+     }
+
     render() {
         let forgotPasswordJsx;
 
@@ -441,15 +446,19 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                         <option key={LoginField.MatrixId} value={LoginField.MatrixId}>
                             {_t('Username')}
                         </option>
+                        {config.allowEmailBasedAuthentication &&
                         <option
                             key={LoginField.Email}
                             value={LoginField.Email}
                         >
                             {_t('Email address')}
                         </option>
+                        }
+                        {config.allowPhoneBasedAuthentication &&
                         <option key={LoginField.Password} value={LoginField.Password}>
                             {_t('Phone')}
                         </option>
+                        }
                     </Field>
                 </div>
             );

@@ -63,7 +63,7 @@ export function isE2EEEnabledInWellKnown(): boolean {
 }
 
 export function isE2EEDefaultedOnInWellKnown(): boolean {
-	// If encryption is disabled then don't default encrpyion on
+	// If encryption is disabled then don't default encryption on
     if (! isE2EEEnabledInWellKnown()) {
 		return false;
 	}

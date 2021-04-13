@@ -24,6 +24,7 @@ import SdkConfig from "../../../SdkConfig";
 import Modal from "../../../Modal";
 import ServerPickerDialog from "../dialogs/ServerPickerDialog";
 import InfoDialog from "../dialogs/InfoDialog";
+import * as config from '../../../config';
 
 interface IProps {
     title?: string;
@@ -81,7 +82,9 @@ const ServerPicker = ({ title, dialogTitle, serverConfig, onServerConfigChange }
         </span>;
     }
 
-    return <div className="mx_ServerPicker">
+
+    return config.showHomeServerDetail &&
+        <div className="mx_ServerPicker">
         <h3>{title || _t("Homeserver")}</h3>
         <AccessibleButton className="mx_ServerPicker_help" onClick={onHelpClick} />
         <span className="mx_ServerPicker_server">{serverName}</span>
