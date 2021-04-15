@@ -310,11 +310,11 @@ This option won't show up in single sign on by default from matrix implementatio
 Review your session prompt
 This prompt appears when user is already authenticated. ShowSecurityKeyBackupPrompt has been used to hide this prompt.
 Remove the I trust server prompt screen
-Its been implemented through homeserver.yaml config value.
+Its been implemented through `homeserver.yaml` config value.
 Hide liberate your communication text
-Its been hidden with custom config value ShowLiberateYourCommunicationText in our config.
+Its been hidden with custom config value `ShowLiberateYourCommunicationText` in our config.
 ACT government logo
-A secondary image has been used and read from config value logo_secondary.imgUrl. This uses standard ACT Govt Logo which is horizontal.
+A secondary image has been used and read from config value `logo.logo_secondary.imgUrl`. This uses standard ACT Govt Logo which is horizontal.
 ACT government logo on pre login screen
 Vertical ACT government logo has been used for this purpose. A config value cant be used for this as app-web is not query that setting in front end. Only on react sdk you can use config to retrieve that value. This one uses ACT gov logo that ends with _vertical keyword.
 
@@ -330,3 +330,13 @@ Web: Sign In Screen Lingo Re-Branding and Update
  which is configurable flag to control image description and we can change this description on config file as we want and this description would aid `WCAG` compliance on image description. This config centralizes all secondary logo  values such as `margin`, `height`, `logo url`, `logo description` etc. which are easily configurable and can be done through config changes in future.
  - Footer for unauthenticated content from matrix default has been turned off by using `showMatrixDefaultFooterLinks` flag which is also used for replacing copyright content of matrix with customized ones from clients.
  - Unauthenticated footer content is going to use customized communicate logo and text label which is private information so instead of hardcoding it , it has been configured from `footer` config value so now WCAG accessibility text for image and footer description won't be part of component even though image is referenced there. There is chance to configure all styles for footer logo, and text labels. Mostly idea of configuring style for anything in UI has been to minimize code changes and be able to change height of image used promptly.
+ These other flags control login screen and home screen display
+to manage logos properly `logo` config value has been added in config which controls values and boolean fields containing logo logic as well as values for styling in general for logo such as `height`.
+ - `showPrimaryLogoOnLoginScreen` controls whether or not to show primary logo on logon screen window.
+ - `showPrimaryLogoInAuthenticatedScreen` controls whether or not to show secondary logo on authenticated screen.
+ - `showSecondaryLogoOnLoginScreen` controls whether or not to show secondary logo on logon screen window which has forms.
+ - `showSecondaryLogoOnAuthenticatedSreen` controls whether or not to show secondary logo when user is authenticated. This logic could be used wherever secondaryLogo is used in authenticated page when i.e. top left, footer, in middle or whatnot.
+ - `showWelcomeToElementText` controls whether or not to show "welcome to element" message when user is logged in.
+ - `showLoginScreenBackgroundImage` controls whether or not to show lake image or any other background images on login screen.
+ - `backgroundColor` is used by view to render colored background which turns into a bogus url instead of real url.
+ - `secondaryLogo` is used by view to render a secondary image which is shown on Login screen or next to primary screen after user is logged in where there is a scenario to use two images.
