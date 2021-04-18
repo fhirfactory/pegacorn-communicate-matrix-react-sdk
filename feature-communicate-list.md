@@ -69,6 +69,90 @@ Web: As an Authenticated Practitioner, I should not be able to view certain Sett
 **config**
 Community feature controls Flair feature at the moment in Setting.ts and this switch is turned off via communicate-config.json by using `"UIFeature.communities": false`.
 
+Feature: 188497
+Web: As an Authenticated Practitioner, I should be able to personalise the Notification Settings, so that I can control certain system behaviours that will maximise my user experience
+=============================================================================================================================================================================
+
+(1) "on" means it will silently send push notification without buzz.
+(2) "off" means it will be completely turned off.
+(3) "Noisy" means it will buzz when notification is sent on phone.
+
+Three conditions were outlined in user setting document which detailed:
+"A notification is created when...." this in user setting story meant set value to "noisy"
+"A silent notification is created when..." this in user story meant set value to "on" and do not buzz or be noisy.
+"The setting is off"....this in user setting document has been assumed to mean set value in column to "off".
+
+Some discrepancy was found in user setting document where  "default setting value" column related values said "off" is default matrix was not valid anymore. Also it was no clear if "default setting value" meant default by matrix or default of what we are defaulting as a part of changing notification rules.
+
+Note:
+How notifications switches has worked in front end is, some of these notifications can be turned on by using default flags available from setting.ts file from front end whereas some notifications were outside control of front end. After doing an observation on requirement on UI it has been found that there were only 2 values where user setting documents said leave it as default and also indicated leave it as something which was maybe default in past but not now so option was to either change the value through synapse configurable setting or adjust requirement document.
+Setting to be adjusted through synapse server
+
+The default user setting values have changed since requirement document was created. The new values are presented as silent or noisy or off were other way around for following which means either requirement needs to change default values or we need to change the expected values.
+For requirements:
+1) for no (1) below, document said default value was silent/on and expected to be silent/on without change but now default value was found to be noisy.
+2) for no (2) below, document said default value was noisy and expected to be noisy, but now noisy value has changed to silent/on.
+3) for no (3) below, document said default value was off and we want it off but now matrix default value was found to be on/silent.
+4) for no (4) below, document said default value was off and we wanted it to be off, but matrix default now was found to be "on/silent".
+When rooms are upgraded (default: noisy, expected:  silent / on,  keyword: "m.rule.tombstone")
+Messages in group chats (default: silent/on, expected: "noisy", keyword: "m.rule.message", no change made)
+Encrypted messages in group chats (default: "on/silent", expected: "off", " keyword: "m.rule.encrypted") 4.
+Encrypted messages in one-to-one chats (default: on, expected: "off", rule keyword: "m.rule.encrypted_room_one_to_one)
+
+
+Settings adjusted through front end setting config values
+notificationEnabled(flag provided by matrix by default in front end)
+Enable notifications for this account (requirement said it needed to be enabled but already enabled by default no change required)
+Enable notifications for this session  (requirement said it needed to be enabled and enabled through notificationEnabled flag)
+Show message in desktop notification (disabled by default but has been enabled by using notificationEnabled flag for all to meet requirement)
+Enable audible notifications for this session (enabled by default and requirement says it needs to be enabled by default when no change has been made, works well, no changes required)
+Clear notifications
+( this option is when you got pending notifications you have not read and you can view these by pressing bell icon on right, if no notification is found bell wont show that button underneath otherwise by default this behavior will work)
+These notifications setting have been hidden and disabled as required by user setting requirement document.
+The default notification settings prior to changes made, are mentioned in bracket () next to notification rules below.
+The list of rules in incremental order as described in user setting document.
+Notifications where it says noisy means it will send notification with default sound set by homeserver setting, whereas where it says "on" would send notification silently and "off" means do not send notification or notification is inactive/disabled.
+Messages containing my display name (default: "noisy", expected: "noisy" when exact match is found in display name" "no change has been requested", rule keyword: "contains_display_name")
+Messages containing keywords(default: on, expected: on and visible, therefore no change has been made)
+Messages containing my username (default: noisy, expected: "noisy", was visible but hidden now with config )
+Messages containing @room (default: noisy, expected: "noisy", no change required, rule keyword: ".m.rule.roomnotif")
+Messages in one-to-one chats (default:  noisy, expected: "off", was visible but hidden now, rule keyword: ".m.rule.room_one_to_one" )
+Messages in group chats (default: silent/on, expected: "noisy", keyword: "m.rule.message", no change made)
+Encrypted messages in group chats (default: "on/silent", expected: "on/silent", " keyword: "m.rule.encrypted")
+When I'm invited to a room (default: "noisy", expected: "noisy", no change made)
+Call invitation (default: noisy, expected: noisy, no change made)
+Messages sent by bot (default: "off", expected: "off", keyword: "m.rule.suppresses.notices", no change made)
+When rooms are upgraded (default: noisy, expected:  silent / on,  keyword: "m.rule.tombstone")
+
+
+These notification rules are not in web so they are in android side of features so they did not need changes. In most of cases these required to be turned off and hidden.
+Show encrypted messages in group chat (expected result was 'off' and invisible)
+Turn the screen on for 3 seconds (expected result was 'off' and invisible)
+Notification privacy (expected result was 'off' and invisible)
+Notifications target
+Troubleshoot notifications
+
+Not web features and no changes needed on these. These are part of android features.
+Show decrypted content (expected result was 'off' and invisible but feature is not in web so no change needed)
+Turn the screen on for 3 seconds ( android feature, not available on web)
+Show notification on this device ( feature is not available on web)
+Developer Note:
+Hidden values in email notification setting in coding side has been done by populating array in communicate-config file so in order to check current state of notification, please remove all of these values from array and run yarn start from app-web project.
+
+ "UIFeature.hiddenNotificationRules": [
+            ".m.rule.contains_display_name",
+            ".m.rule.contains_user_name",
+            ".m.rule.roomnotif",
+            ".m.rule.room_one_to_one",
+            ".m.rule.encrypted_room_one_to_one",
+            ".m.rule.message",
+            ".m.rule.encrypted",
+            ".m.rule.invite_for_me",
+            ".m.rule.call",
+            ".m.rule.suppress_notices",
+            ".m.rule.tombstone"
+        ]
+
 Feature: 188661
 Web: As an Authenticated Practitioner, I should be able to personalize the Preference Settings, so that I can control certain system behaviors that will maximize my user experience.
 ============================================================
