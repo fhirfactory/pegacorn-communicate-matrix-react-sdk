@@ -121,9 +121,8 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
        }
 
         introSection = <React.Fragment>
-            {logoUrlSecondary && <img src={logoUrlSecondary} style={logoSecondaryStyle} alt={logoSecondaryDescription} />}
             <img src={logoUrl} alt={config.brand} />
-            <h1>{ _t("Welcome to %(appName)s", { appName: config.brand }) }</h1>
+
             {showLiberateYourCommunicationText &&
             <h4>{ _t("Liberate your communication") }</h4>
             }

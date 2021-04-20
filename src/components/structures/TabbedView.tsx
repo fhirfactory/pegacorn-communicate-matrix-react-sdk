@@ -125,6 +125,14 @@ export default class TabbedView extends React.Component<IProps, IState> {
                     {labels}
                 </div>
                 {panel}
+                <div className="mx_AuthFooter_TabbedView">
+                    <a href="" target="_blank" rel="noreferrer noopener">                        
+                    </a>
+                    <span className="mx_AuthFooter_brand_TabbedView">
+                        <img className="mx_AuthFooter_Image_Tabbed" src="themes/element/img/logos/ACTGov_inline_rev_black.png" alt="ACT Govt Logo"/>
+                    </span>
+                </div>
+
             </div>
         );
     }
