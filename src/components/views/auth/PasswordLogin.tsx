@@ -484,7 +484,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                     {forgotPasswordJsx}
                     { !this.props.busy && <input className="mx_Login_submit"
                         type="submit"
-                        value={_t('Sign in')}
+                        value={('Log in')}
                         disabled={this.props.disableSubmit}
                     /> }
                 </form>

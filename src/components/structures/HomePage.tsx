@@ -119,14 +119,7 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
        }
 
         introSection = <React.Fragment>
-            {customConfig.showSecondaryLogoInAuthenticatedScreen && <img src={logoUrlSecondary} style={logoSecondaryStyle} alt={logoSecondaryDescription} />}
-            {customConfig.showPrimaryLogoInAuthenticatedScreen &&
-            <img src={logoUrl} alt={config.brand}/>
-            }
-            {showWelcomeToElementText ?
-            <h1>{ _t("Welcome to %(appName)s", { appName: config.brand }) }</h1>
-            :<h1>{<img src={logoUrl} alt={config.brand}/>}</h1>
-            }
+            <img src={logoUrl} alt={config.brand} />
             {showLiberateYourCommunicationText &&
             <h4>{ _t("Liberate your communication") }</h4>
             }

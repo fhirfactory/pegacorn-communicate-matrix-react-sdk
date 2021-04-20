@@ -29,7 +29,12 @@ export default class AuthHeader extends React.Component {
         const LanguageSelector = sdk.getComponent('views.auth.LanguageSelector');
 
         return (
-            <div className="mx_AuthHeader">
+            <div className="mx_AuthHeader"> 
+                <br/>  
+                <br/> 
+                <div>
+                <img className="mx_AuthHeaderLogo_Act" src="themes/element/img/logos/ACT-Government-inline-back-trans.jpg" alt="ACT Govt Logo"  />                
+                </div>
                 <AuthHeaderLogo />
                 <LanguageSelector disabled={this.props.disableLanguageSelector} />
             </div>
