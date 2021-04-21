@@ -109,7 +109,7 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
         const brandingConfig = config.branding;
         let logoUrl = "themes/element/img/logos/element-logo.svg";
         const logoSecondaryDescription = customConfig?.logoSecondary?.description || config.brand;
-        const logoUrlSecondary = config.logo.logo_secondary.imgUrl;
+        const logoUrlSecondary = config.logo?.logo_secondary?.imgUrl;
         if (brandingConfig && brandingConfig.authHeaderLogoUrl) {
             logoUrl = brandingConfig.authHeaderLogoUrl;
         }
@@ -119,10 +119,7 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
        }
 
         introSection = <React.Fragment>
-            <img src={logoUrl} alt={config.brand} />
-            {showLiberateYourCommunicationText &&
-            <h4>{ _t("Liberate your communication") }</h4>
-            }
+            <img src={logoUrl} alt={config.brand} />           
         </React.Fragment>;
     }
 
