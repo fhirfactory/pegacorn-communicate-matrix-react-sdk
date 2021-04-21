@@ -30,8 +30,7 @@ export default class AuthHeader extends React.Component {
 
         return (
             <div className="mx_AuthHeader"> 
-                <br/>  
-                <br/> 
+                <br/>              
                 <div>
                 <img className="mx_AuthHeaderLogo_Act" src="themes/element/img/logos/ACT-Government-inline-back-trans.jpg" alt="ACT Govt Logo"  />                
                 </div>
