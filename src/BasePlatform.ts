@@ -89,12 +89,9 @@ export default abstract class BasePlatform {
     }
 
     startUpdateCheck() {
-        hideUpdateToast();
-        localStorage.removeItem(UPDATE_DEFER_KEY);
-        dis.dispatch<CheckUpdatesPayload>({
-            action: Action.CheckUpdates,
-            status: UpdateCheckStatus.Checking,
-        });
+        // https://dev.azure.com/ACTGovernment/Pegacorn/_workitems/edit/222612/
+        // Disable VersionUpdate
+       
     }
 
     /**
