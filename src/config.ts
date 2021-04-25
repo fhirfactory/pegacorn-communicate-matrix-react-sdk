@@ -43,3 +43,54 @@ export const showHomeServerDetail = loginScreen?.showHomeServerInfo ?? true;
 
 // Default footer links
 export const showDefaultFooterLinks = loginScreen?.showMatrixDefaultFooterLinks ?? true;
+
+
+/**
+ * Authenticated homepage directory ui flow
+ * 'explore public room options' can be switched off
+ * and many more tiles on homepage for users to click and
+ * navigate to.
+ */
+
+// get directory config
+export const directory = config['directory'];
+
+// turn off explore public room
+export const showExplorePublicRoom = directory?.showExplorePublicRoomTile ?? false;
+
+// matrix default server selection dropdown
+export const showPublicRoomServerSelectionDropdown = directory?.explorePublicRoomServerSelectionDropdown ?? true;
+
+/***
+ *  role directory config list
+ */
+export const role_directory = directory?.role;
+
+export const role_directory_feature_name = role_directory?.name;
+
+export const role_directory_description = role_directory?.description;
+
+export const role_directory_placeholder = role_directory?.placeholder;
+
+export const showAdvancedDirectorySearchDropdown = role_directory?.showAdvancedDirectorySearchDropdown ?? false;
+
+/***
+ *  service directory config list
+ */
+export const service_directory = directory?.service;
+
+export const service_directory_name = directory?.name;
+
+/**
+ * people's directory config list
+*/
+export const people_directory = directory?.people;
+
+// APIs
+
+// base api
+export const base_path = directory?.api.base_path;
+
+// role role by short name
+export const search_role_by_shortName = base_path + directory?.api?.search_role_by_shortName;
+
