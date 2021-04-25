@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component} from "react";
 import * as PropTypes from 'prop-types';
 import * as sdk from "../../../index";
 import { getRoleEnumValues } from "../../../utils/directory-enums";
@@ -167,16 +167,15 @@ export default class RoleDirectoryView extends Component<IProps[], IState> {
     renderRoleTitles = () => {
         let headerElement = Object.keys(this.state.roles[0])
         return headerElement.map((key, index) => {
-            return <tr key={this.state.roles.simplifiedID}>
-                <th key={index}>{this.getFormattedRoleIds(key)}</th>
-                {/* <th>Simplified ID</th>
+            return <th key={index}>{this.getFormattedRoleIds(key)}</th>
+            {/* <tr key={index}>
+            <th>Simplified ID</th>
             <th>Primary Category ID</th>
             <th>Primary Organization ID</th>
             <th>Primary Location ID</th>
             <th>Primary Role ID</th>
             <th>Display Name</th>
-            <th>Description</th> */}
-            </tr>
+            <th>Description</th></tr> */}
         })
     }
 
