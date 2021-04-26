@@ -155,15 +155,14 @@ export default class RoleDirectoryView extends Component<IProps[], IState> {
     renderRoleDetailView = () => {
         return this.state.roles.map((role, index) => {
             let headerElement = Object.keys(this.state.roles[0]);
-            const { simplifiedID, primaryRoleCategoryID, identifiers, primaryRoleID, organization, specialty, location,
+            const { simplifiedID, primaryRoleCategoryID, identifiers, primaryRoleID,
                 primaryLocationID, primaryOrganizationID, displayName, description, contactPoints } = role //destructuring the role object/array
             return <table key={index} className="mx_role_table">
-                <caption>Practitioner Registered Role Detail</caption>
+                <caption><h2>Practitioner Registered Role Detail</h2></caption>
                 <tbody>
                     <tr><th>{this.findGivenColumnID("simplifiedID", headerElement)}</th><td>{simplifiedID}</td></tr>
                     <tr><th>{this.findGivenColumnID("primaryRoleCategoryID", headerElement)}</th><td>{primaryRoleCategoryID}</td></tr>
                     <tr><th>{this.findGivenColumnID("primaryOrganizationID", headerElement)}</th><td>{primaryOrganizationID}</td></tr>
-                    <tr><th>{this.findGivenColumnID("primaryRoleCategoryID", headerElement)}</th><td>{this.getFormattedRoleIds(primaryRoleCategoryID)}</td></tr>
                     <tr><th>{this.findGivenColumnID("primaryRoleID", headerElement)}</th><td>{primaryRoleID}</td></tr>
                     <tr><th>{this.findGivenColumnID("displayName", headerElement)}</th><td>{displayName}</td></tr>
                     <tr><th>{this.findGivenColumnID("description", headerElement)}</th><td>{description}</td></tr>

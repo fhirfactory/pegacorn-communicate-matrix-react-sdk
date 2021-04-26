@@ -1,6 +1,6 @@
 export enum DirectoryEnum {
     simplifiedID = "Simplified ID",
-    displayName = "Description",
+    description = "Description",
     primaryOrganizationID = "Organization ID",
     primaryLocationID = "Location",
     primaryRoleCategoryID = "Role Category ID",
