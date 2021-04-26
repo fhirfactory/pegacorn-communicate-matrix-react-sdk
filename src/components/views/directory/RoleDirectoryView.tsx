@@ -149,38 +149,37 @@ export default class RoleDirectoryView extends Component<IProps[], IState> {
     }
 
     findGivenColumnID(id: string, headerElement) {
-      if(id ==undefined || id ==null){
-          return id;
-      } else {
-          id = headerElement[headerElement.indexOf(id)];
-          console.log("header element is", headerElement);
-          return this.getFormattedRoleIds(id);
-      }
+        if (id == undefined || id == null) {
+            return id;
+        } else {
+            id = headerElement[headerElement.indexOf(id)];
+            console.log("header element is", headerElement);
+            return this.getFormattedRoleIds(id);
+        }
     }
 
     renderRoleDetailView = () => {
-        console.log("Data found for heading was", this.state.roles)
-
-
         return this.state.roles.map((role, index) => {
             let headerElement = Object.keys(this.state.roles[0]);
             const { simplifiedID, primaryRoleCategoryID, identifiers, primaryRoleID, organization, specialty, location,
                 primaryLocationID, primaryOrganizationID, displayName, description, contactPoints } = role //destructuring the role object/array
-            return <tbody key={index}>
-                <tr><th>{this.findGivenColumnID("simplifiedID", headerElement)}</th><td>{simplifiedID}</td></tr>
-                <tr><th>{this.findGivenColumnID("primaryRoleCategoryID", headerElement)}</th><td>{primaryRoleCategoryID}</td></tr>
-                <tr><th>{this.findGivenColumnID("primaryOrganizationID", headerElement)}</th><td>{primaryOrganizationID}</td></tr>
-                <tr><th>{this.findGivenColumnID("primaryRoleCategoryID", headerElement)}</th><td>{this.getFormattedRoleIds(primaryRoleCategoryID)}</td></tr>
-                <tr><th>{this.findGivenColumnID("primaryRoleID", headerElement)}</th><td>{primaryRoleID}</td></tr>
-                <tr><th>{this.findGivenColumnID("displayName", headerElement)}</th><td>{displayName}</td></tr>
-                <tr><th>{this.findGivenColumnID("description", headerElement)}</th><td>{description}</td></tr>
-                <tr><th>{this.findGivenColumnID("contactPoints", headerElement)}</th><td>{this.getFormattedPhoneNumber(contactPoints)}</td></tr>
-            </tbody>
+            return <table key={index} className="mx_role_table">
+                <caption>Practitioner Registered Role Detail</caption>
+                <tbody>
+                    <tr><th>{this.findGivenColumnID("simplifiedID", headerElement)}</th><td>{simplifiedID}</td></tr>
+                    <tr><th>{this.findGivenColumnID("primaryRoleCategoryID", headerElement)}</th><td>{primaryRoleCategoryID}</td></tr>
+                    <tr><th>{this.findGivenColumnID("primaryOrganizationID", headerElement)}</th><td>{primaryOrganizationID}</td></tr>
+                    <tr><th>{this.findGivenColumnID("primaryRoleCategoryID", headerElement)}</th><td>{this.getFormattedRoleIds(primaryRoleCategoryID)}</td></tr>
+                    <tr><th>{this.findGivenColumnID("primaryRoleID", headerElement)}</th><td>{primaryRoleID}</td></tr>
+                    <tr><th>{this.findGivenColumnID("displayName", headerElement)}</th><td>{displayName}</td></tr>
+                    <tr><th>{this.findGivenColumnID("description", headerElement)}</th><td>{description}</td></tr>
+                    <tr><th>{this.findGivenColumnID("contactPoints", headerElement)}</th><td>{this.getFormattedPhoneNumber(contactPoints)}</td></tr>
+                </tbody>
+            </table>
         })
     }
 
     render() {
-        console.log("data for role is", this.state.roles);
         console.log("Show role directory detail", this.state.showUserRoleTable);
         const Spinner = sdk.getComponent("elements.Spinner");
         if (this.state.loading) return <Spinner w={22} h={22} />;
@@ -190,11 +189,8 @@ export default class RoleDirectoryView extends Component<IProps[], IState> {
                 <div>Error message: {this.state.error.message}</div>
             </>
         }
-        return <>
-            <table className="mx_role_table">
-            <caption>Practitioner Registered Role Detail</caption>
-                {this.renderRoleDetailView()}
-            </table>
-        </>
+        return <React.Fragment>
+           {this.renderRoleDetailView()}
+        </React.Fragment>
     }
 }
