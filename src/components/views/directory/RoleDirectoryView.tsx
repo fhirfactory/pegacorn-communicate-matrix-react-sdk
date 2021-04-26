@@ -80,40 +80,35 @@ export default class RoleDirectoryView extends Component<IProps[], IState> {
         }
     }
 
-    componentDidMount() {
+    getRoleDetail() {
         const view_role_detail = search_role_by_shortName + "FAMSAC%20On%20Call%20Nurse";
         console.log("role directory path is", search_role_by_shortName);
         // api data
-        fetch(view_role_detail, {
+        const response = fetch(view_role_detail, {
             method: "GET"
-        })
-            .then(res => res.json())
-            .then((response) => {
-                this.setState({
-                    roles: response,
-                    showUserRoleTable: true,
-                    loading: false,
-                })
-            })
-            .catch(err => {
-                if (err instanceof Error) {
-                    console.log("Failed to fetch request...", err.message);
-                    this.setState({
-                        error: err,
-                        loading: false
-                    })
-                }
-            })
-
-        // if (response) {
-        //     this.setState({
-        //         showUserRoleTable: true,
-        //         loading: false,
-        //     })
-        // }
+        }).then(res => res.json());
+        return response;
     }
 
-    // Because the view that receives phone, email address info was already converted to
+    componentDidMount() {
+        this.getRoleDetail().then((response) => {
+            this.setState({
+                roles: response,
+                showUserRoleTable: true,
+                loading: false,
+            })
+        }).catch(err => {
+            if (err instanceof Error) {
+                console.log("Failed to fetch request...", err.message);
+                this.setState({
+                    error: err,
+                    loading: false
+                })
+            }
+        })
+    }
+
+    // The phone, email address info was already converted to
     // string bundle it needs to be changed back to array then be formatted properly
     // A utility function that converts an string containing pair value into array
     // converts a given value number into landline or mobile number.
@@ -153,7 +148,6 @@ export default class RoleDirectoryView extends Component<IProps[], IState> {
             return id;
         } else {
             id = headerElement[headerElement.indexOf(id)];
-            console.log("header element is", headerElement);
             return this.getFormattedRoleIds(id);
         }
     }
@@ -190,7 +184,7 @@ export default class RoleDirectoryView extends Component<IProps[], IState> {
             </>
         }
         return <React.Fragment>
-           {this.renderRoleDetailView()}
+            {this.renderRoleDetailView()}
         </React.Fragment>
     }
 }
