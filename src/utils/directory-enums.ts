@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 export enum DirectoryEnum {
     simplifiedID = "Simplified ID",
     displayName = "Description",
@@ -9,21 +7,15 @@ export enum DirectoryEnum {
     primaryRoleID = "Primary Role ID",
     practitionerRoleADGroup = "Practitioner Role ADGroup",
     contactPoints = "Contact",
-    ch ="Canberra Hospital"
+    CH = "Canberra Hospital"
 }
 
-export const getRoleEnumValues = (values) => {
-    const newValue = Object.entries(DirectoryEnum);
-    let key = String(values);
-    console.log("formatted enum values:", newValue);
-    console.log("key to be searched is", key);
-    console.log("formatted role ids:", values);
-    for (let newValue in DirectoryEnum) {
-        key = newValue[key];
-        if (key) {
-            return key;
-        } else {
-            return null;
-        }
+export const getRoleEnumValues = (value) => {
+    const key = DirectoryEnum[value];
+    console.log("Value translated is", key);
+    if (key) {
+        return key;
+    } else {
+        return undefined;
     }
 }

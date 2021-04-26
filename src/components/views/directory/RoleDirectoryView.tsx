@@ -167,6 +167,7 @@ export default class RoleDirectoryView extends Component<IProps[], IState> {
                     <tr><th>{this.findGivenColumnID("primaryRoleID", headerElement)}</th><td>{primaryRoleID}</td></tr>
                     <tr><th>{this.findGivenColumnID("displayName", headerElement)}</th><td>{displayName}</td></tr>
                     <tr><th>{this.findGivenColumnID("description", headerElement)}</th><td>{description}</td></tr>
+                    <tr><th>{this.findGivenColumnID("primaryLocationID", headerElement)}</th><td>{this.getFormattedRoleIds(primaryLocationID)}</td></tr>
                     <tr><th>{this.findGivenColumnID("contactPoints", headerElement)}</th><td>{this.getFormattedPhoneNumber(contactPoints)}</td></tr>
                 </tbody>
             </table>
