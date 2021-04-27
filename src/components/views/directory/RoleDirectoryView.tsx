@@ -143,7 +143,7 @@ export default class RoleDirectoryView extends Component<IProps[], IState> {
         return finalFormattedValues;
     }
 
-    findGivenColumnID(id: string, headerElement) {
+    getFormattedRoleIDTextLabel(id: string, headerElement) {
         if (id == undefined || id == null) {
             return id;
         } else {
@@ -160,14 +160,14 @@ export default class RoleDirectoryView extends Component<IProps[], IState> {
             return <table key={index} className="mx_role_table">
                 <caption><h2>Practitioner Registered Role Detail</h2></caption>
                 <tbody>
-                    <tr><th>{this.findGivenColumnID("simplifiedID", headerElement)}</th><td>{simplifiedID}</td></tr>
-                    <tr><th>{this.findGivenColumnID("primaryRoleCategoryID", headerElement)}</th><td>{primaryRoleCategoryID}</td></tr>
-                    <tr><th>{this.findGivenColumnID("primaryOrganizationID", headerElement)}</th><td>{primaryOrganizationID}</td></tr>
-                    <tr><th>{this.findGivenColumnID("primaryRoleID", headerElement)}</th><td>{primaryRoleID}</td></tr>
-                    <tr><th>{this.findGivenColumnID("displayName", headerElement)}</th><td>{displayName}</td></tr>
-                    <tr><th>{this.findGivenColumnID("description", headerElement)}</th><td>{description}</td></tr>
-                    <tr><th>{this.findGivenColumnID("primaryLocationID", headerElement)}</th><td>{this.getFormattedRoleIds(primaryLocationID)}</td></tr>
-                    <tr><th>{this.findGivenColumnID("contactPoints", headerElement)}</th><td>{this.getFormattedPhoneNumber(contactPoints)}</td></tr>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("simplifiedID", headerElement)}</th><td>{simplifiedID}</td></tr>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("primaryRoleCategoryID", headerElement)}</th><td>{primaryRoleCategoryID}</td></tr>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("primaryOrganizationID", headerElement)}</th><td>{primaryOrganizationID}</td></tr>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("primaryRoleID", headerElement)}</th><td>{primaryRoleID}</td></tr>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("displayName", headerElement)}</th><td>{displayName}</td></tr>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("description", headerElement)}</th><td>{description}</td></tr>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("primaryLocationID", headerElement)}</th><td>{this.getFormattedRoleIds(primaryLocationID)}</td></tr>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("contactPoints", headerElement)}</th><td>{this.getFormattedPhoneNumber(contactPoints)}</td></tr>
                 </tbody>
             </table>
         })
