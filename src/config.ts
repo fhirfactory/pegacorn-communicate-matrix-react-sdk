@@ -72,4 +72,9 @@ export const showSecondaryLogoOnLogOnScreen = logoConfig?.showSecondaryLogoInLog
 export const showSecondaryLogoInAuthenticatedScreen = logoConfig?.showSecondaryLogoInAuthenticatedScreen ?? false; // default should be false
 
 //find logo secondary
-export const logoSecondary = logoConfig['logo_secondary'] || null;
+export const logoSecondary = logoConfig?.logo_secondary ?? null;
+
+
+// tab condition
+export const tabbedView =config['tabbedView'];
+export const tabbedViewDisplayActLogo  = tabbedView?.displayActLogo ?? false; //config['TABCONDITION'];

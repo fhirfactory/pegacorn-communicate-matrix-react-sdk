@@ -95,7 +95,7 @@ const UserWelcomeTop = () => {
 const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
     const config = SdkConfig.get();
     const pageUrl = getHomePageUrl(config);
-    const showWelcomeToElementText = customConfig.showWelcomeToElementText;
+    const showWelcomeToElementText = customConfig.showWelcomeToElementText;    
     const showLiberateYourCommunicationText = customConfig.showLiberateYourCommunicationText;
     if (pageUrl) {
         const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
@@ -119,7 +119,16 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
        }
 
         introSection = <React.Fragment>
-            <img src={logoUrl} alt={config.brand} />           
+            {logoUrlSecondary && <img src={logoUrlSecondary} style={logoSecondaryStyle} alt={logoSecondaryDescription} />}
+            <img src={logoUrl} alt={config.brand} />  
+            
+            {showWelcomeToElementText &&  
+            <h1>{ _t("Welcome to %(appName)s", { appName: config.brand }) }</h1>
+            }
+            
+            {showLiberateYourCommunicationText &&
+            <h4>{ _t("Liberate your communication") }</h4>   
+            }    
         </React.Fragment>;
     }
 
