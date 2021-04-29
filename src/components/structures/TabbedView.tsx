@@ -126,7 +126,7 @@ export default class TabbedView extends React.Component<IProps, IState> {
                     {labels}
                 </div>
                 {panel}
-                {customConfig.tabbedViewDisplayActLogo === true &&
+                {customConfig.tabbedViewdisplaySecondaryLogo === true &&
                     <div className="mx_AuthFooter_TabbedView">
                         <a href="" target="_blank" rel="noreferrer noopener">                        
                         </a>

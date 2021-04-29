@@ -77,4 +77,4 @@ export const logoSecondary = logoConfig?.logo_secondary ?? null;
 
 // tab condition
 export const tabbedView =config['tabbedView'];
-export const tabbedViewDisplayActLogo  = tabbedView?.displayActLogo ?? false; //config['TABCONDITION'];
+export const tabbedViewdisplaySecondaryLogo  = tabbedView?.displaySecondaryLogo ?? false; 

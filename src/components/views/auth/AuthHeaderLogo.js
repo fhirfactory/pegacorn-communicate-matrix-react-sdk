@@ -15,9 +15,12 @@ limitations under the License.
 */
 
 import React from 'react';
-
+import SdkConfig from "../../../SdkConfig";
 export default class AuthHeaderLogo extends React.PureComponent {
+    
+
     render() {
+        
         return <div className="mx_AuthHeaderLogo">
             Matrix
         </div>;

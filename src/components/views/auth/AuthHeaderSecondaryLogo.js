@@ -14,37 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_AuthHeaderLogo {
-    margin-top: 15px;
-    flex: 1;
-    padding: 0 25px;
-}
+import React from 'react';
+import SdkConfig from "../../../SdkConfig";
+export default class AuthHeaderSecondaryLogo extends React.PureComponent {
 
-.mx_AuthHeaderLogo img {
-    //width: 100%;
-    width: 150px;
-    height: 100px;
-}
-
-@media only screen and (max-width: 480px) {
-    .mx_AuthHeaderLogo {
-        display: none;
-    }
-}
-
-.mx_AuthHeaderSecondaryLogo{
-    margin-top: 15px;
-    flex: 1;
-    padding: 0 25px;
-    height:100px;
-    width: 100px;
-}
-.mx_AuthHeaderSecondaryLogo img {
-    height:100px;
-    width: 100px;
-}
-@media only screen and (max-width: 480px) {
-    .mx_AuthHeaderSecondaryLogo {
-        display: none;
+    render() {
+        var config = SdkConfig.get();
+        var logoUrlSecondary = config.logo_secondary?.imgUrl;
+        var logoUrlAlt = config.logo_secondary?.description;
+        
+       return <div className="mx_AuthHeaderSecondaryLogo">
+                    <br/>              
+                    <img src={logoUrlSecondary} alt={logoUrlAlt}  />                
+                </div>;
     }
 }

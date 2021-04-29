@@ -27,17 +27,15 @@ export default class AuthHeader extends React.Component {
 
     render() {
         const AuthHeaderLogo = sdk.getComponent('auth.AuthHeaderLogo');
+        const AuthHeaderSecondaryLogo = sdk.getComponent('auth.AuthHeaderSecondaryLogo');
         const LanguageSelector = sdk.getComponent('views.auth.LanguageSelector');
         const loginScreen = SdkConfig.get().loginScreen;
-        const showAuthHeaderLogo_Act = loginScreen?.displayActLogo ?? true;
-
+        const showAuthHeaderSecondaryLogo = loginScreen?.displaySecondaryLogo ?? true;       
         return (
             <div className="mx_AuthHeader"> 
-                {showAuthHeaderLogo_Act &&                  
-                <div>
-                    <br/>              
-                    <img className="mx_AuthHeaderLogo_Act" src="themes/element/img/logos/ACT-Government-inline-back-trans.jpg" alt="ACT Govt Logo"  />                
-                </div>}
+                {showAuthHeaderSecondaryLogo &&                  
+                <AuthHeaderSecondaryLogo />
+                }
                 <AuthHeaderLogo />
                 <LanguageSelector disabled={this.props.disableLanguageSelector} />
             </div>
