@@ -71,6 +71,7 @@ export default class RoleDirectoryView extends Component<IProps[], IState> {
 
     constructor(props) {
         super(props);
+        console.log("props are", );
         this.state = {
             showUserRoleTable: false,
             roles: [],
