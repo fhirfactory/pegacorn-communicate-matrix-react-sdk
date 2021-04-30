@@ -109,18 +109,24 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
         const brandingConfig = config.branding;
         let logoUrl = "themes/element/img/logos/element-logo.svg";
         const logoSecondaryDescription = customConfig?.logoSecondary?.description || config.brand;
+        const logoHeight  = customConfig?.authenticatedHomeScreenLogoConfigHeight;
         const logoUrlSecondary = config.logo?.logo_secondary?.imgUrl;
         if (brandingConfig && brandingConfig.authHeaderLogoUrl) {
             logoUrl = brandingConfig.authHeaderLogoUrl;
         }
+
+        const logoStyle = {
+            height: logoHeight || '48px'
+        }
+
         const logoSecondaryStyle = {
            margin: customConfig?.logoSecondary?.margin || '0 10px',
            height: customConfig?.logoSecondary?.height || '55px'
-       }
+        }
 
         introSection = <React.Fragment>
             {logoUrlSecondary && <img src={logoUrlSecondary} style={logoSecondaryStyle} alt={logoSecondaryDescription} />}
-            <img src={logoUrl} alt={config.brand} />  
+            <img src={logoUrl} alt={config.brand} style={logoStyle}/>  
             
             {showWelcomeToElementText &&  
             <h1>{ _t("Welcome to %(appName)s", { appName: config.brand }) }</h1>

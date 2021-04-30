@@ -12,6 +12,7 @@ const config = SdkConfig.get();
 const loginScreen = config['loginScreen'];
 
 const authenticatedHomeScreen = config['authenticatedHomeScreen'];
+export const authenticatedHomeScreenLogoConfigHeight = authenticatedHomeScreen?.logo?.height ?? '48px';
 
 const logoConfig = config['logo'];
 
