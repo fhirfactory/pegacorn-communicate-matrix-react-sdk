@@ -684,6 +684,9 @@ class LoggedInView extends React.Component<IProps, IState> {
                     aria-hidden={this.props.hideToSRUsers}
                 >
                     <ToastContainer />
+                    <div  className='topBanner'>
+                        <h1></h1>                       
+                    </div>
                     <DragDropContext onDragEnd={this._onDragEnd}>
                         <div ref={this._resizeContainer} className={bodyClasses}>
                             { leftPanel }

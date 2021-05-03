@@ -53,6 +53,29 @@ limitations under the License.
     min-height: 0;
 }
 
+.topBanner {
+    /*background: linear-gradient(120deg, rgba(0,173,239,1) 0%, rgba(71,45,140,1) 75%, rgba(170,66,152,1) 100%);*/
+    /*background: linear-gradient(120deg, rgba(0,173,239,1) 0%, rgba(0,130,140,1) 67%, rgba(71,45,140,1) 100%);*/
+    background: linear-gradient(90deg, #00818b, #253686);
+    min-height: 2em;
+    box-shadow: 0 .25rem .5rem rgba(0, 0, 0, .15)!important;
+    transition: 0.4s;
+}
+
+.topBanner h1 {
+    /*background-image: url(./assets/ACTGov_inline_rev.png);*/
+   background-image: url("/themes/element/img/logos/Lingo Logo REV - RGB - 10.png");
+    background-repeat: no-repeat;
+    background-size: 70px;
+    background-position-y: center;
+    background-position: 20px;
+    font-size: 0.5em;
+    text-align: right;
+    padding-bottom: 5px;
+    margin-right: 0.25em;
+    transition: max-height 0.25s ease-in;
+    height: 50px
+}
 .mx_MatrixChat_syncError {
     color: $accent-fg-color;
     background-color: $warning-bg-color;
