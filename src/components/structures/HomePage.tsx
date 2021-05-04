@@ -35,6 +35,7 @@ import Analytics from "../../Analytics";
 import CountlyAnalytics from "../../CountlyAnalytics";
 import SettingsStore from "../../settings/SettingsStore";
 import { UIFeature } from "../../settings/UIFeature";
+import { role_directory_feature_name, showExplorePublicRoom, showRoleDirectory} from "../../config";
 
 const onClickSendDm = () => {
     Analytics.trackEvent('home_page', 'button', 'dm');
@@ -54,6 +55,11 @@ const onClickNewRoom = () => {
     dis.dispatch({action: 'view_create_room'});
 };
 
+const onClickRoleDirectory = () => {
+    Analytics.trackEvent('home_page', 'button', 'search_role_directory');
+    CountlyAnalytics.instance.track("home_page_button", { button: "search_role_directory" });
+    dis.dispatch({action: 'search_role_directory'});
+}
 interface IProps {
     justRegistered?: boolean;
 }
@@ -138,12 +144,21 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
                 <AccessibleButton onClick={onClickSendDm} className="mx_HomePage_button_sendDm">
                     { _t("Send a Direct Message") }
                 </AccessibleButton>
+                {showExplorePublicRoom &&
                 <AccessibleButton onClick={onClickExplore} className="mx_HomePage_button_explore">
                     { _t("Explore Public Rooms") }
                 </AccessibleButton>
+                }
                 <AccessibleButton onClick={onClickNewRoom} className="mx_HomePage_button_createGroup">
                     { _t("Create a Group Chat") }
                 </AccessibleButton>
+            </div>
+            <div className="mx_HomePage_default_buttons">
+                {showRoleDirectory &&
+                    <AccessibleButton onClick={onClickRoleDirectory} className="mx_HomePage_button_explore">
+                        {role_directory_feature_name}
+                    </AccessibleButton>
+                }
             </div>
         </div>
     </AutoHideScrollbar>;

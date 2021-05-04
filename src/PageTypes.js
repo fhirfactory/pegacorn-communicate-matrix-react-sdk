@@ -23,4 +23,5 @@ export default {
     UserView: "user_view",
     GroupView: "group_view",
     MyGroups: "my_groups",
+    RoleView: "role_directory"
 };
