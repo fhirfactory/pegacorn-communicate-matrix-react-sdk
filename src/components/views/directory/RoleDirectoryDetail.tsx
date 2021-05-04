@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import * as PropTypes from 'prop-types';
 import * as sdk from "../../../index";
 import { getRoleEnumValues } from "../../../utils/directory-enums";
-import { search_role_by_shortName } from "../../../config";
+import { search_role_by_displayName } from "../../../config";
+import { isEmpty } from "lodash";
 
 /*
 Copyright 2020 The Matrix.org Foundation C.I.C.
@@ -54,7 +55,7 @@ interface IState {
  * This view would display detailed view of selected role by shortName, but can be changed to view by longName or something else as well if need it be.
  */
 
-export default class RoleDirectoryView extends Component<IProps[], IState> {
+export default class RoleDirectoryView extends Component<IProps, IState> {
 
     static propTypes = {
         simplifiedID: PropTypes.string,
@@ -71,7 +72,7 @@ export default class RoleDirectoryView extends Component<IProps[], IState> {
 
     constructor(props) {
         super(props);
-        console.log("props are", );
+        console.log("props are", props);
         this.state = {
             showUserRoleTable: false,
             roles: [],
@@ -82,8 +83,10 @@ export default class RoleDirectoryView extends Component<IProps[], IState> {
     }
 
     getRoleDetail() {
-        const view_role_detail = search_role_by_shortName + "FAMSAC%20On%20Call%20Nurse";
-        console.log("role directory path is", search_role_by_shortName);
+        const searchQuery = this.props.displayName;
+        const displayName = encodeURI(searchQuery);
+        const view_role_detail = search_role_by_displayName + displayName;
+        console.log("role directory path is", view_role_detail);
         // api data
         const response = fetch(view_role_detail, {
             method: "GET"
@@ -109,6 +112,25 @@ export default class RoleDirectoryView extends Component<IProps[], IState> {
         })
     }
 
+    // check if phone number contains at least a digit
+
+    phoneNumberHasNumber(phoneNumber) {
+        // Check if it includes a number, if it doesn't phone number detail was not provided
+        const phoneNumberCheckRegex = /\d/;
+        let phoneNumberIsProvided = (phoneNumberCheckRegex.test(phoneNumber[0] || phoneNumberCheckRegex.test(phoneNumber[1])));
+        if (phoneNumberIsProvided) {
+            phoneNumberIsProvided = true;
+        } else {
+            phoneNumberIsProvided = false;
+        }
+        console.log("Phone number was provided", phoneNumberIsProvided);
+        if (phoneNumberIsProvided) {
+            return "Number not found..."
+        } else {
+            phoneNumber;
+        }
+    }
+
     // The phone, email address info was already converted to
     // string bundle it needs to be changed back to array then be formatted properly
     // A utility function that converts an string containing pair value into array
@@ -117,7 +139,7 @@ export default class RoleDirectoryView extends Component<IProps[], IState> {
     getFormattedPhoneNumber(value) {
         const phoneNumber = value.map((value, index) => {
             let newPhoneNumber = new Array(value);
-            //landline or mobile number? check type
+            // Generates landline or mobile number
             let phoneNumberType = newPhoneNumber.map((value) => value.type);
             //find actual phone number digit
             let phoneNumber = newPhoneNumber.map((value) => value.value);
