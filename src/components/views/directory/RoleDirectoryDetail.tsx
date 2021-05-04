@@ -112,25 +112,6 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
         })
     }
 
-    // check if phone number contains at least a digit
-
-    phoneNumberHasNumber(phoneNumber) {
-        // Check if it includes a number, if it doesn't phone number detail was not provided
-        const phoneNumberCheckRegex = /\d/;
-        let phoneNumberIsProvided = (phoneNumberCheckRegex.test(phoneNumber[0] || phoneNumberCheckRegex.test(phoneNumber[1])));
-        if (phoneNumberIsProvided) {
-            phoneNumberIsProvided = true;
-        } else {
-            phoneNumberIsProvided = false;
-        }
-        console.log("Phone number was provided", phoneNumberIsProvided);
-        if (phoneNumberIsProvided) {
-            return "Number not found..."
-        } else {
-            phoneNumber;
-        }
-    }
-
     // The phone, email address info was already converted to
     // string bundle it needs to be changed back to array then be formatted properly
     // A utility function that converts an string containing pair value into array
