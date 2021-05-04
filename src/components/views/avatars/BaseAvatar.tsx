@@ -25,6 +25,7 @@ import AccessibleButton from '../elements/AccessibleButton';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import {toPx} from "../../../utils/units";
+import { showFirstLastNameIntialsOnAvatarBackground } from '../../../config';
 
 interface IProps {
     name: string; // The name (first initial used as default)
@@ -108,7 +109,7 @@ const BaseAvatar = (props: IProps) => {
     const [imageUrl, onError] = useImageUrl({url, urls});
 
     if (!imageUrl && defaultToInitialLetter) {
-        const initialLetter = AvatarLogic.getInitialLetter(name);
+        const initialLetter = showFirstLastNameIntialsOnAvatarBackground ? AvatarLogic.getFirstAndLastNameInitialLetters(name) : AvatarLogic.getInitialLetter(name);
         const textNode = (
             <span
                 className="mx_BaseAvatar_initial"
