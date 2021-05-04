@@ -40,7 +40,7 @@ import Notifier from '../../Notifier';
 import Modal from "../../Modal";
 import Tinter from "../../Tinter";
 import * as sdk from '../../index';
-import { showRoomInviteDialog, showStartChatInviteDialog } from '../../RoomInvite';
+import { showRoomInviteDialog, showStartChatInviteDialog, showRoleDirectorySearchDialog  } from '../../RoomInvite';
 import * as Rooms from '../../Rooms';
 import linkifyMatrix from "../../linkify-matrix";
 import * as Lifecycle from '../../Lifecycle';
@@ -117,6 +117,8 @@ export enum Views {
     // We are logged out (invalid token) but have our local state again. The user
     // should log back in to rehydrate the client.
     SOFT_LOGOUT,
+    // Show role directory page to search
+    Role_Directory
 }
 
 const AUTH_SCREENS = ["register", "login", "forgot_password", "start_sso", "start_cas"];
@@ -734,6 +736,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case 'view_invite':
                 showRoomInviteDialog(payload.roomId);
+                break;
+            // Directory search (role)
+            case 'search_role_directory':
+               showRoleDirectorySearchDialog(payload.initialText || "");
+
                 break;
             case 'view_last_screen':
                 // This function does what we want, despite the name. The idea is that it shows
