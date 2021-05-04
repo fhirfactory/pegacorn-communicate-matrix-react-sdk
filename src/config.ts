@@ -66,17 +66,27 @@ export const showPublicRoomServerSelectionDropdown = directory?.explorePublicRoo
  */
 export const role_directory = directory?.role;
 
+export const showRoleDirectory = role_directory.showRoleDirectory ?? false;
+
 export const role_directory_feature_name = role_directory?.name;
 
-export const role_directory_description = role_directory?.description;
+export const role_directory_description = role_directory?.feature_description;
 
 export const role_directory_placeholder = role_directory?.placeholder;
 
 export const showAdvancedDirectorySearchDropdown = role_directory?.showAdvancedDirectorySearchDropdown ?? false;
 
+
 /***
  *  service directory config list
  */
+export const numberOfRecordsToShowInSearch = directory?.numberOfRecordsToShowInSearch ?? null;
+
+// show favorite icon in directory search
+export const show_favorite_icon_in_directory_search = directory?.show_favorite_icon_in_directory_search ?? false;
+
+export const showServiceDirectory = directory?.showServiceDirectory ?? false;
+
 export const service_directory = directory?.service;
 
 export const service_directory_name = directory?.name;
@@ -89,8 +99,15 @@ export const people_directory = directory?.people;
 // APIs
 
 // base api
-export const base_path = directory?.api.base_path;
+export const api_base_path = directory?.api.base_path;
 
-// role role by short name
-export const search_role_by_shortName = base_path + directory?.api?.search_role_by_shortName;
+// search all roles
+export const search_all_roles = api_base_path + directory?.api?.search_all_roles;
 
+// role by short name
+export const search_role_by_displayName = api_base_path + directory.api.search_role_by_displayName;
+
+/**
+ * Avatar
+ */
+export const showFirstLastNameIntialsOnAvatarBackground = config.show_first_last_char_initials_on_avatar ?? false;
