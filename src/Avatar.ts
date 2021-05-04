@@ -188,3 +188,70 @@ export function avatarUrlForRoom(room: Room, width: number, height: number, resi
     }
     return null;
 }
+
+export function getFirstAndLastNameInitialLetters(name: string): string {
+
+    if (!name) {
+        return undefined;
+    }
+
+    if (name.length == 1) {
+        return name;
+    }
+
+    // If it is single string then this will cover edge case of only one word user
+    if (name.search(/[ .,-]+/i) < 0) return getInitialLetter(name);
+
+    /**
+     * if name is an email address (Used by avatar when user is logged in)
+    */
+    try {
+        let firstName = '';
+        let lastName = '';
+        let firstNameInitial = '';
+        let lastNameInitial = '';
+        let firstAndLastInitials = '';
+
+        // find out if name input is an email for avatar
+        const nameIsInEmailFormat = name.indexOf(':') > -1;
+        if (name.length > 1 && nameIsInEmailFormat) {
+
+            //find first and last names from email address
+            let nameFromEmailAddr = name.split(':')[0].split('.');
+            firstName = nameFromEmailAddr[0];
+            if (nameFromEmailAddr[nameFromEmailAddr.length - 1]) {
+                lastName = nameFromEmailAddr[1];
+            }
+            firstNameInitial = getInitialLetter(firstName);
+            lastNameInitial = getInitialLetter(lastName);
+            firstAndLastInitials = firstNameInitial + lastNameInitial;
+            return firstAndLastInitials;
+        }
+            /**
+             * Split first and last-names based on regular expression. It checks following usernames patterns
+             * "firstname.lastname", "firstname-lastname", "firstname lastname, "firstname, lastname"
+             * Based on https://stackoverflow.com/questions/10346722/how-can-i-split-a-javascript-string-by-white-space-or-comma
+            */
+        else if (name.length > 1 && !nameIsInEmailFormat) {
+            let fullName = name.split(/[ .,-]+/);
+            firstName = fullName[0];   // gives first name
+            lastName = fullName[1];  // gives last name
+
+            firstNameInitial = firstName[0];
+            lastNameInitial = lastName[0];
+            if((name.search(/[.-]+/i) > -1)){
+                firstAndLastInitials = firstNameInitial + lastNameInitial;
+            }  else {
+                firstAndLastInitials = lastNameInitial + firstNameInitial;
+            }
+            return firstAndLastInitials.toUpperCase();
+        }
+    } catch (e) {
+        /**
+         * If there is a problem translating then just grab first name initials as matrix default
+         */
+        if (e instanceof Error) {
+            getInitialLetter(name);
+        }
+    }
+}
