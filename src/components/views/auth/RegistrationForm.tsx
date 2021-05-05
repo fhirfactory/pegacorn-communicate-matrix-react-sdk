@@ -411,7 +411,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
     }
 
     private showPhoneNumber() {
-        const threePidLogin = !SdkConfig.get().disable_3pid_login;
+        const threePidLogin = !SdkConfig.get().loginScreen?.disable_3pid_login;
         if (!threePidLogin || !this.authStepIsUsed('m.login.msisdn')) {
             return false;
         }

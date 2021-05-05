@@ -20,7 +20,7 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { DragDropContext } from 'react-beautiful-dnd';
-
+import SdkConfig from '../../SdkConfig';
 import {Key, isOnlyCtrlOrCmdKeyEvent, isOnlyCtrlOrCmdIgnoreShiftKeyEvent, isMac} from '../../Keyboard';
 import PageTypes from '../../PageTypes';
 import CallMediaHandler from '../../CallMediaHandler';
@@ -674,7 +674,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 resizeNotifier={this.props.resizeNotifier}
             />
         );
-
+        const displayTopBanner = SdkConfig.get().displayTopBanner??false;
         return (
             <MatrixClientContext.Provider value={this._matrixClient}>
                 <div
@@ -684,6 +684,9 @@ class LoggedInView extends React.Component<IProps, IState> {
                     aria-hidden={this.props.hideToSRUsers}
                 >
                     <ToastContainer />
+                    {displayTopBanner && <div  className='mx_TopBanner'>
+                        <h1></h1>                       
+                    </div>}
                     <DragDropContext onDragEnd={this._onDragEnd}>
                         <div ref={this._resizeContainer} className={bodyClasses}>
                             { leftPanel }
