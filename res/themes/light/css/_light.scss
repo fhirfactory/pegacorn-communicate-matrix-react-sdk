@@ -14,7 +14,7 @@ $monospace-font-family: Inconsolata, Twemoji, 'Apple Color Emoji', 'Segoe UI Emo
 
 // unified palette
 // try to use these colors when possible
-$accent-color:  #002677;
+$accent-color:  #00818b;
 $accent-bg-color: rgba(3, 179, 129, 0.16);
 $notice-primary-color: #ff4b55;
 $notice-primary-bg-color: rgba(255, 75, 85, 0.16);
@@ -385,4 +385,27 @@ $composer-shadow-color: rgba(0, 0, 0, 0.04);
 
 .hljs-deletion {
     background: #fdd;
+}
+.mx_TopBanner {
+    /*background: linear-gradient(120deg, rgba(0,173,239,1) 0%, rgba(71,45,140,1) 75%, rgba(170,66,152,1) 100%);*/
+    /*background: linear-gradient(120deg, rgba(0,173,239,1) 0%, rgba(0,130,140,1) 67%, rgba(71,45,140,1) 100%);*/
+    background: linear-gradient(90deg, $accent-color, #253686);
+    min-height: 2em;
+    box-shadow: 0 .25rem .5rem rgba(0, 0, 0, .15)!important;
+    transition: 0.4s;
+}
+
+.mx_TopBanner h1 {
+    /*background-image: url(./assets/ACTGov_inline_rev.png);*/
+   background-image: url("/themes/element/img/logos/Lingo Logo REV - RGB - 10.png");
+    background-repeat: no-repeat;
+    background-size: 70px;
+    background-position-y: center;
+    background-position: 20px;
+    font-size: 0.5em;
+    text-align: right;
+    padding-bottom: 5px;
+    margin-right: 0.25em;
+    transition: max-height 0.25s ease-in;
+    height: 50px
 }
