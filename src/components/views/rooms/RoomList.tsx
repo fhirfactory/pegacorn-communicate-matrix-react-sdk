@@ -163,7 +163,7 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
         sectionLabel: _td("Role"),
         isInvite: false,
         defaultHidden: false,
-        addRoomLabel: _td("Search in Role Directory")
+        addRoomLabel: "Search roles"
     },
     [DefaultTagID.Untagged]: {
         sectionLabel: _td("Rooms"),
