@@ -119,7 +119,8 @@ export default class TabbedView extends React.Component<IProps, IState> {
     public render(): React.ReactNode {
         const labels = this.props.tabs.map(tab => this._renderTabLabel(tab));
         const panel = this._renderTabPanel(this.props.tabs[this._getActiveTabIndex()]);
-        
+        const logoUrlSecondary = customConfig.logoUrlTabbedViewFooter;
+        const logoUrlAltText =  customConfig.logoDescTabbedViewFooter;
         return (
             <div className="mx_TabbedView">
                 <div className="mx_TabbedView_tabLabels">
@@ -131,12 +132,10 @@ export default class TabbedView extends React.Component<IProps, IState> {
                         <a href="" target="_blank" rel="noreferrer noopener">                        
                         </a>
                         <span className="mx_AuthFooter_brand_TabbedView">
-                            <img className="mx_AuthFooter_Image_Tabbed" src="themes/element/img/logos/ACTGov_inline_rev_black.png" alt="ACT Govt Logo"/>
+                            <img className="mx_AuthFooter_Image_Tabbed" src={logoUrlSecondary} alt={logoUrlAltText}/>
                         </span>
                     </div>
-
                 }
-
             </div>
         );
     }
