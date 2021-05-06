@@ -12,7 +12,6 @@ export enum DirectoryEnum {
 
 export const getRoleEnumValues = (value) => {
     const key = DirectoryEnum[value];
-    console.log("Value translated is", key);
     if (key) {
         return key;
     } else {

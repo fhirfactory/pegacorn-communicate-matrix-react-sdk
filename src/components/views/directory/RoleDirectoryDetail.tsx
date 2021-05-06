@@ -3,7 +3,6 @@ import * as PropTypes from 'prop-types';
 import * as sdk from "../../../index";
 import { getRoleEnumValues } from "../../../utils/directory-enums";
 import { search_role_by_displayName } from "../../../config";
-import { isEmpty } from "lodash";
 
 /*
 Copyright 2020 The Matrix.org Foundation C.I.C.
@@ -72,7 +71,6 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
 
     constructor(props) {
         super(props);
-        console.log("props are", props);
         this.state = {
             showUserRoleTable: false,
             roles: [],
@@ -86,7 +84,6 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
         const searchQuery = this.props.displayName;
         const displayName = encodeURI(searchQuery);
         const view_role_detail = search_role_by_displayName + displayName;
-        console.log("role directory path is", view_role_detail);
         // api data
         const response = fetch(view_role_detail, {
             method: "GET"
@@ -103,7 +100,6 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
             })
         }).catch(err => {
             if (err instanceof Error) {
-                console.log("Failed to fetch request...", err.message);
                 this.setState({
                     error: err,
                     loading: false
@@ -125,7 +121,6 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
             //find actual phone number digit
             let phoneNumber = newPhoneNumber.map((value) => value.value);
             const phoneFormat = phoneNumberType.toString().charAt(0).toUpperCase() + phoneNumberType.toString().slice(1).toLowerCase() + ' - ';
-            console.log("phone format type", phoneNumberType);
             return <div key={index}><span>{phoneFormat}</span><span>{phoneNumber}</span></div>
         });
 
@@ -178,7 +173,6 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
     }
 
     render() {
-        console.log("Show role directory detail", this.state.showUserRoleTable);
         const Spinner = sdk.getComponent("elements.Spinner");
         if (this.state.loading) return <Spinner w={22} h={22} />;
         if (this.state.error) {
