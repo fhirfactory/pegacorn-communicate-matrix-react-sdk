@@ -25,8 +25,6 @@ export const signInTextNeedsToBeReplaced = loginScreen?.changeSigninToLoginTextL
 
 // background color on login screen
 // used by app-web to load a colored background instead of lake image
-export const showLoginScreenBackgroundImage = loginScreen?.showLoginScreenBackgroundImage ?? null;
-
 // Sign in text - change to login
 export const changeSigninWithLoginTextLabel = () => {
     console.log('change sign in text', signInTextNeedsToBeReplaced);
@@ -55,27 +53,10 @@ export const showLiberateYourCommunicationText = authenticatedHomeScreen?.showLi
 //show/hide welcome to {brand} text
 export const showWelcomeToElementText = authenticatedHomeScreen?.showWelcomeToElementText ?? true;
 
-// show primary logo on logged in screen
-// Due to positioning and etc this switch would make it easy to have that logo configured.
-// it is to control logo that element provides
-export const showPrimaryLogoOnLoginScreen = logoConfig?.showPrimaryLogoOnLoginScreen ?? true;
-
-//show secondary logo after login screen
-//it is to control your own secondary logo that you provide inside logged in screen
-//it can also control footer logo as well if one has been used or needs to be used.
-export const showPrimaryLogoInAuthenticatedScreen = logoConfig?.showPrimaryLogoInAuthenticatedScreen ?? true;
-
-//show secondary logo
-export const showSecondaryLogoOnLogOnScreen = logoConfig?.showSecondaryLogoInLoginScreen ?? false; // default should be false
-
-//show primary logo on login screen
-// Used by loggedin view
-export const showSecondaryLogoInAuthenticatedScreen = logoConfig?.showSecondaryLogoInAuthenticatedScreen ?? false; // default should be false
-
 //find logo secondary
 export const logoSecondary = logoConfig?.logo_secondary ?? null;
 
 
 // tab condition
 export const tabbedView =config['tabbedView'];
-export const tabbedViewdisplaySecondaryLogo  = tabbedView?.displaySecondaryLogo ?? false; 
+export const tabbedViewdisplaySecondaryLogo  = tabbedView?.displaySecondaryLogo ?? false;
