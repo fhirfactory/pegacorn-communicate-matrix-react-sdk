@@ -129,8 +129,6 @@ export default class TabbedView extends React.Component<IProps, IState> {
                 {panel}
                 {customConfig.tabbedViewdisplaySecondaryLogo === true &&
                     <div className="mx_AuthFooter_TabbedView">
-                        <a href="" target="_blank" rel="noreferrer noopener">                        
-                        </a>
                         <span className="mx_AuthFooter_brand_TabbedView">
                             <img className="mx_AuthFooter_Image_Tabbed" src={logoUrlSecondary} alt={logoUrlAltText}/>
                         </span>
