@@ -336,7 +336,18 @@ to manage logos properly `logo` config value has been added in config which cont
  - `showPrimaryLogoInAuthenticatedScreen` controls whether or not to show secondary logo on authenticated screen.
  - `showSecondaryLogoOnLoginScreen` controls whether or not to show secondary logo on logon screen window which has forms.
  - `showSecondaryLogoOnAuthenticatedSreen` controls whether or not to show secondary logo when user is authenticated. This logic could be used wherever secondaryLogo is used in authenticated page when i.e. top left, footer, in middle or whatnot.
- - `showWelcomeToElementText` controls whether or not to show "welcome to element" message when user is logged in.
  - `showLoginScreenBackgroundImage` controls whether or not to show lake image or any other background images on login screen.
  - `backgroundColor` is used by view to render colored background which turns into a bogus url instead of real url.
  - `secondaryLogo` is used by view to render a secondary image which is shown on Login screen or next to primary screen after user is logged in where there is a scenario to use two images.
+ - `tabbedView.displaySecondaryLogo `  Display secondary logo(footer logo) on tabbed view. by default it's false.
+ - `tabbedView.secondaryLogoUrl`  store image url for secondary logo to be shown on tabbed view.
+ - `tabbedView.secondaryLogoAltText`  store image alt text for secondary logo to be shown on tabbed view.
+ - `displayTopBanner`   display top banner with app logo by default it's false
+ - `logo_secondary.display` display the Secondary logo by default it's false.
+ - `loginScreen.displaySecondaryLogo` On login screen display the Secondary logo by default it's false.
+ - `loginScreen.displaySecondaryVerticalLogo` On login screen display the Secondary Vertical logo by default it's false.
+ - `loginScreen.displayLanguageSelector` On login screen display the language selector if true. by default it's true.
+ - `authenticatedHomeScreen.showWelcomeToElementText` on Dashboard / Landing page display Welcome to AppName(Element/Lingo) text.
+ - `authenticatedHomeScreen.showLiberateYourCommunicationText` on Dashboard / Landing page display Liberate Your communication text.
+ 
+  
