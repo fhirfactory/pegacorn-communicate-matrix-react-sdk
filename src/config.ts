@@ -55,11 +55,6 @@ export const showLiberateYourCommunicationText = authenticatedHomeScreen?.showLi
 //show/hide welcome to {brand} text
 export const showWelcomeToElementText = authenticatedHomeScreen?.showWelcomeToElementText ?? true;
 
-// show primary logo on logged in screen
-// Due to positioning and etc this switch would make it easy to have that logo configured.
-// it is to control logo that element provides
-export const showPrimaryLogoOnLoginScreen = logoConfig?.showPrimaryLogoOnLoginScreen ?? true;
-
 //show secondary logo after login screen
 //it is to control your own secondary logo that you provide inside logged in screen
 //it can also control footer logo as well if one has been used or needs to be used.
