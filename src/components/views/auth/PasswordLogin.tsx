@@ -433,8 +433,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
         const loginField = this.renderLoginField(this.state.loginType, !autoFocusPassword);
 
         let loginType;
-        const disable_3pid_login =SdkConfig.get().disable_3pid_login??false;
-        if (!disable_3pid_login) {
+        if (!SdkConfig.get().disable_3pid_login) {
             loginType = (
                 <div className="mx_Login_type_container">
                     <label className="mx_Login_type_label">{ _t('Sign in with') }</label>

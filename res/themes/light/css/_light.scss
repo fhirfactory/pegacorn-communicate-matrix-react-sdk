@@ -32,7 +32,7 @@ $light-fg-color: #747474;
 
 // used for focusing form controls
 $focus-bg-color: #dddddd;
-$authfooter-text-align:center;
+
 // button UI (white-on-green in light skin)
 $accent-fg-color: #ffffff;
 $accent-color-50pct: rgba($accent-color, 0.5);
@@ -291,6 +291,9 @@ $authpage-focus-bg-color: #dddddd;
 $authpage-lang-color: #4e5054;
 $authpage-primary-color: #232f32;
 $authpage-secondary-color: #61708b;
+
+$authfooter-text-align:center;
+
 $dark-panel-bg-color: $secondary-accent-color;
 $panel-gradient: rgba(242, 245, 248, 0), rgba(242, 245, 248, 1);
 
@@ -377,17 +380,7 @@ $composer-shadow-color: rgba(0, 0, 0, 0.04);
     text-decoration: none;
 }
 
-// diff highlight colors
-.hljs-addition {
-    background: #dfd;
-}
-
-.hljs-deletion {
-    background: #fdd;
-}
 .mx_TopBanner {
-    /*background: linear-gradient(120deg, rgba(0,173,239,1) 0%, rgba(71,45,140,1) 75%, rgba(170,66,152,1) 100%);*/
-    /*background: linear-gradient(120deg, rgba(0,173,239,1) 0%, rgba(0,130,140,1) 67%, rgba(71,45,140,1) 100%);*/
     background: linear-gradient(90deg, $accent-color, #253686);
     min-height: 2em;
     box-shadow: 0 .25rem .5rem rgba(0, 0, 0, .15)!important;
@@ -395,8 +388,7 @@ $composer-shadow-color: rgba(0, 0, 0, 0.04);
 }
 
 .mx_TopBanner h1 {
-    /*background-image: url(./assets/ACTGov_inline_rev.png);*/
-   background-image: url("/themes/element/img/logos/Lingo Logo REV - RGB - 10.png");
+    background-image: url("/themes/element/img/logos/element-logo.svg");
     background-repeat: no-repeat;
     background-size: 70px;
     background-position-y: center;
@@ -407,4 +399,13 @@ $composer-shadow-color: rgba(0, 0, 0, 0.04);
     margin-right: 0.25em;
     transition: max-height 0.25s ease-in;
     height: 50px
+}
+
+// diff highlight colors
+.hljs-addition {
+    background: #dfd;
+}
+
+.hljs-deletion {
+    background: #fdd;
 }

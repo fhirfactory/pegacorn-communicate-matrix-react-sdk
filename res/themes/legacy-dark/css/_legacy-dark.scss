@@ -19,7 +19,6 @@ $secondary-fg-color: $primary-fg-color;
 $tertiary-fg-color: $primary-fg-color;
 $primary-bg-color: $bg-color;
 $muted-fg-color: $header-panel-text-primary-color;
-$authfooter-text-align:center;
 
 // used for dialog box text
 $light-fg-color: $header-panel-text-secondary-color;
@@ -172,6 +171,8 @@ $progressbar-bg-color: #21262c;
 $visual-bell-bg-color: #800;
 
 $room-warning-bg-color: $header-panel-bg-color;
+
+$authfooter-text-align:center;
 
 $dark-panel-bg-color: $header-panel-bg-color;
 $panel-gradient: rgba(34, 38, 46, 0), rgba(34, 38, 46, 1);
