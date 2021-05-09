@@ -104,10 +104,24 @@ export const api_base_path = directory?.api.base_path;
 // search all roles
 export const search_all_roles = api_base_path + directory?.api?.search_all_roles;
 
-// role by short name
+// search roles by a short name
 export const search_role_by_displayName = api_base_path + directory.api.search_role_by_displayName;
+
+// api to filter by favorites;
+export const search_by_favorite = directory.api.favourites;
+
 
 /**
  * Avatar
  */
 export const showFirstLastNameIntialsOnAvatarBackground = config.show_first_last_char_initials_on_avatar ?? false;
+
+/**
+ * Avatar color
+ */
+export const avatarColors = config.avatarColors;
+
+/**
+ * Sort alphabetically (currently applied by directory feature but in future it can be applied to many other features)
+ */
+export const sortAlphabeticallyInAscendingOrder = config.sort_directory_view_alphabetically;
