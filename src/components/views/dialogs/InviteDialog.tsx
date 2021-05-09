@@ -1316,7 +1316,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         // sort sourceMembers before displaying in UI, sort alphabetically
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
         // https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value
-        if (this._searchIsOnRoleServicePeopleDir) {
+        if (this._searchIsOnRoleServicePeopleDir && config.sortAlphabeticallyInAscendingOrder) {
             //   sourceMembers = _.orderBy(sourceMembers, sourceMembers.map(m => m.user.name));
             sourceMembers = sourceMembers.sort((a, b) => {
                 const nameA = a.user.name.toLowerCase();
