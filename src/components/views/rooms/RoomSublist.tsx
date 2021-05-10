@@ -729,6 +729,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                                 >
                                     <span className={collapseClasses} />
                                     <span>{this.props.label}</span>
+                                    <span>(2) todo:sam need to check this fix</span>
                                 </Button>
                                 {this.renderMenu()}
                                 {this.props.isMinimized ? null : badgeContainer}
