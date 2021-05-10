@@ -736,8 +736,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                                 >
                                     <span className={collapseClasses} />
                                     <span>{this.props.label}</span>
-                                    <span>todo:sam display proper count of items (chat )</span>
-                                    {visibleRooms.length &&  `(${visibleRooms.length})`}
+                                    { visibleRooms.length > 0 &&  `(${visibleRooms.length})`}
                                 </Button>
                                 {this.renderMenu()}
                                 {this.props.isMinimized ? null : badgeContainer}
@@ -903,3 +902,4 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         );
     }
 }
+45
