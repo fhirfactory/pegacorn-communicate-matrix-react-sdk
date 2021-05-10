@@ -546,7 +546,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     private renderMenu(): React.ReactElement {
         let contextMenu = null;
         if (this.state.contextMenuPosition) {
-            const isAlphabetical = RoomListStore.instance.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
+            //todo:sam need to fix this logic based on requirements.
+            const isAlphabetical = false;// RoomListStore.instance.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
             const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
 
             // Invites don't get some nonsense options, so only add them if we have to.
@@ -707,6 +708,12 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                     // If we're minimized, we want it below the header so it
                     // doesn't become sticky.
                     // The same applies to the notification badge.
+                    
+                    //let visibleRooms = 0;
+                    //if (this.state.rooms) {
+                    //todo:sam display count of chats in the bracket
+                    let  visibleRooms = this.state.rooms?.slice(0, this.numVisibleTiles);
+                    //}
                     return (
                         <div
                             className={classes}
@@ -729,6 +736,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                                 >
                                     <span className={collapseClasses} />
                                     <span>{this.props.label}</span>
+                                    <span>todo:sam display proper count of items (chat )</span>
+                                    {visibleRooms.length &&  `(${visibleRooms.length})`}
                                 </Button>
                                 {this.renderMenu()}
                                 {this.props.isMinimized ? null : badgeContainer}
