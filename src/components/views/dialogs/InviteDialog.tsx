@@ -402,7 +402,8 @@ interface IInviteDialogState {
     canUseIdentityServer: boolean;
     tryingIdentityServer: boolean;
     numOfRecordsFromSearchAPI: number;
-    favorites: string[]
+    favorites: string[];
+    favoriteFilterIsSelected: boolean;
 
     // These two flags are used for the 'Go' button to communicate what is going on.
     busy: boolean,
@@ -455,7 +456,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             busy: false,
             errorText: null,
             numOfRecordsFromSearchAPI: null,
-            favorites: []
+            favorites: [],
+            favoriteFilterIsSelected: false
         };
 
         this._editorRef = createRef();
@@ -464,6 +466,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     componentDidMount() {
         if (this.props.initialText) {
             this._updateSuggestions(this.props.initialText);
+        }
+
+        // if favorite in state does not have have values, update favorites results
+        if (this.state.favorites.length < 1) {
+            this._updateFavoritesForCurrentUser();
         }
     }
 
@@ -833,10 +840,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         ev.stopPropagation();
         if (!this._searchIsOnRoleServicePeopleDir) return;
         const eventTarget = ev.currentTarget;
-        let filterByFavoriteIsSelected = eventTarget.parentNode.textContent.includes("Favorite");
-        let filterByNameIsSelected = eventTarget.parentNode.textContent.includes("Name");
-        if(filterByNameIsSelected) return;
-        if (filterByFavoriteIsSelected) {
+        let filterByFavoriteEvent = eventTarget.parentNode.textContent.includes("Favorite");
+        let filterByNameEvent = eventTarget.parentNode.textContent.includes("Name");
+        if(filterByNameEvent) return;
+        if (filterByFavoriteEvent) {
             let favorite = this.state.favorites;
             let filteredFavoriteResults;
             for(let fav in favorite){
@@ -844,6 +851,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             }
             this.setState({
                 serverResultsMixin: filteredFavoriteResults,
+                favoriteFilterIsSelected: true,
                 recents: [],
                 suggestions: []
             })
@@ -893,7 +901,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         let search_api_path;
         // form an api path based on context
 
-        if (KIND_Role_Directory_Search || KIND_Service_Directory_Search) {
+        if (KIND_Role_Directory_Search) {
             if (!term) {
                 search_api_path = config.search_all_roles
             }
@@ -936,7 +944,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 let role_display_name = '';
                 let role_user_id = '';
                 let roleIsAvailable = false;
-                let favorites = [];
                 newObj = results.map((value) => {
                     role_display_name = value["displayName"];
                     newObj.display_name = role_display_name;
@@ -952,11 +959,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     }
                 });
 
-                // if favorite in state does not have have values, update favorites results
-                if (this.state.favorites.length < 1) {
-                    this._updateFavoritesForCurrentUser();
-                }
-
                 // update server result mixin(search result) in state
                 if (results.length > 0) {
                     this.setState({
@@ -966,10 +968,26 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                                 display_name: role_display_name,
                                 avatar_url: '',
                                 favorite: false,
-                                available: roleIsAvailable
+                                available: roleIsAvailable,
                             }),
-                            userId: role_user_id
+                            userId: role_user_id,
                         }],
+                        recents: [],
+                        suggestions: []
+                    });
+                }
+
+                // if filter by favorite is selected, and user tries to search favorite only
+                if (results.length > 0 && this.state.favoriteFilterIsSelected) {
+                    const serverResults = this.state.serverResultsMixin;
+                    let filteredByFavoriteResults;
+                    for (let fav in this.state.favorites) {
+                        filteredByFavoriteResults = serverResults.filter(m => m.user.name.indexOf(fav) !== -1);
+                    }
+                    this.setState({
+                        serverResultsMixin: filteredByFavoriteResults,
+                        recents: [],
+                        suggestions: []
                     });
                 }
             }).catch(e => {
@@ -1465,13 +1483,13 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         let totalMembersTiles = document.getElementsByClassName("mx_InviteDialog_roomTile");
         let numOfTotalRecords;
         let totalDisplayedResults;
-        if (totalMembersTiles) {
+        if (totalMembersTiles.length > 0) {
             totalDisplayedResults = totalMembersTiles ? (totalMembersTiles.length + 1) : null;
-            numOfTotalRecords = this.state.numOfRecordsFromSearchAPI + this.state.recents.length;
         }
+        numOfTotalRecords = this.state.numOfRecordsFromSearchAPI;
         if (totalDisplayedResults > numOfTotalRecords) return null;
         if (totalDisplayedResults <= 1 || this.state.numOfRecordsFromSearchAPI == 0) return null;
-        return <div className="mx_InvitedDialog_">
+        return <div className="mx_InvitedDialog_totalRecords">
             <p>Showing {totalDisplayedResults} records of {numOfTotalRecords ? numOfTotalRecords: totalDisplayedResults}</p>
         </div>
     }
