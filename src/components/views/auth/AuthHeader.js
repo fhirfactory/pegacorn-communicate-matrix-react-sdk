@@ -18,6 +18,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
+import SdkConfig from "../../../SdkConfig";
 
 export default class AuthHeader extends React.Component {
     static propTypes = {
@@ -26,10 +27,15 @@ export default class AuthHeader extends React.Component {
 
     render() {
         const AuthHeaderLogo = sdk.getComponent('auth.AuthHeaderLogo');
+        const AuthHeaderSecondaryLogo = sdk.getComponent('auth.AuthHeaderSecondaryLogo');
         const LanguageSelector = sdk.getComponent('views.auth.LanguageSelector');
-
+        const loginScreen = SdkConfig.get().loginScreen;
+        const showAuthHeaderSecondaryLogo = loginScreen?.displaySecondaryLogo ?? true;       
         return (
-            <div className="mx_AuthHeader">
+            <div className="mx_AuthHeader"> 
+                {showAuthHeaderSecondaryLogo &&                  
+                <AuthHeaderSecondaryLogo />
+                }
                 <AuthHeaderLogo />
                 <LanguageSelector disabled={this.props.disableLanguageSelector} />
             </div>

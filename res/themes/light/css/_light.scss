@@ -14,7 +14,7 @@ $monospace-font-family: Inconsolata, Twemoji, 'Apple Color Emoji', 'Segoe UI Emo
 
 // unified palette
 // try to use these colors when possible
-$accent-color: #0DBD8B;
+$accent-color:  #0DBD8B;
 $accent-bg-color: rgba(3, 179, 129, 0.16);
 $notice-primary-color: #ff4b55;
 $notice-primary-bg-color: rgba(255, 75, 85, 0.16);
@@ -292,6 +292,8 @@ $authpage-lang-color: #4e5054;
 $authpage-primary-color: #232f32;
 $authpage-secondary-color: #61708b;
 
+$authfooter-text-align:center;
+
 $dark-panel-bg-color: $secondary-accent-color;
 $panel-gradient: rgba(242, 245, 248, 0), rgba(242, 245, 248, 1);
 
@@ -376,6 +378,27 @@ $composer-shadow-color: rgba(0, 0, 0, 0.04);
 @define-mixin mx_Dialog_link {
     color: $accent-color;
     text-decoration: none;
+}
+
+.mx_TopBanner {
+    background: linear-gradient(90deg, $accent-color, #253686);
+    min-height: 2em;
+    box-shadow: 0 .25rem .5rem rgba(0, 0, 0, .15)!important;
+    transition: 0.4s;
+}
+
+.mx_TopBanner h1 {
+    background-image: url("/themes/element/img/logos/element-logo.svg");
+    background-repeat: no-repeat;
+    background-size: 70px;
+    background-position-y: center;
+    background-position: 20px;
+    font-size: 0.5em;
+    text-align: right;
+    padding-bottom: 5px;
+    margin-right: 0.25em;
+    transition: max-height 0.25s ease-in;
+    height: 50px
 }
 
 // diff highlight colors

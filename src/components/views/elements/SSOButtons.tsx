@@ -79,7 +79,7 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     const classes = classNames("mx_SSOButton", {
         [brandClass]: brandClass,
         mx_SSOButton_mini: mini,
-        mx_SSOButton_default: !idp,
+        mx_SSOButton_default_inverse: !idp,
         mx_SSOButton_primary: primary,
     });
 
