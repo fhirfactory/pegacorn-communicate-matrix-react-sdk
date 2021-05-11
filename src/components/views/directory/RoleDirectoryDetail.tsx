@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import * as PropTypes from 'prop-types';
 import * as sdk from "../../../index";
 import { getRoleEnumValues } from "../../../utils/directory-enums";
-import { search_role_by_displayName } from "../../../config";
+import * as config from "../../../config";
 
 /*
 Copyright 2020 The Matrix.org Foundation C.I.C.
@@ -26,6 +26,7 @@ interface IProps {
         value?: string
     ];
     displayName?: string;
+    roleId?: string;
     description?: string;
     primaryOrganizationID?: string;
     primaryRoleCategoryID?: string;
@@ -64,7 +65,7 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
         primaryRoleID: PropTypes.string,
         identifiers: PropTypes.array,
         location: PropTypes.string,
-        displayName: PropTypes.string,
+        roleId: PropTypes.string,
         description: PropTypes.string,
         contactPoints: PropTypes.array
     };
@@ -80,32 +81,32 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
         }
     }
 
-    getRoleDetail() {
-        const searchQuery = this.props.displayName;
-        const displayName = encodeURI(searchQuery);
-        const view_role_detail = search_role_by_displayName + displayName;
-        // api data
-        const response = fetch(view_role_detail, {
-            method: "GET"
-        }).then(res => res.json());
-        return response;
+    componentDidMount() {
+        this.getRoleDetail();
     }
 
-    componentDidMount() {
-        this.getRoleDetail().then((response) => {
-            this.setState({
-                roles: response,
-                showUserRoleTable: true,
-                loading: false,
-            })
-        }).catch(err => {
-            if (err instanceof Error) {
+    getRoleDetail() {
+        const searchQuery = this.props.roleId;
+        const roleId = encodeURI(searchQuery);
+        const view_role_detail = config.search_role_by_displayName + roleId;
+        // api data
+        fetch(view_role_detail, {
+            method: "GET"
+        }).then(res => res.json())
+            .then((response) => {
                 this.setState({
-                    error: err,
-                    loading: false
+                    roles: response,
+                    showUserRoleTable: true,
+                    loading: false,
                 })
-            }
-        })
+            }).catch(err => {
+                if (err instanceof Error) {
+                    this.setState({
+                        error: err,
+                        loading: false
+                    })
+                }
+            });
     }
 
     // The phone, email address info was already converted to
@@ -151,11 +152,11 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
         }
     }
 
-    renderRoleDetailView = () => {
+    _renderRoleDetailView = () => {
         return this.state.roles.map((role, index) => {
             let headerElement = Object.keys(this.state.roles[0]);
-            const { simplifiedID, primaryRoleCategoryID, identifiers, primaryRoleID,
-                primaryLocationID, primaryOrganizationID, displayName, description, contactPoints } = role //destructuring the role object/array
+            const { simplifiedID, primaryRoleCategoryID, primaryRoleID, primaryLocationID,
+                primaryOrganizationID, displayName, description, contactPoints } = role //destructuring the role object/array
             return <table key={index} className="mx_role_table">
                 <caption><h2>Practitioner Registered Role Detail</h2></caption>
                 <tbody>
@@ -182,7 +183,7 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
             </>
         }
         return <React.Fragment>
-            {this.renderRoleDetailView()}
+            {this._renderRoleDetailView()}
         </React.Fragment>
     }
 }
