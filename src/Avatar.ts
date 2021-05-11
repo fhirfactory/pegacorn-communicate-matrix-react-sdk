@@ -21,6 +21,7 @@ import {Room} from "matrix-js-sdk/src/models/room";
 
 import {MatrixClientPeg} from './MatrixClientPeg';
 import DMRoomMap from './utils/DMRoomMap';
+import * as config from './config';
 
 export type ResizeMethod = "crop" | "scale";
 
@@ -97,7 +98,7 @@ export function defaultAvatarUrlForString(s: string): string {
     // overwritten color value in custom themes
     const cssVariable = `--avatar-background-colors_${colorIndex}`;
     const cssValue = document.body.style.getPropertyValue(cssVariable);
-    const color = cssValue || defaultColors[colorIndex];
+    const color = ((config.avatarColors) ? getSpecificColorFromConfig(s) : undefined) || cssValue || defaultColors[colorIndex];
     let dataUrl = colorToDataURLCache.get(color);
     if (!dataUrl) {
         // validate color as this can come from account_data
@@ -110,6 +111,25 @@ export function defaultAvatarUrlForString(s: string): string {
         }
     }
     return dataUrl;
+}
+
+/**
+ * If client is particular about role colors  user role/user directory category then
+ * approach below would be sufficient to replace colors configured in custom config as well as color
+ * You can configure your own color in object in config file
+ * Not having this config or not having color in config parameter would default
+ * avatar colors back to matrix color
+ * @param {string} s
+ * @param {string} randomlySelectedAvatarColor randomly selected color from config
+ * @param {object} configAvatarColors needs to be obj{key:value} pair type in config
+ * @param {object} avatarColors needs to be passed from config and read via config.ts file
+*/
+function getSpecificColorFromConfig(s: string): string {
+    let configAvatarColors = config.avatarColors;
+    let avatarColors = configAvatarColors[s];
+    let numOfColors = Object.keys(configAvatarColors).length;
+    let randomlySelectedAvatarColor = String(Object.values(configAvatarColors)[Math.floor(Math.random() * numOfColors)]);
+    return (avatarColors || randomlySelectedAvatarColor);
 }
 
 /**

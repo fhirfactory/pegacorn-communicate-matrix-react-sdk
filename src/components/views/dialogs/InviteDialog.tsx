@@ -85,13 +85,23 @@ class Member {
     getMxcAvatarUrl(): string { throw new Error("Member class not implemented"); }
     /**
     * Determines whether or not member listed is a favorited member
+    * Unless value is provided, default is set to false
     */
     get favorite(): boolean { throw new Error("Member class not implemented"); }   // determines whether or not member is favorite
 
     /**
      * Determines whether or not given member is available for chat
+     * Unless value is provided default is set to false
     */
     get available(): boolean { throw new Error("Member class not implemented"); }  // determines whether or not to initiate chats
+
+    /**
+     * Determines what is category of current role category
+     * It is used by rendering right avatar color according to
+     * category id, also used by name initials
+     * Default will be set to null
+     */
+    get roleCategoryId(): string { throw new Error("Member class not implemented"); }
 }
 
 class DirectoryMember extends Member {
@@ -100,14 +110,16 @@ class DirectoryMember extends Member {
     _avatarUrl: string;
     _isFavorite: boolean;
     _isAvailable: boolean;
+    _roleCategoryId: string;
 
-    constructor(userDirResult: {user_id: string, display_name: string, avatar_url: string, favorite: boolean, available: boolean}) {
+    constructor(userDirResult: {user_id: string, display_name: string, avatar_url: string, favorite: boolean, available: boolean, roleCategoryId: string}) {
         super();
         this._userId = userDirResult.user_id;
         this._displayName = userDirResult.display_name;
         this._avatarUrl = userDirResult.avatar_url;
         this._isFavorite = userDirResult.favorite;
         this._isAvailable = userDirResult.available;
+        this._roleCategoryId = userDirResult.roleCategoryId;
     }
 
     // These next class members are for the Member interface
@@ -129,6 +141,10 @@ class DirectoryMember extends Member {
 
     get available(): boolean {
         return this._isAvailable;
+    }
+
+    get roleCategoryId(): string {
+        return this._roleCategoryId;
     }
 }
 
@@ -190,8 +206,8 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
                 url={getHttpUriForMxc(
                     MatrixClientPeg.get().getHomeserverUrl(), this.props.member.getMxcAvatarUrl(),
                     avatarSize, avatarSize, "crop")}
-                name={this.props.member.name}
-                idName={this.props.member.userId}
+                name={config.avatarColors ? this.props.member.roleCategoryId: this.props.member.name}
+                idName={config.avatarColors ? this.props.member.roleCategoryId: this.props.member.userId}
                 width={avatarSize}
                 height={avatarSize} />;
 
@@ -229,6 +245,7 @@ interface IDMRoomTileProps {
     isSelected: boolean;
     isFavorite: boolean;   // determines whether or not member is your favorite
     isAvailable: boolean;  // determines whether or not member role has a person fulfilling that role
+    roleCategoryId: string;
 }
 
 class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
@@ -315,8 +332,8 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                 url={getHttpUriForMxc(
                     MatrixClientPeg.get().getHomeserverUrl(), this.props.member.getMxcAvatarUrl(),
                     avatarSize, avatarSize, "crop")}
-                name={this.props.member.name}
-                idName={this.props.member.userId}
+                name={config.avatarColors ? this.props.member.roleCategoryId : this.props.member.name}
+                idName={config.avatarColors ? this.props.member.roleCategoryId : this.props.member.userId}
                 width={avatarSize}
                 height={avatarSize} />;
 
@@ -352,7 +369,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             </AccessibleButton>
 
         const viewMemberDetail = <div id="mx_table_role_detail" style={{ display: 'none' }}>
-            <RoleDetailView displayName={this.props.member.name}/>
+            <RoleDetailView roleId={this.props.member.name}/>
         </div>
 
         return (
@@ -679,7 +696,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             // Assume mxid
             newMember = new DirectoryMember({
                 user_id: this.state.filterText, display_name: null, avatar_url: null
-                , available: false, favorite: false
+                , available: false, favorite: false, roleCategoryId: null
             });
         } else if (SettingsStore.getValue(UIFeature.IdentityServer)) {
             // Assume email
@@ -852,7 +869,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             this.setState({
                 serverResultsMixin: filteredFavoriteResults,
                 favoriteFilterIsSelected: true,
-                recents: [],
                 suggestions: []
             })
         }
@@ -943,13 +959,14 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 let newObj = { user_id: '', display_name: '', avatar_url: '' }
                 let role_display_name = '';
                 let role_user_id = '';
+                let role_category = '';
                 let roleIsAvailable = false;
                 newObj = results.map((value) => {
                     role_display_name = value["displayName"];
                     newObj.display_name = role_display_name;
                     role_user_id = value["simplifiedID"];
                     newObj["user_id"] = role_user_id;
-
+                    role_category = value["primaryRoleCategoryID"];
                     // filled or not filled status
                     // if activePractitionerSet array is non-empty someone is fulfilling that role
                     if (value.activePractitionerSet.length > 0) {
@@ -958,6 +975,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         roleIsAvailable = true;
                     }
                 });
+
+                // update favorite roles
+                this._updateFavoritesForCurrentUser();
 
                 // update server result mixin(search result) in state
                 if (results.length > 0) {
@@ -969,6 +989,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                                 avatar_url: '',
                                 favorite: false,
                                 available: roleIsAvailable,
+                                roleCategoryId: role_category
                             }),
                             userId: role_user_id,
                         }],
@@ -1096,7 +1117,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                             display_name: profile.displayname,
                             avatar_url: profile.avatar_url,
                             favorite: false,
-                            available: false
+                            available: false,
+                            roleCategoryId: null
                         }),
                         userId: lookup.mxid,
                     }],
@@ -1210,7 +1232,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     display_name: displayName,
                     avatar_url: avatarUrl,
                     available: false,
-                    favorite: false
+                    favorite: false,
+                    roleCategoryId: null
                 }));
             } catch (e) {
                 console.error("Error looking up profile for " + address);
@@ -1373,6 +1396,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 isSelected={this.state.targets.some(t => t.userId === r.userId)}
                 isFavorite={this.state.favorites.indexOf(r.user.name)  !== -1 ? true: false}
                 isAvailable={r.user.available}
+                roleCategoryId={r.user.roleCategoryId}
             />
         ));
         return (
@@ -1489,8 +1513,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         numOfTotalRecords = this.state.numOfRecordsFromSearchAPI;
         if (totalDisplayedResults > numOfTotalRecords) return null;
         if (totalDisplayedResults <= 1 || this.state.numOfRecordsFromSearchAPI == 0) return null;
+        if (this.state.favoriteFilterIsSelected) return null;
         return <div className="mx_InvitedDialog_totalRecords">
-            <p>Showing {totalDisplayedResults} records of {numOfTotalRecords ? numOfTotalRecords: totalDisplayedResults}</p>
+        {totalDisplayedResults && <p>Showing {totalDisplayedResults} records of {numOfTotalRecords ? numOfTotalRecords: totalDisplayedResults}</p>}
         </div>
     }
 
