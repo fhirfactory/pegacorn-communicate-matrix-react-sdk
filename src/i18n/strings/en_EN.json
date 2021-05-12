@@ -468,7 +468,7 @@
     "Unknown (user, session) pair:": "Unknown (user, session) pair:",
     "Session already verified!": "Session already verified!",
     "WARNING: Session already verified, but keys do NOT MATCH!": "WARNING: Session already verified, but keys do NOT MATCH!",
-    "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!",
+    "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is "%(fprint)s" which does not match the provided key "%(fingerprint)s". This could mean your communications are being intercepted!": "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is "%(fprint)s" which does not match the provided key "%(fingerprint)s". This could mean your communications are being intercepted!",
     "Verified key": "Verified key",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.",
     "Forces the current outbound group session in an encrypted room to be discarded": "Forces the current outbound group session in an encrypted discussion to be discarded",
@@ -502,13 +502,13 @@
     "%(senderName)s unbanned %(targetName)s.": "%(senderName)s unbanned %(targetName)s.",
     "%(senderName)s withdrew %(targetName)s's invitation.": "%(senderName)s withdrew %(targetName)s's invitation.",
     "%(senderName)s kicked %(targetName)s.": "%(senderName)s kicked %(targetName)s.",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s changed the topic to \"%(topic)s\".",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s removed the room name.",
-    "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.",
-    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s changed the room name to %(roomName)s.",
-    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s upgraded this room.",
-    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s made the room public to whoever knows the link.",
-    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s made the room invite only.",
+    "%(senderDisplayName)s changed the topic to "%(topic)s".": "%(senderDisplayName)s changed the topic to "%(topic)s".",
+    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s removed the discussion name.",
+    "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s changed the discussion name from %(oldDiscussionName)s to %(newDiscussionName)s.",
+    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s changed the discussion name to %(discussionName)s.",
+    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s upgraded this discussion.",
+    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s made the discussion public to whoever knows the link.",
+    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s made the discussion invite only.",
     "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s changed the join rule to %(rule)s",
     "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s has allowed guests to join the discussion.",
     "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s has prevented guests from joining the discussion.",
@@ -2477,7 +2477,23 @@
     "Attach files from chat or just drag and drop them anywhere in a room.": "Attach files from chat or just drag and drop them anywhere in a discussion.",
     "Communities": "Communities",
     "Create community": "Create community",
-    "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even add images with Matrix URLs <img src=\"mxc://url\" />\n</p>\n": "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even add images with Matrix URLs <img src=\"mxc://url\" />\n</p>\n",
+    """<h1>HTML for your community's page</h1>
+    <p>
+        Use the long description to introduce new members to the community, or distribute
+        some important <a href=""foo"">links</a>
+    </p>
+    <p>
+        You can even add images with Matrix URLs <img src=""mxc://url"" />
+    </p>
+    "": ""<h1>HTML for your community's page</h1>
+    <p>
+        Use the long description to introduce new members to the community, or distribute
+        some important <a href=""foo"">links</a>
+    </p>
+    <p>
+        You can even add images with Matrix URLs <img src=""mxc://url"" />
+    </p>
+    "","
     "Add rooms to the community summary": "Add discussions to the community summary",
     "Which rooms would you like to add to this summary?": "Which discussions would you like to add to this summary?",
     "Add to summary": "Add to summary",
