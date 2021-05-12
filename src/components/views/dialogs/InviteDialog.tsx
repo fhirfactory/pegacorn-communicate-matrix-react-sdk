@@ -322,7 +322,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             const humanTs = humanizeTime(this.props.lastActiveTs);
             timestamp = <span className='mx_InviteDialog_roomTile_time'>{humanTs}</span>;
         }
-        console.log("Favorite status is", this.props.isFavorite);
+
         const avatarSize = 36;
         const avatar = this.props.member.isEmail
             ? <img
@@ -361,8 +361,8 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                 <img src={require("../../../../res/img/element-icons/roomlist/favorite.svg")} title="Your favorite" alt="favorite icon" />
             </span> : null;
 
-        const roleIsFilledOrUnfilled = this.props.isAvailable ? <span className="mx_InviteDialog_roomTile_available">Not Filled</span>
-            : <span className="mx_InviteDialog_roomTile_unavailable">Filled</span>;
+        const roleIsFilledOrUnfilled = this.props.isAvailable ? <span className="mx_InviteDialog_roomTile_available">Filled</span>
+        :<span className="mx_InviteDialog_roomTile_unavailable">Not Filled</span>;
 
         const viewDetailBtn = <AccessibleButton id="mx_viewDetailBtn" kind="primary" onClick={ev => this.onClickView(ev)}>
            View Detail
@@ -1508,11 +1508,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         let numOfTotalRecords;
         let totalDisplayedResults;
         if (totalMembersTiles.length > 0) {
-            totalDisplayedResults = totalMembersTiles ? (totalMembersTiles.length + 1) : null;
+            totalDisplayedResults = totalMembersTiles ? totalMembersTiles.length  : null;
         }
         numOfTotalRecords = this.state.numOfRecordsFromSearchAPI;
         if (totalDisplayedResults > numOfTotalRecords) return null;
-        if (totalDisplayedResults <= 1 || this.state.numOfRecordsFromSearchAPI == 0) return null;
+        if (totalDisplayedResults < 1 || this.state.numOfRecordsFromSearchAPI < 1) return null;
         if (this.state.favoriteFilterIsSelected) return null;
         return <div className="mx_InvitedDialog_totalRecords">
         {totalDisplayedResults && <p>Showing {totalDisplayedResults} records of {numOfTotalRecords ? numOfTotalRecords: totalDisplayedResults}</p>}
@@ -1637,7 +1637,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             goButtonFn = this._transferCall;
         } else if (this.props.kind === KIND_Role_Directory_Search) {
             title = "Role Directory Search";
-            buttonText = "Invite";
+            buttonText = "Start Discussion";
             goButtonFn = this._startDm;
             helpText = <React.Fragment>
                 {config.role_directory_description}
