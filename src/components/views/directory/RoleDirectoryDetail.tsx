@@ -179,7 +179,6 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
     }
 
     getNameFromEmail(email: string): string {
-        console.log("Email received is", email);
         if(!email || (email === undefined) || (email.indexOf('@') === -1)) return null;
         let firstName = email.split('.')[0];
         firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
@@ -201,17 +200,18 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
             height={36} />;
     }
 
-    // gets someone that is fulfilling the role
+    // show someone who is fulfilling the role.
     _renderUserDetailView = () => {
         let users: string[] = this.state.activeUsersInRole;
         if ((users.length < 1) || !Array.isArray(users)) return null;
-        console.log("It is an array", Array.isArray(users));
         return <div className="mx_role_fulfilledBy">
             <h3>Role Fulfilled By:</h3>
             {users.map((emailAddr, index) => {
-                 console.log("single user is", emailAddr);
-                const name = emailAddr ? this.getNameFromEmail(emailAddr): null;
-                return name && <span className="mx_role_fulfilledBy_user"><li>{this._renderAvatar(name) || null}</li><li>{name || null}</li></span>
+                const name = emailAddr ? this.getNameFromEmail(emailAddr) : null;
+                return name && <span className="mx_role_fulfilledBy_user" key={index}>
+                    <li>{this._renderAvatar(name)}</li>
+                    <li>{name}</li>
+                </span>
             })}
         </div>
     }
