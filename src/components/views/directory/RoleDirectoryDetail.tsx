@@ -47,7 +47,7 @@ interface IState {
     showUserRoleTable: boolean;
     roles: IProps[];
     error: any;
-    activeUsersInRole: string[];
+    activeRoleEmails: string[];
     loading: boolean;
     searchQuery: string;
 }
@@ -76,7 +76,7 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
         this.state = {
             showUserRoleTable: false,
             roles: [],
-            activeUsersInRole: [],
+            activeRoleEmails: [],
             error: null,
             loading: true,
             searchQuery: ''
@@ -96,16 +96,16 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
             method: "GET"
         }).then(res => res.json())
             .then((response) => {
-                let usersToBeAdded = [];
+                let emails = [];
                 let roleArrayResponse = [];
                 let entries = response.entry;
                 roleArrayResponse.push(entries);
-                roleArrayResponse.map(val => usersToBeAdded = val.activePractitionerSet);
+                roleArrayResponse.map(val => emails = val.activePractitionerSet);
                 this.setState({
                     roles: roleArrayResponse,
                     showUserRoleTable: true,
                     loading: false,
-                    activeUsersInRole: usersToBeAdded
+                    activeRoleEmails: emails
                 })
             }).catch(err => {
                 console.log("error found was", err);
@@ -161,27 +161,6 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
         }
     }
 
-    _renderRoleDetailView = () => {
-        return this.state.roles.map((role, index) => {
-            let headerElement = Object.keys(this.state.roles[0]);
-            const { simplifiedID, primaryRoleCategoryID, primaryRoleID, primaryLocationID,
-                primaryOrganizationID, displayName, description, contactPoints } = role //destructuring the role object/array
-            return <table key={index} className="mx_role_table">
-                <caption><h2>Practitioner Registered Role Detail</h2></caption>
-                <tbody>
-                    <tr><th>{this.getFormattedRoleIDTextLabel("simplifiedID", headerElement)}</th><td>{simplifiedID}</td></tr>
-                    <tr><th>{this.getFormattedRoleIDTextLabel("primaryRoleCategoryID", headerElement)}</th><td>{primaryRoleCategoryID}</td></tr>
-                    <tr><th>{this.getFormattedRoleIDTextLabel("primaryOrganizationID", headerElement)}</th><td>{primaryOrganizationID}</td></tr>
-                    <tr><th>{this.getFormattedRoleIDTextLabel("primaryRoleID", headerElement)}</th><td>{primaryRoleID}</td></tr>
-                    <tr><th>{this.getFormattedRoleIDTextLabel("displayName", headerElement)}</th><td>{displayName}</td></tr>
-                    <tr><th>{this.getFormattedRoleIDTextLabel("description", headerElement)}</th><td>{description}</td></tr>
-                    <tr><th>{this.getFormattedRoleIDTextLabel("primaryLocationID", headerElement)}</th><td>{this.getFormattedRoleIds(primaryLocationID)}</td></tr>
-                    <tr><th>{this.getFormattedRoleIDTextLabel("contactPoints", headerElement)}</th><td>{this.getFormattedPhoneNumber(contactPoints)}</td></tr>
-                </tbody>
-            </table>
-        })
-    }
-
     getNameFromEmail(email: string): string {
         if(!email || (email === undefined) || (email.indexOf('@') === -1)) return null;
         let firstName = email.split('.')[0];
@@ -204,9 +183,31 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
             height={36} />;
     }
 
+
+    _renderRoleDetailView = () => {
+        return this.state.roles.map((role, index) => {
+            let headerElement = Object.keys(this.state.roles[0]);
+            const { simplifiedID, primaryRoleCategoryID, primaryRoleID, primaryLocationID,
+                primaryOrganizationID, displayName, description, contactPoints } = role //destructuring the role object/array
+            return <table key={index} className="mx_role_table">
+                <caption><h2>Practitioner Registered Role Detail</h2></caption>
+                <tbody>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("simplifiedID", headerElement)}</th><td>{simplifiedID}</td></tr>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("primaryRoleCategoryID", headerElement)}</th><td>{primaryRoleCategoryID}</td></tr>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("primaryOrganizationID", headerElement)}</th><td>{primaryOrganizationID}</td></tr>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("primaryRoleID", headerElement)}</th><td>{primaryRoleID}</td></tr>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("displayName", headerElement)}</th><td>{displayName}</td></tr>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("description", headerElement)}</th><td>{description}</td></tr>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("primaryLocationID", headerElement)}</th><td>{this.getFormattedRoleIds(primaryLocationID)}</td></tr>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("contactPoints", headerElement)}</th><td>{this.getFormattedPhoneNumber(contactPoints)}</td></tr>
+                </tbody>
+            </table>
+        })
+    }
+
     // show someone who is fulfilling the role.
     _renderUserDetailView = () => {
-        let users: string[] = this.state.activeUsersInRole;
+        let users: string[] = this.state.activeRoleEmails;
         if ((users.length < 1) || !Array.isArray(users)) return null;
         return <div className="mx_role_fulfilledBy">
             <h3>Role Fulfilled By:</h3>
