@@ -101,6 +101,9 @@ export const people_directory = directory?.people;
 // base api
 export const api_base_path = directory?.api.base_path;
 
+// prefix
+export const prefix = directory?.api.prefix;
+
 // search all roles
 export const search_all_roles = api_base_path + directory?.api?.search_all_roles;
 

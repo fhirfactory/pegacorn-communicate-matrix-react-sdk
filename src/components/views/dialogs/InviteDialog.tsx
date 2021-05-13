@@ -897,7 +897,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         // Find favorites from relevant api (roles / services)
         // get user id
         const user_id_encoded = encodeURI(MatrixClientPeg.get().getUserId());
-        const role_favorite_api = config.api_base_path + config.search_by_favorite.prefix + user_id_encoded + config.search_by_favorite.role_suffix;
+        const role_favorite_api = config.api_base_path + config.prefix + user_id_encoded + config.search_by_favorite.role_suffix;
         fetch(role_favorite_api, {
             method: "GET",
             headers: {
