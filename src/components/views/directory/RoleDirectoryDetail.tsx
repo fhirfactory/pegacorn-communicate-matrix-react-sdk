@@ -89,22 +89,26 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
 
     getRoleDetail() {
         const searchQuery = this.props.roleId;
-        const roleId = encodeURI(searchQuery);
-        const view_role_detail = config.search_role_by_displayName + roleId;
+        const roleId = encodeURIComponent(searchQuery);
+        const view_role_detail = config.search_all_roles + roleId;
         // api data
         fetch(view_role_detail, {
             method: "GET"
         }).then(res => res.json())
             .then((response) => {
                 let usersToBeAdded = [];
-                response.map(val => usersToBeAdded = val.activePractitionerSet);
+                let roleArrayResponse = [];
+                let entries = response.entry;
+                roleArrayResponse.push(entries);
+                roleArrayResponse.map(val => usersToBeAdded = val.activePractitionerSet);
                 this.setState({
-                    roles: response,
+                    roles: roleArrayResponse,
                     showUserRoleTable: true,
                     loading: false,
                     activeUsersInRole: usersToBeAdded
                 })
             }).catch(err => {
+                console.log("error found was", err);
                 if (err instanceof Error) {
                     this.setState({
                         error: err,
@@ -220,10 +224,10 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
         const Spinner = sdk.getComponent("elements.Spinner");
         if (this.state.loading) return <Spinner w={22} h={22} />;
         if (this.state.error) {
-            return <>
-                <div>An error has occured....</div>;
-                <div>Error message: {this.state.error.message}</div>
-            </>
+            return <div style = {{color: 'red'}}>
+                <p>Something bad happened! Requested resource could not be found.</p>
+                <p>Internal Server Error Occured.</p>
+            </div>
         }
         return <React.Fragment>
             {this._renderUserDetailView()}
