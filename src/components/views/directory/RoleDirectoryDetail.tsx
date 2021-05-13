@@ -47,6 +47,7 @@ interface IState {
     showUserRoleTable: boolean;
     roles: IProps[];
     error: any;
+    activeUsersInRole: string[];
     loading: boolean;
     searchQuery: string;
 }
@@ -75,6 +76,7 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
         this.state = {
             showUserRoleTable: false,
             roles: [],
+            activeUsersInRole: [],
             error: null,
             loading: true,
             searchQuery: ''
@@ -94,10 +96,13 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
             method: "GET"
         }).then(res => res.json())
             .then((response) => {
+                let usersToBeAdded = [];
+                response.map(val => usersToBeAdded = val.activePractitionerSet);
                 this.setState({
                     roles: response,
                     showUserRoleTable: true,
                     loading: false,
+                    activeUsersInRole: usersToBeAdded
                 })
             }).catch(err => {
                 if (err instanceof Error) {
@@ -173,6 +178,44 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
         })
     }
 
+    getNameFromEmail(email: string): string {
+        console.log("Email received is", email);
+        if(!email || (email === undefined) || (email.indexOf('@') === -1)) return null;
+        let firstName = email.split('.')[0];
+        firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+        let lastName = email.split('@')[0].split('.').pop();
+        lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1);
+        const fullName = firstName + " " + lastName;
+        return fullName;
+    }
+
+    // avatar for who is fulfilling the given role
+    _renderAvatar(name: string){
+        const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
+        return <BaseAvatar
+            className='mx_InviteDialog_userTile_avatar'
+            url={null}
+            name={name}
+            idName={name}
+            width={36}
+            height={36} />;
+    }
+
+    // gets someone that is fulfilling the role
+    _renderUserDetailView = () => {
+        let users: string[] = this.state.activeUsersInRole;
+        if ((users.length < 1) || !Array.isArray(users)) return null;
+        console.log("It is an array", Array.isArray(users));
+        return <div className="mx_role_fulfilledBy">
+            <h3>Role Fulfilled By:</h3>
+            {users.map((emailAddr, index) => {
+                 console.log("single user is", emailAddr);
+                const name = emailAddr ? this.getNameFromEmail(emailAddr): null;
+                return name && <span className="mx_role_fulfilledBy_user"><li>{this._renderAvatar(name) || null}</li><li>{name || null}</li></span>
+            })}
+        </div>
+    }
+
     render() {
         const Spinner = sdk.getComponent("elements.Spinner");
         if (this.state.loading) return <Spinner w={22} h={22} />;
@@ -183,6 +226,7 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
             </>
         }
         return <React.Fragment>
+            {this._renderUserDetailView()}
             {this._renderRoleDetailView()}
         </React.Fragment>
     }
