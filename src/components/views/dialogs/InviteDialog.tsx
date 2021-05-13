@@ -960,7 +960,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 let role_display_name = '';
                 let role_user_id = '';
                 let role_category = '';
-                let roleIsAvailable = false;
+                let roleIsActive = false;
                 newObj = results.map((value) => {
                     role_display_name = value["displayName"];
                     newObj.display_name = role_display_name;
@@ -969,10 +969,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     role_category = value["primaryRoleCategoryID"];
                     // filled or not filled status
                     // if activePractitionerSet array is non-empty someone is fulfilling that role
-                    if (value.activePractitionerSet.length > 0) {
-                        roleIsAvailable = false;
+                    if (value.activePractitionerSet.length < 1) {
+                        roleIsActive = false;
                     } else {
-                        roleIsAvailable = true;
+                        roleIsActive = true;
                     }
                 });
 
@@ -988,7 +988,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                                 display_name: role_display_name,
                                 avatar_url: '',
                                 favorite: false,
-                                available: roleIsAvailable,
+                                available: roleIsActive,
                                 roleCategoryId: role_category
                             }),
                             userId: role_user_id,
