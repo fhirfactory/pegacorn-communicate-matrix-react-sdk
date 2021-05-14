@@ -61,7 +61,7 @@ export function showRoomInviteDialog(roomId) {
 }
 
 /**
- * Dialogs for directory integrations - role and services
+ * Dialog for role search
 */
 
 export function showRoleDirectorySearchDialog(initialText) {
