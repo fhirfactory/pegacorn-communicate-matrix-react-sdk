@@ -740,7 +740,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // Directory search (role)
             case 'search_role_directory':
                showRoleDirectorySearchDialog(payload.initialText || "");
-
                 break;
             case 'view_last_screen':
                 // This function does what we want, despite the name. The idea is that it shows
