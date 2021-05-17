@@ -155,10 +155,11 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
             </div>
             <div className="mx_HomePage_default_buttons">
                 {showRoleDirectory &&
-                    <AccessibleButton onClick={onClickRoleDirectory} className="mx_HomePage_button_explore">
+                    <AccessibleButton onClick={onClickRoleDirectory} className="mx_HomePage_button_role">
                         {role_directory_feature_name}
                     </AccessibleButton>
                 }
+
             </div>
         </div>
     </AutoHideScrollbar>;
