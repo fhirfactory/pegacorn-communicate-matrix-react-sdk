@@ -128,8 +128,14 @@ function getSpecificColorFromConfig(s: string): string {
     let configAvatarColors = config.avatarColors;
     let avatarColors = configAvatarColors[s];
     let numOfColors = Object.keys(configAvatarColors).length;
+    let total = 0;
+    for (let i = 0; i < s.length; ++i) {
+        total += s.charCodeAt(i);
+    }
+    const colorIndex = total % numOfColors;
+    const defaultToOtherColors = String(Object.values(configAvatarColors)[colorIndex]);
     let randomlySelectedAvatarColor = String(Object.values(configAvatarColors)[Math.floor(Math.random() * numOfColors)]);
-    return (avatarColors || randomlySelectedAvatarColor);
+    return (avatarColors || defaultToOtherColors || randomlySelectedAvatarColor);
 }
 
 /**
