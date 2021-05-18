@@ -883,7 +883,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     _searchIsOnRoleServicePeopleDir = () => {
-        if (KIND_Role_Directory_Search || KIND_Service_Directory_Search) {
+        if (this.props.kind === (KIND_Role_Directory_Search
+            || KIND_Service_Directory_Search
+            || KIND_People_Directory_Search)) {
             return true;
         } else {
             return false;
@@ -897,8 +899,12 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         // Find favorites from relevant api (roles / services)
         // get user id
         const user_id_encoded = encodeURI(MatrixClientPeg.get().getUserId());
-        const role_favorite_api = config.api_base_path + config.prefix + user_id_encoded + config.search_by_favorite.role_suffix;
-        fetch(role_favorite_api, {
+        let favorite_api;
+        if (this.props.kind === KIND_Role_Directory_Search) {
+            favorite_api = config.api_base_path + config.prefix + user_id_encoded
+                + config.search_by_favorite.role_suffix;
+        }
+        fetch(favorite_api, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -909,7 +915,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     favorites: response.favourites
                 })
             })
-
     }
 
     _updateDirectorySearchFromAPI = async (term: string) => {
@@ -917,7 +922,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         let search_api_path;
         // form an api path based on context
 
-        if (KIND_Role_Directory_Search) {
+        if (this.props.kind === KIND_Role_Directory_Search) {
             if (!term) {
                 search_api_path = config.search_all_roles
             }
