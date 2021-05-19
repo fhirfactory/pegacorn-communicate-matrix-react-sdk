@@ -574,7 +574,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     >
                         {_t("Start a new chat")}
                     </AccessibleButton>
-                    {config.showExplorePublicRoom &&
                     <AccessibleButton
                         className="mx_RoomList_explorePrompt_explore"
                         kind="link"
@@ -582,7 +581,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     >
                         {_t("Explore all public rooms")}
                     </AccessibleButton>
-                    }
                 </div>;
             } else if (Object.values(this.state.sublists).some(list => list.length > 0)) {
                 const unfilteredLists = RoomListStore.instance.unfilteredLists
@@ -610,6 +608,12 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     </div>;
                 }
             }
+        }
+
+        if (!config.showExplorePublicRoom) {
+            explorePrompt = <div className="mx_RoomList_explorePrompt">
+                <div>Use the + to make a new room or search roles, people or services in directory</div>
+            </div>
         }
 
         const sublists = this.renderSublists();

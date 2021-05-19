@@ -56,7 +56,7 @@ export const showDefaultFooterLinks = loginScreen?.showMatrixDefaultFooterLinks 
 export const directory = config['directory'];
 
 // turn off explore public room
-export const showExplorePublicRoom = directory?.showExplorePublicRoomTile ?? false;
+export const showExplorePublicRoom = directory?.showExplorePublicRoomTile ?? true;
 
 // matrix default server selection dropdown
 export const showPublicRoomServerSelectionDropdown = directory?.explorePublicRoomServerSelectionDropdown ?? true;
