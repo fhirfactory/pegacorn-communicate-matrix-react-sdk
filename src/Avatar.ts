@@ -239,14 +239,14 @@ export function getFirstAndLastNameInitialLetters(name: string): string {
         let firstAndLastInitials = '';
 
         // find out if name input is an email for avatar
-        const nameIsInEmailFormat = name.indexOf(':') > -1;
-        if (name.length > 1 && nameIsInEmailFormat) {
+        const nameIsInMatrixIdFormat = name.indexOf(':') > -1;
+        if (name.length > 1 && nameIsInMatrixIdFormat) {
 
             //find first and last names from email address
-            let nameFromEmailAddr = name.split(':')[0].split('.');
-            firstName = nameFromEmailAddr[0];
-            if (nameFromEmailAddr[nameFromEmailAddr.length - 1]) {
-                lastName = nameFromEmailAddr[1];
+            let nameFromMatrixId = name.split(':')[0].split('.');
+            firstName = nameFromMatrixId[0];
+            if (nameFromMatrixId[nameFromMatrixId.length - 1]) {
+                lastName = nameFromMatrixId[1];
             }
             firstNameInitial = getInitialLetter(firstName);
             lastNameInitial = getInitialLetter(lastName);
@@ -258,18 +258,17 @@ export function getFirstAndLastNameInitialLetters(name: string): string {
              * "firstname.lastname", "firstname-lastname", "firstname lastname, "firstname, lastname"
              * Based on https://stackoverflow.com/questions/10346722/how-can-i-split-a-javascript-string-by-white-space-or-comma
             */
-        else if (name.length > 1 && !nameIsInEmailFormat) {
+        else if (name.length > 1 && !nameIsInMatrixIdFormat) {
             let fullName = name.split(/[ .,-]+/);
             firstName = fullName[0];   // gives first name
             lastName = fullName[1];  // gives last name
-
+            if(name.includes(',')){
+                firstName = fullName[1];
+                lastName = fullName[0];
+            }
             firstNameInitial = firstName[0];
             lastNameInitial = lastName[0];
-            if((name.search(/[.-]+/i) > -1)){
-                firstAndLastInitials = firstNameInitial + lastNameInitial;
-            }  else {
-                firstAndLastInitials = lastNameInitial + firstNameInitial;
-            }
+            firstAndLastInitials = firstNameInitial + lastNameInitial;
             return firstAndLastInitials.toUpperCase();
         }
     } catch (e) {
