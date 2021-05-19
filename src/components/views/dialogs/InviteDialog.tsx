@@ -206,8 +206,8 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
                 url={getHttpUriForMxc(
                     MatrixClientPeg.get().getHomeserverUrl(), this.props.member.getMxcAvatarUrl(),
                     avatarSize, avatarSize, "crop")}
-                name={config.avatarColors ? this.props.member.roleCategoryId: this.props.member.name}
-                idName={config.avatarColors ? this.props.member.roleCategoryId: this.props.member.userId}
+                name={(config.avatarColors ? this.props.member.roleCategoryId: null) || this.props.member.name}
+                idName={(config.avatarColors ? this.props.member.roleCategoryId: null) || this.props.member.userId}
                 width={avatarSize}
                 height={avatarSize} />;
 
@@ -246,6 +246,7 @@ interface IDMRoomTileProps {
     isFavorite: boolean;   // determines whether or not member is your favorite
     isAvailable: boolean;  // determines whether or not member role has a person fulfilling that role
     roleCategoryId: string;
+    searchContext: string;
 }
 
 class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
@@ -332,8 +333,8 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                 url={getHttpUriForMxc(
                     MatrixClientPeg.get().getHomeserverUrl(), this.props.member.getMxcAvatarUrl(),
                     avatarSize, avatarSize, "crop")}
-                name={config.avatarColors ? this.props.member.roleCategoryId : this.props.member.name}
-                idName={config.avatarColors ? this.props.member.roleCategoryId : this.props.member.userId}
+                name={(config.avatarColors ? this.props.member.roleCategoryId: null) || this.props.member.name}
+                idName={(config.avatarColors ? this.props.member.roleCategoryId: null) || this.props.member.userId}
                 width={avatarSize}
                 height={avatarSize} />;
 
@@ -899,7 +900,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         // Find favorites from relevant api (roles / services)
         // get user id
         const user_id_encoded = encodeURI(MatrixClientPeg.get().getUserId());
-        let favorite_api;
+        let favorite_api = config.api_base_path + config.prefix + user_id_encoded;
         if (this.props.kind === KIND_Role_Directory_Search) {
             favorite_api = config.api_base_path + config.prefix + user_id_encoded
                 + config.search_by_favorite.role_suffix;
@@ -974,16 +975,15 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     role_category = value["primaryRoleCategoryID"];
                     // filled or not filled status
                     // if activePractitionerSet array is non-empty someone is fulfilling that role
-                    if (value.activePractitionerSet.length < 1) {
-                        roleIsActive = false;
-                    } else {
+                    if (value.activePractitionerSet?.length >= 1) {
                         roleIsActive = true;
+                    } else {
+                        roleIsActive = false;
                     }
                 });
 
                 // update favorite roles
                 this._updateFavoritesForCurrentUser();
-
                 // update server result mixin(search result) in state
                 if (results.length > 0) {
                     this.setState({
