@@ -50,6 +50,7 @@ interface IState {
     activeRoleEmails: string[];
     loading: boolean;
     searchQuery: string;
+    displayName: string;
 }
 
 /***
@@ -79,7 +80,8 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
             activeRoleEmails: [],
             error: null,
             loading: true,
-            searchQuery: ''
+            searchQuery: '',
+            displayName: null
         }
     }
 
@@ -108,7 +110,6 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
                     activeRoleEmails: emails
                 })
             }).catch(err => {
-                console.log("error found was", err);
                 if (err instanceof Error) {
                     this.setState({
                         error: err,
@@ -116,6 +117,20 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
                     })
                 }
             });
+    }
+
+    getDisplayNameFromAPI(emailId: string): string {
+        if(emailId.indexOf("@") === -1) return null;
+        const api = config.api_base_path + config.prefix + emailId;
+        fetch(api, {
+            method: "GET"
+        }).then(res => res.json())
+            .then((response) => {
+                let displayName = response.entry.displayName;
+                this.setState({ displayName: displayName })
+            })
+        let fullName = this.state.displayName;
+        return fullName;
     }
 
     // The phone, email address info was already converted to
@@ -162,10 +177,21 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
     }
 
     getNameFromEmail(email: string): string {
-        if(!email || (email === undefined) || (email.indexOf('@') === -1)) return null;
+        // checks email addresses and splits first and last names accordingly
+        if (!email || (email === undefined) || (email.indexOf('@') === -1)) return null;
+        if (email[0] === '@') {  // remove @ initial (valid in matrix id)
+            email = email.substring(1);
+        }
         let firstName = email.split('.')[0];
         firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
-        let lastName = email.split('@')[0].split('.').pop();
+        let lastName;
+        // non matrix id may have email address format firstname.lastName@email.com so split that accordingly
+        if (email.includes('@')) {
+            lastName = email.split('@')[0].split('.').pop();
+        // matrix id has ':' in middle of address, so just use that to split and format names
+        } else if (email.includes(':')) {
+            lastName = email.split(':')[0].split('.').pop();
+        }
         lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1);
         const fullName = firstName + " " + lastName;
         return fullName;
@@ -212,7 +238,7 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
         return <div className="mx_role_fulfilledBy">
             <h3>Role Fulfilled By:</h3>
             {users.map((emailAddr, index) => {
-                const name = emailAddr ? this.getNameFromEmail(emailAddr) : null;
+                const name = this.getNameFromEmail(emailAddr) || this.getDisplayNameFromAPI(emailAddr);
                 return name && <span className="mx_role_fulfilledBy_user" key={index}>
                     <li>{this._renderAvatar(name)}</li>
                     <li>{name}</li>
