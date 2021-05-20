@@ -486,22 +486,22 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         return errorText;
     }
 
-	renderHeader() {
+    renderHeader() {
         if (!this.state.flows) return null;
 
         const hasPasswordFlow = this.state.flows?.find(flow => flow.type === "m.login.password");
         const ssoFlow = this.state.flows?.find(flow => flow.type === "m.login.sso" || flow.type === "m.login.cas");
-		this.state.ssoFlowOnly = (ssoFlow && !hasPasswordFlow);
+        this.state.ssoFlowOnly = (ssoFlow && !hasPasswordFlow);
         // If has no password flow but an SSO flow, don't show the header, but just show the SSO button
         if (this.state.ssoFlowOnly) {
-			return null;
-		}
-		return (
-				<h2>
-					{_t('Sign in')}
-				</h2>
-		);
-	}	
+            return null;
+        }
+        return (
+                <h2>
+                    {_t('Sign in')}
+                </h2>
+        );
+    }
 
     renderLoginComponentForFlows() {
         if (!this.state.flows) return null;
