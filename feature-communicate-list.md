@@ -310,11 +310,11 @@ This option won't show up in single sign on by default from matrix implementatio
 Review your session prompt
 This prompt appears when user is already authenticated. ShowSecurityKeyBackupPrompt has been used to hide this prompt.
 Remove the I trust server prompt screen
-Its been implemented through `homeserver.yaml` config value.
+Its been implemented through homeserver.yaml config value.
 Hide liberate your communication text
-Its been hidden with custom config value `ShowLiberateYourCommunicationText` in our config.
+Its been hidden with custom config value ShowLiberateYourCommunicationText in our config.
 ACT government logo
-A secondary image has been used and read from config value `logo.logo_secondary.imgUrl`. This uses standard ACT Govt Logo which is horizontal.
+A secondary image has been used and read from config value logo_secondary.imgUrl. This uses standard ACT Govt Logo which is horizontal.
 ACT government logo on pre login screen
 Vertical ACT government logo has been used for this purpose. A config value cant be used for this as app-web is not query that setting in front end. Only on react sdk you can use config to retrieve that value. This one uses ACT gov logo that ends with _vertical keyword.
 
@@ -325,29 +325,18 @@ Web: Sign In Screen Lingo Re-Branding and Update
 - Homeserver edit/selection on login screen is controlled by  element's default configuration value disable_custom_urls which when used makes homerserver text a read only text is displayed and `edit` option won't show up.
 - Splash screen menu items `UIFeature.PasswordReset` and `UIFeature.Registration` were part of default matrix config values which has been set to true from our side to disable password reset and client's ability to create account and it will hide these two menu from splash screen.
 - This feature introduces a new config `loginScreen` to hide phone number drop down menu, `homeserver name`, `i-information tag`, `footer-link`, `background-color`, `phone based authentication dropdown`. If the value is populated in array then its meant to control it can be used in `config-ts` to determine what needs to be hidden on login screen prompt. If this array is not used in config, then it has been well tested that default behavior of Matrix will return to normal i.e. ( all default options on login screen will reappear). This optional array flag will fit purpose of what to show/hide or tweak on login prompt UI as client side may not need many options on login screen as single sign on is the only solution in some clients' space, and phone based authentication, email, different levels, homeserver detail make a little sense to normal public users.
-- At the moment matrix uses welcome screen for displaying information of brand on a page which appears prior to login (form based authentication page). Original intention of this from matrix/element.io page has been to allow client side to see information homepage in authenticated mode and let user click sign in and take user to another page but we do not have welcome page at the moment so we have wanted to skip welcome screen to page with login form. Matrix default login screen before form based login screen where user would see sign in button which then takes user to sign in form would be triggered was controlled by `welcome_page` routing configuration in codebase which has been turned off and instead we redirect user from welcome screen in authenticated page to form based login screen with configurable parameter. `auto_redirect_from_welcome_screen_to_login`. On hindsight, if `welcome.html` is replaced with another `html` file then default behavior of UI would have been to show another welcome page instead of login prompt screen that shows up before login form based page.
+- At the moment matrix uses welcome screen for displaying information of brand on a page which appears prior to login (form based authentication page). Original intention of this from matrix/element.io page has been to allow client side to see information homepage in authenticated mode and let user click sign in and take user to another page but we do not have welcome page at the moment so we have wanted to skip welcome screen to page with login form. Matrix default login screen before form based login screen where user would see sign in button which then takes user to sign in form would be triggered was controlled by `welcome_page` routing configuration in codebase which has been turned off and instead we redirect user from welcome screen in authenticated page to form based login screen with configurable parameter. `auto_redirect_from_welcome_screen_to_login`. In hindsight, if `welcome.html` is replaced with another `html` file then default behavior of UI would have been to show another welcome page instead of login prompt screen that shows up before login form based page.
 - The secondary vertical and horizontal logos use alt key description which comes from `logo_secondary` config value.
  which is configurable flag to control image description and we can change this description on config file as we want and this description would aid `WCAG` compliance on image description. This config centralizes all secondary logo  values such as `margin`, `height`, `logo url`, `logo description` etc. which are easily configurable and can be done through config changes in future.
- - Footer for unauthenticated content from matrix default has been turned off by using `showMatrixDefaultFooterLinks` flag which is also used for replacing copyright content of matrix with customized ones from clients.
+ - `loginScreen.showMatrixDefaultFooterLinks` controls whether or not to show the default links in the footer on the login screen.
  - Unauthenticated footer content is going to use customized communicate logo and text label which is private information so instead of hardcoding it , it has been configured from `footer` config value so now WCAG accessibility text for image and footer description won't be part of component even though image is referenced there. There is chance to configure all styles for footer logo, and text labels. Mostly idea of configuring style for anything in UI has been to minimize code changes and be able to change height of image used promptly.
  These other flags control login screen and home screen display
-to manage logos properly `logo` config value has been added in config which controls values and boolean fields containing logo logic as well as values for styling in general for logo such as `height`.
- - `showPrimaryLogoOnLoginScreen` controls whether or not to show primary logo on logon screen window.
- - `showPrimaryLogoInAuthenticatedScreen` controls whether or not to show secondary logo on authenticated screen.
- - `showSecondaryLogoOnLoginScreen` controls whether or not to show secondary logo on logon screen window which has forms.
- - `showSecondaryLogoOnAuthenticatedSreen` controls whether or not to show secondary logo when user is authenticated. This logic could be used wherever secondaryLogo is used in authenticated page when i.e. top left, footer, in middle or whatnot.
- - `showLoginScreenBackgroundImage` controls whether or not to show lake image or any other background images on login screen.
- - `backgroundColor` is used by view to render colored background which turns into a bogus url instead of real url.
- - `secondaryLogo` is used by view to render a secondary image which is shown on Login screen or next to primary screen after user is logged in where there is a scenario to use two images.
- - `tabbedView.displaySecondaryLogo `  Display secondary logo(footer logo) on tabbed view. by default it's false.
- - `tabbedView.secondaryLogoUrl`  store image url for secondary logo to be shown on tabbed view.
- - `tabbedView.secondaryLogoAltText`  store image alt text for secondary logo to be shown on tabbed view.
- - `displayTopBanner`   display top banner with app logo by default it's false
- - `logo_secondary.display` display the Secondary logo by default it's false.
- - `loginScreen.displaySecondaryLogo` On login screen display the Secondary logo by default it's false.
- - `loginScreen.displaySecondaryVerticalLogo` On login screen display the Secondary Vertical logo by default it's false.
- - `loginScreen.displayLanguageSelector` On login screen display the language selector if true. by default it's true.
- - `authenticatedHomeScreen.showWelcomeToElementText` on Dashboard / Landing page display Welcome to AppName(Element/Lingo) text.
- - `authenticatedHomeScreen.showLiberateYourCommunicationText` on Dashboard / Landing page display Liberate Your communication text.
- 
-  
+ - `tabbedView.showSecondaryLogo` controls whether or not to show the secondary logo (footer logo) on tabbed view. By default it's false.
+ - `tabbedView.secondaryLogoUrl` image url for secondary logo if shown on tabbed view.
+ - `tabbedView.secondaryLogoAltText` alt text for secondary logo if shown on tabbed view.
+ - `displayTopBanner` controls whether or not to show the top banner on authenticated pages. By default it's false.
+ - `authenticatedHomeScreen.showWelcomeToElementText` controls whether or not to show the "Welcome to [config.brand]" text on the authenticated home screen.  By default it's true.
+ - `authenticatedHomeScreen.showLiberateYourCommunicationText` controls whether or not to show the "Liberate Your communication" text on the authenticated home screen.  By default it's true.
+ - `loginScreen.ssoButtonDefaultClass` optional value, to override the default of mx_SSOButton_default 
+ - `loginScreen.changeSigninToLoginTextLabel` controls whether or not to replace the instances of "Sign In" to "Log In" on the Login screen. By default it's false.
+NOTE: the custom styling of these banners, buttons and logos is done via the theme e.g. \res\themes\light\css\_light.scss

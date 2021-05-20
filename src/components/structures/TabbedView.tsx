@@ -119,21 +119,19 @@ export default class TabbedView extends React.Component<IProps, IState> {
     public render(): React.ReactNode {
         const labels = this.props.tabs.map(tab => this._renderTabLabel(tab));
         const panel = this._renderTabPanel(this.props.tabs[this._getActiveTabIndex()]);
-        const logoUrlSecondary = customConfig.logoUrlTabbedViewFooter;
-        const logoUrlAltText =  customConfig.logoDescTabbedViewFooter;
+        const logoUrl = customConfig.tabbedViewSecondaryLogoUrl;
+        const logoUrlAltText = customConfig.tabbedViewSecondaryLogoAltText;
         return (
             <div className="mx_TabbedView">
                 <div className="mx_TabbedView_tabLabels">
                     {labels}
                 </div>
+				{customConfig.tabbedViewShowSecondaryLogo &&
+					<div className="mx_TabbedViewFooter">
+						<img className="mx_TabbedViewFooter_Image" src={logoUrl} alt={logoUrlAltText}/>
+					</div>
+				}
                 {panel}
-                {customConfig.tabbedViewdisplaySecondaryLogo === true &&
-                    <div className="mx_AuthFooter_TabbedView">
-                        <span className="mx_AuthFooter_brand_TabbedView">
-                            <img className="mx_AuthFooter_Image_Tabbed" src={logoUrlSecondary} alt={logoUrlAltText}/>
-                        </span>
-                    </div>
-                }
             </div>
         );
     }
