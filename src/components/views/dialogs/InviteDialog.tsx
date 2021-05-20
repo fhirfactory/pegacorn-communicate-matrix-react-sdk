@@ -315,9 +315,11 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
     }
 
     searchIsOnRolePeopleServiceDirectory = () => {
-        if (this.props.kind === (KIND_Role_Directory_Search
-            || KIND_Service_Directory_Search
-            || KIND_People_Directory_Search)) {
+        if (this.props.kind === KIND_Role_Directory_Search) {
+            return true;
+        } else if (this.props.kind === KIND_People_Directory_Search) {
+            return true;
+        } else if (this.props.kind === KIND_Service_Directory_Search) {
             return true;
         } else {
             return false;
@@ -894,9 +896,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     searchIsOnRolePeopleServiceDirectory = () => {
-        if (this.props.kind === (KIND_Role_Directory_Search
-            || KIND_Service_Directory_Search
-            || KIND_People_Directory_Search)) {
+        if (this.props.kind === KIND_Role_Directory_Search) {
+            return true;
+        } else if (this.props.kind === KIND_People_Directory_Search) {
+            return true;
+        } else if (this.props.kind === KIND_Service_Directory_Search) {
             return true;
         } else {
             return false;
