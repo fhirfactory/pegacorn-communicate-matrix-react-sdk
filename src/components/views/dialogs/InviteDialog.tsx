@@ -246,7 +246,7 @@ interface IDMRoomTileProps {
     isFavorite: boolean;   // determines whether or not member is your favorite
     isAvailable: boolean;  // determines whether or not member role has a person fulfilling that role
     roleCategoryId: string;
-    searchContext: string;
+    kind: string;
 }
 
 class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
@@ -312,6 +312,16 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         }
 
         return result;
+    }
+
+    searchIsOnRolePeopleServiceDirectory = () => {
+        if (this.props.kind === (KIND_Role_Directory_Search
+            || KIND_Service_Directory_Search
+            || KIND_People_Directory_Search)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     render() {
@@ -381,8 +391,8 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                     <div className='mx_InviteDialog_roomTile_userId'>{caption}</div>
                 </span>
                 {timestamp}
-                {config.show_favorite_icon_in_directory_search && viewDetailBtn}
-                {config.show_favorite_icon_in_directory_search && roleIsFilledOrUnfilled}
+                {this.searchIsOnRolePeopleServiceDirectory() && viewDetailBtn}
+                {(this.props.kind === KIND_Role_Directory_Search) && roleIsFilledOrUnfilled}
                 {config.show_favorite_icon_in_directory_search && favorite}
                 {viewMemberDetail}
             </div>
@@ -856,7 +866,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
     onChangeFilter = (ev: React.MouseEvent<HTMLInputElement>) => {
         ev.stopPropagation();
-        if (!this._searchIsOnRoleServicePeopleDir) return;
+        if (!this.searchIsOnRolePeopleServiceDirectory()) return;
         const eventTarget = ev.currentTarget;
         let filterByFavoriteEvent = eventTarget.parentNode.textContent.includes("Favorite");
         let filterByNameEvent = eventTarget.parentNode.textContent.includes("Name");
@@ -876,14 +886,14 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     _onClearSearchResult = () => {
-        if(!this._searchIsOnRoleServicePeopleDir) return;
+        if(!this.searchIsOnRolePeopleServiceDirectory()) return;
         this.setState({
             serverResultsMixin: [],
             numOfRecordsFromSearchAPI: 0
         });
     }
 
-    _searchIsOnRoleServicePeopleDir = () => {
+    searchIsOnRolePeopleServiceDirectory = () => {
         if (this.props.kind === (KIND_Role_Directory_Search
             || KIND_Service_Directory_Search
             || KIND_People_Directory_Search)) {
@@ -1024,7 +1034,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     };
 
     _updateSuggestions = async (term) => {
-       this._searchIsOnRoleServicePeopleDir ?  this._updateDirectorySearchFromAPI(term):
+       this.searchIsOnRolePeopleServiceDirectory() ?  this._updateDirectorySearchFromAPI(term):
         MatrixClientPeg.get().searchUserDirectory({term}).then(async r => {
             if (term !== this.state.filterText) {
                 // Discard the results - we were probably too slow on the server-side to make
@@ -1309,7 +1319,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             sectionName = kind === 'recents' ? _t("Recently Direct Messaged") : _t("Suggestions");
         }
 
-        if (this._searchIsOnRoleServicePeopleDir) {
+        if (this.searchIsOnRolePeopleServiceDirectory()) {
             if(this.state.numOfRecordsFromSearchAPI > 0){
                 sectionName = 'Search Results';
             }
@@ -1362,7 +1372,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         // sort sourceMembers before displaying in UI, sort alphabetically
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
         // https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value
-        if (this._searchIsOnRoleServicePeopleDir && config.sortAlphabeticallyInAscendingOrder) {
+        if (this.searchIsOnRolePeopleServiceDirectory() && config.sortAlphabeticallyInAscendingOrder) {
             //   sourceMembers = _.orderBy(sourceMembers, sourceMembers.map(m => m.user.name));
             sourceMembers = sourceMembers.sort((a, b) => {
                 const nameA = a.user.name.toLowerCase();
@@ -1399,9 +1409,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 onToggle={this._toggleMember}
                 highlightWord={this.state.filterText}
                 isSelected={this.state.targets.some(t => t.userId === r.userId)}
-                isFavorite={this.state.favorites.indexOf(r.user.name)  !== -1 ? true: false}
-                isAvailable={r.user.available}
-                roleCategoryId={r.user.roleCategoryId}
+                isFavorite={(this.state.favorites?.indexOf(r.user.name)  !== -1 ? true: false) || false}
+                isAvailable={r.user.available || false}
+                roleCategoryId={r.user.roleCategoryId || null}
+                kind={this.props.kind}
             />
         ));
         return (
@@ -1476,7 +1487,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     _renderClearSearchButton() {
-        if(!this._searchIsOnRoleServicePeopleDir) return null;
+        if(!this.searchIsOnRolePeopleServiceDirectory()) return null;
         return <div className='mx_InvitedDialog_clearButton'>
             <AccessibleButton onClick={this._onClearSearchResult} kind='primary'>
                 <span>Clear search result</span>
@@ -1485,7 +1496,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     _renderFilterOptions() {
-        if(!this._searchIsOnRoleServicePeopleDir) return null;
+        if(!this.searchIsOnRolePeopleServiceDirectory()) return null;
         return <div className="mx_InvitedDialog_filterOptions">
             <p>Filter By:</p>
             <StyledMenuItemCheckbox
@@ -1508,7 +1519,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
     _renderRecordCount() {
     //if it is not role, service, people directory search don't display record count
-        if (!this._searchIsOnRoleServicePeopleDir) return null;
+        if (!this.searchIsOnRolePeopleServiceDirectory()) return null;
         let totalMembersTiles = document.getElementsByClassName("mx_InviteDialog_roomTile");
         let numOfTotalRecords;
         let totalDisplayedResults;
