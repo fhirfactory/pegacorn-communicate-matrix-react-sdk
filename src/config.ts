@@ -26,6 +26,9 @@ export const allowEmailBasedAuthentication = loginScreen?.allowEmailBasedAuthent
 //Phone based authentication drop down menu
 export const allowPhoneBasedAuthentication = loginScreen?.allowPhoneBasedAuthentication ?? true;
 
+// Homeserver
+export const showHomeServerDetail = loginScreen?.showHomeServerInfo ?? true;
+
 // Default footer links
 export const showDefaultFooterLinks = loginScreen?.showMatrixDefaultFooterLinks ?? true;
 

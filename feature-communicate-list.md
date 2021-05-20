@@ -337,6 +337,7 @@ Web: Sign In Screen Lingo Re-Branding and Update
  - `displayTopBanner` controls whether or not to show the top banner on authenticated pages. By default it's false.
  - `authenticatedHomeScreen.showWelcomeToElementText` controls whether or not to show the "Welcome to [config.brand]" text on the authenticated home screen.  By default it's true.
  - `authenticatedHomeScreen.showLiberateYourCommunicationText` controls whether or not to show the "Liberate Your communication" text on the authenticated home screen.  By default it's true.
+ - `loginScreen.showHomeServerInfo` controls whether or not to show the Home Server information. By default it's true.
  - `loginScreen.ssoButtonDefaultClass` optional value, to override the default of mx_SSOButton_default 
  - `loginScreen.changeSigninToLoginTextLabel` controls whether or not to replace the instances of "Sign In" to "Log In" on the Login screen. By default it's false.
 NOTE: the custom styling of these banners, buttons and logos is done via the theme e.g. \res\themes\light\css\_light.scss
