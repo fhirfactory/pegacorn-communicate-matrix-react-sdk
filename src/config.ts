@@ -11,26 +11,14 @@ const config = SdkConfig.get();
 
 const loginScreen = config['loginScreen'];
 
+const authenticatedHomeScreen = config['authenticatedHomeScreen'];
+
 // As the config values are booleans, we use the
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator (??)
 // to safely provide a default boolean value to optional config values that provide boolean values.
 // We also use https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining (?.) to handle if the config
 // hierarchy doesn't exist
-export const signInTextNeedsToBeReplaced = loginScreen?.changeSigninToLoginTextLabel ?? false;
-
-// background color on login screen
-// used by app-web to load a colored background instead of lake image
-export const loginScreenBackgroundColor = loginScreen?.backgroundColor ?? null;
-
-// Sign in text - change to login
-export const changeSigninWithLoginTextLabel = () => {
-    console.log('change sign in text', signInTextNeedsToBeReplaced);
-    if (signInTextNeedsToBeReplaced) {
-        document.querySelector('label').innerHTML = document.querySelector('label').innerHTML.replace(/Sign in/g, "Log in");
-        document.querySelector('input').innerHTML = document.querySelector('input').innerHTML.replace(/Sign in/g, "Log in");
-        document.querySelector('h2').innerHTML = document.querySelector('h2').innerHTML.replace(/Sign in/g, "Log in");
-    }
-}
+export const changeSigninToLoginTextLabel = loginScreen?.changeSigninToLoginTextLabel ?? false;
 
 //Email based authentication drop down menu
 export const allowEmailBasedAuthentication = loginScreen?.allowEmailBasedAuthentication ?? true;
@@ -43,3 +31,16 @@ export const showHomeServerDetail = loginScreen?.showHomeServerInfo ?? true;
 
 // Default footer links
 export const showDefaultFooterLinks = loginScreen?.showMatrixDefaultFooterLinks ?? true;
+
+// show/hide liberate your communication text
+export const showLiberateYourCommunicationText = authenticatedHomeScreen?.showLiberateYourCommunicationText ?? true;
+
+//show/hide welcome to {brand} text
+export const showWelcomeToElementText = authenticatedHomeScreen?.showWelcomeToElementText ?? true;
+
+// tab condition
+export const tabbedView = config['tabbedView'];
+export const tabbedViewShowSecondaryLogo  = tabbedView?.showSecondaryLogo ?? false;
+export const tabbedViewSecondaryLogoUrl =  tabbedView?.secondaryLogoUrl;
+export const tabbedViewSecondaryLogoAltText =  tabbedView?.secondaryLogoAltText;
+
