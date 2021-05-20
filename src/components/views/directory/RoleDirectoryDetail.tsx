@@ -139,6 +139,9 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
     // converts a given value number into landline or mobile number.
     // returns 'Landline' or 'mobile' number with correct text which can be presentable.
     getFormattedPhoneNumber(value) {
+        if (value == undefined || value == null) {
+            return value;
+        }
         const phoneNumber = value.map((value, index) => {
             let newPhoneNumber = new Array(value);
             // Generates landline or mobile number
@@ -155,6 +158,9 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
 
     //format role id columns
     getFormattedRoleIds(key: string) {
+        if (key == undefined || key == null) {
+            return key;
+        }
         //if values are listed in enum format from there first
         const formattedValuesWithEnums = getRoleEnumValues(key);
         // if role ids are not listed in enums format using followings.
