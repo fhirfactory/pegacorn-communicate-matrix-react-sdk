@@ -20,6 +20,25 @@ const authenticatedHomeScreen = config['authenticatedHomeScreen'];
 // hierarchy doesn't exist
 export const changeSigninToLoginTextLabel = loginScreen?.changeSigninToLoginTextLabel ?? false;
 
+export const updateDocumentForSelector = (selector) => {
+	let object = document.querySelector(selector);
+	if (object !== null) {
+		object.innerHTML = object.innerHTML.replace(/Sign in/g, "Log in");
+		if (object.value) {
+			object.value = object.value.replace(/Sign in/g, "Log in");
+		}
+	}
+}
+
+export const updateTerminologyInDocument = () => {
+    console.log('change sign in text', changeSigninToLoginTextLabel);
+    if (changeSigninToLoginTextLabel) {
+        updateDocumentForSelector('h2');
+        updateDocumentForSelector('.mx_Login_type_label');
+        updateDocumentForSelector('.mx_Login_submit');
+    }
+}
+
 //Email based authentication drop down menu
 export const allowEmailBasedAuthentication = loginScreen?.allowEmailBasedAuthentication ?? true;
 
