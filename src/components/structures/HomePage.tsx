@@ -33,8 +33,7 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import MiniAvatarUploader, {AVATAR_SIZE} from "../views/elements/MiniAvatarUploader";
 import Analytics from "../../Analytics";
 import CountlyAnalytics from "../../CountlyAnalytics";
-import SettingsStore from "../../settings/SettingsStore";
-import { UIFeature } from "../../settings/UIFeature";
+import * as customConfig from "../../config";
 import { role_directory_feature_name, showExplorePublicRoom, showRoleDirectory} from "../../config";
 
 const onClickSendDm = () => {
@@ -102,7 +101,8 @@ const UserWelcomeTop = () => {
 const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
     const config = SdkConfig.get();
     const pageUrl = getHomePageUrl(config);
-    const showLiberateYourCommunicationText = SettingsStore.getValue(UIFeature.ShowLiberateYourCommunicationText);
+    const showWelcomeToElementText = customConfig.showWelcomeToElementText;    
+    const showLiberateYourCommunicationText = customConfig.showLiberateYourCommunicationText;
     if (pageUrl) {
         const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         return <EmbeddedPage className="mx_HomePage" url={pageUrl} scrollbar={true} />;
@@ -114,22 +114,17 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
     } else {
         const brandingConfig = config.branding;
         let logoUrl = "themes/element/img/logos/element-logo.svg";
-        const logoSecondaryConfig = config['logo_secondary'];
-        const logoUrlSecondary = logoSecondaryConfig?.imgUrl || null;
-        const logoSecondaryDescription = logoSecondaryConfig?.description || config.brand;
-
         if (brandingConfig && brandingConfig.authHeaderLogoUrl) {
             logoUrl = brandingConfig.authHeaderLogoUrl;
         }
-        const logoSecondaryStyle = {
-           margin: logoSecondaryConfig?.margin || '0 10px',
-           height: logoSecondaryConfig?.height || '55px'
-       }
 
         introSection = <React.Fragment>
-            {logoUrlSecondary && <img src={logoUrlSecondary} style={logoSecondaryStyle} alt={logoSecondaryDescription} />}
             <img src={logoUrl} alt={config.brand} />
+            
+            {showWelcomeToElementText &&  
             <h1>{ _t("Welcome to %(appName)s", { appName: config.brand }) }</h1>
+            }
+            
             {showLiberateYourCommunicationText &&
             <h4>{ _t("Liberate your communication") }</h4>
             }

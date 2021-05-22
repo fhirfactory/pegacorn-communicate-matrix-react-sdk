@@ -406,7 +406,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
     }
 
     componentDidUpdate(){
-        return config.changeSigninWithLoginTextLabel();
+        return config.updateTerminologyInDocument();
      }
 
     render() {

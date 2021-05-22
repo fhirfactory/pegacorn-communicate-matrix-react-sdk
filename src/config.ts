@@ -11,24 +11,31 @@ const config = SdkConfig.get();
 
 const loginScreen = config['loginScreen'];
 
+const authenticatedHomeScreen = config['authenticatedHomeScreen'];
+
 // As the config values are booleans, we use the
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator (??)
 // to safely provide a default boolean value to optional config values that provide boolean values.
 // We also use https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining (?.) to handle if the config
 // hierarchy doesn't exist
-export const signInTextNeedsToBeReplaced = loginScreen?.changeSigninToLoginTextLabel ?? false;
+export const changeSigninToLoginTextLabel = loginScreen?.changeSigninToLoginTextLabel ?? false;
 
-// background color on login screen
-// used by app-web to load a colored background instead of lake image
-export const loginScreenBackgroundColor = loginScreen?.backgroundColor ?? null;
+export const updateDocumentForSelector = (selector) => {
+	let object = document.querySelector(selector);
+	if (object !== null) {
+		object.innerHTML = object.innerHTML.replace(/Sign in/g, "Log in");
+		if (object.value) {
+			object.value = object.value.replace(/Sign in/g, "Log in");
+		}
+	}
+}
 
-// Sign in text - change to login
-export const changeSigninWithLoginTextLabel = () => {
-    console.log('change sign in text', signInTextNeedsToBeReplaced);
-    if (signInTextNeedsToBeReplaced) {
-        document.querySelector('label').innerHTML = document.querySelector('label').innerHTML.replace(/Sign in/g, "Log in");
-        document.querySelector('input').innerHTML = document.querySelector('input').innerHTML.replace(/Sign in/g, "Log in");
-        document.querySelector('h2').innerHTML = document.querySelector('h2').innerHTML.replace(/Sign in/g, "Log in");
+export const updateTerminologyInDocument = () => {
+    console.log('change sign in text', changeSigninToLoginTextLabel);
+    if (changeSigninToLoginTextLabel) {
+        updateDocumentForSelector('h2');
+        updateDocumentForSelector('.mx_Login_type_label');
+        updateDocumentForSelector('.mx_Login_submit');
     }
 }
 
@@ -44,6 +51,17 @@ export const showHomeServerDetail = loginScreen?.showHomeServerInfo ?? true;
 // Default footer links
 export const showDefaultFooterLinks = loginScreen?.showMatrixDefaultFooterLinks ?? true;
 
+// show/hide liberate your communication text
+export const showLiberateYourCommunicationText = authenticatedHomeScreen?.showLiberateYourCommunicationText ?? true;
+
+//show/hide welcome to {brand} text
+export const showWelcomeToElementText = authenticatedHomeScreen?.showWelcomeToElementText ?? true;
+
+// tab condition
+export const tabbedView = config['tabbedView'];
+export const tabbedViewShowSecondaryLogo  = tabbedView?.showSecondaryLogo ?? false;
+export const tabbedViewSecondaryLogoUrl =  tabbedView?.secondaryLogoUrl;
+export const tabbedViewSecondaryLogoAltText =  tabbedView?.secondaryLogoAltText;
 
 /**
  * Authenticated homepage directory ui flow
@@ -119,9 +137,6 @@ export const search_by_favorite = directory.api.favourites;
  */
 export const showFirstLastNameIntialsOnAvatarBackground = config.show_first_last_char_initials_on_avatar ?? false;
 
-/**
- * Avatar color
- */
 export const avatarColors = config.avatarColors;
 
 /**
