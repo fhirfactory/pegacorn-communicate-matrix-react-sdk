@@ -112,7 +112,8 @@ class DirectoryMember extends Member {
     _isAvailable: boolean;
     _roleCategoryId: string;
 
-    constructor(userDirResult: {user_id: string, display_name: string, avatar_url: string, favorite: boolean, available: boolean, roleCategoryId: string}) {
+    constructor(userDirResult: {user_id: string, display_name: string, avatar_url: string,
+                favorite?: false, available?: false, roleCategoryId: string}) {
         super();
         this._userId = userDirResult.user_id;
         this._displayName = userDirResult.display_name;
@@ -1413,7 +1414,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 onToggle={this._toggleMember}
                 highlightWord={this.state.filterText}
                 isSelected={this.state.targets.some(t => t.userId === r.userId)}
-                isFavorite={(this.state.favorites?.indexOf(r.user.name)  !== -1 ? true: false) || false}
+                isFavorite={(this.state.favorites?.indexOf(r.user.name)  !== -1) || false}
                 isAvailable={r.user.available || false}
                 roleCategoryId={r.user.roleCategoryId || null}
                 kind={this.props.kind}
