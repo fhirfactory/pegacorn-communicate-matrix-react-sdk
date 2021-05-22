@@ -610,9 +610,9 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             }
         }
 
-        if (!config.showExplorePublicRoom) {
+        if (!!config.use_custom_text_label_on_left_menu) {
             explorePrompt = <div className="mx_RoomList_explorePrompt">
-                <div>Use the + to make a new room or search roles, people or services in directory</div>
+                <div>{config.use_custom_text_label_on_left_menu}</div>
             </div>
         }
 

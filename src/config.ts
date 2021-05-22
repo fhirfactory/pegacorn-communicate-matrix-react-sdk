@@ -74,10 +74,14 @@ export const tabbedViewSecondaryLogoAltText =  tabbedView?.secondaryLogoAltText;
 export const directory = config['directory'];
 
 // turn off explore public room
-export const showExplorePublicRoom = directory?.showExplorePublicRoomTile ?? true;
+export const showExplorePublicRoom = config.roomDirectory?.showExplorePublicRoomTile ?? true;
 
 // matrix default server selection dropdown
-export const showPublicRoomServerSelectionDropdown = directory?.explorePublicRoomServerSelectionDropdown ?? true;
+export const showPublicRoomServerSelectionDropdown = config.roomDirectory.explorePublicRoomServerSelectionDropdown ?? true;
+
+// use directory related text instead of normal text on left menu (can be used to modify default text on left menu)
+// This would be very useful when menu on left is used entirely for directories are used and public room is not used.
+export const use_custom_text_label_on_left_menu: string = config.use_custom_text_label_on_left_menu;
 
 /***
  *  role directory config list

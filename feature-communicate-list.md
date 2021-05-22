@@ -338,7 +338,7 @@ Web: Sign In Screen Lingo Re-Branding and Update
  - `authenticatedHomeScreen.showWelcomeToElementText` controls whether or not to show the "Welcome to [config.brand]" text on the authenticated home screen.  By default it's true.
  - `authenticatedHomeScreen.showLiberateYourCommunicationText` controls whether or not to show the "Liberate Your communication" text on the authenticated home screen.  By default it's true.
  - `loginScreen.showHomeServerInfo` controls whether or not to show the Home Server information. By default it's true.
- - `loginScreen.ssoButtonDefaultClass` optional value, to override the default of mx_SSOButton_default 
+ - `loginScreen.ssoButtonDefaultClass` optional value, to override the default of mx_SSOButton_default
  - `loginScreen.changeSigninToLoginTextLabel` controls whether or not to replace the instances of "Sign In" to "Log In" on the Login screen. By default it's false.
 NOTE: the custom styling of these banners, buttons and logos is done via the theme e.g. \res\themes\light\css\_light.scss
 
@@ -372,6 +372,7 @@ role, service and people search in UI. `directory` config parameter would have a
 - `showExplorePublicRoomTile` has been used in config in order to hide the default button on homepage which opens explore public room. This flag has also been used to change default text "Use the + sign to make a new room or to chat or to explore public rooms" text which implied we support 'explore public room' which we don't. It is controlled by configurable flag so anytime we need it back we can switch it back.
 - To create your own favorites, you need to do `PUT` request on `base-api + user-id + search-by-favorites-uri`. API needs to be aligned with role, people or services favorite. If favorarite is searched via practitioner role, it will bring favorites in organisation, service and roles.
 - `UIFeature.identityServer` is a default user setting flag which controls whether or not to search user through matrix api which has been set to false in order to turn off search in matrix server. Not using this flag would result error appear on search window which would say "Identity Server has not been enabled...".
+- `use_custom_text_label_on_left_menu` has been used to change the default text on left menu which previously mentioned about explore public rooms, or send message through matrix api/people directory. This flag contains string so you could modify text directly through config. Not having config value would result text return to matrix.
 
 224329
 Web: As an Authenticated Practitioner, all avatars on web display Lingo colors by role category so that I am shown accessibility friendly colors
