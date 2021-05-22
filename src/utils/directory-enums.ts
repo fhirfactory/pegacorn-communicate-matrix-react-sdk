@@ -7,10 +7,11 @@ export enum DirectoryEnum {
     primaryRoleID = "Primary Role ID",
     practitionerRoleADGroup = "Practitioner Role ADGroup",
     contactPoints = "Contact",
-    CH = "Canberra Hospital"
+    CH = "Canberra Hospital",
+    Pabx_extension = "Landline : "
 }
 
-export const getRoleEnumValues = (value) => {
+export const getTextLabelFromEnum = (value) => {
     const key = DirectoryEnum[value];
     if (key) {
         return key;
