@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import * as PropTypes from 'prop-types';
 import * as sdk from "../../../index";
-import { getRoleEnumValues } from "../../../utils/directory-enums";
 import * as config from "../../../config";
+import { getFormattedRoleIds } from "../../../utils/formatKeyValueUtil";
+import { getFormattedPhoneNumberAndType } from "../../../utils/formatPhoneNumberUtil";
+import { getNameFromEmail } from "../../../utils/formatEmailUtil";
+import { getTextLabelFromEnum } from "../../../utils/directory-enums";
 
 /*
 Copyright 2020 The Matrix.org Foundation C.I.C.
@@ -54,7 +57,8 @@ interface IState {
 }
 
 /***
- * This view would display detailed view of selected role by shortName, but can be changed to view by longName or something else as well if need it be.
+ * This view would display detailed view of selected role by shortName,
+ * but can be changed to view by longName or something else as well if need it be.
  */
 
 export default class RoleDirectoryView extends Component<IProps, IState> {
@@ -120,7 +124,7 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
     }
 
     getDisplayNameFromAPI(emailId: string): string {
-        if(emailId.indexOf("@") === -1) return null;
+        if (emailId.indexOf("@") === -1) return null;
         const api = config.api_base_path + config.prefix + emailId;
         fetch(api, {
             method: "GET"
@@ -133,78 +137,31 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
         return fullName;
     }
 
-    // The phone, email address info was already converted to
-    // string bundle it needs to be changed back to array then be formatted properly
-    // A utility function that converts an string containing pair value into array
-    // converts a given value number into landline or mobile number.
-    // returns 'Landline' or 'mobile' number with correct text which can be presentable.
-    getFormattedPhoneNumber(value) {
-        if (value == undefined || value == null) {
-            return value;
-        }
-        const phoneNumber = value.map((value, index) => {
-            let newPhoneNumber = new Array(value);
-            // Generates landline or mobile number
-            let phoneNumberType = newPhoneNumber.map((value) => value.type);
-            //find actual phone number digit
-            let phoneNumber = newPhoneNumber.map((value) => value.value);
-            const phoneFormat = phoneNumberType.toString().charAt(0).toUpperCase() + phoneNumberType.toString().slice(1).toLowerCase() + ' - ';
-            return <div key={index}><span>{phoneFormat}</span><span>{phoneNumber}</span></div>
-        });
-
-        return phoneNumber;
-
-    }
-
-    //format role id columns
-    getFormattedRoleIds(key: string) {
-        if (key == undefined || key == null) {
-            return key;
-        }
-        //if values are listed in enum format from there first
-        const formattedValuesWithEnums = getRoleEnumValues(key);
-        // if role ids are not listed in enums format using followings.
-        const formattedValues = () => {
-            key = key.charAt(0).toUpperCase() + key.slice(1); // turn first letter to capital
-            key = key.replace(/([A-Z]+)/g, ",$1").replace(/^,/, "");
-            return key.split(',').join(' ');
-        }
-        const finalFormattedValues = formattedValuesWithEnums || formattedValues();
-        return finalFormattedValues;
-    }
-
     getFormattedRoleIDTextLabel(id: string, headerElement) {
         if (id == undefined || id == null) {
             return id;
         } else {
             id = headerElement[headerElement.indexOf(id)];
-            return this.getFormattedRoleIds(id);
+            return getFormattedRoleIds(id);
         }
     }
 
-    getNameFromEmail(email: string): string {
-        // checks email addresses and splits first and last names accordingly
-        if (!email || (email === undefined) || (email.indexOf('@') === -1)) return null;
-        if (email[0] === '@') {  // remove @ initial (valid in matrix id)
-            email = email.substring(1);
+    // render phone number text with types ( Cellphone or Extension)
+    _renderPhoneNumbers(contactPoints) {
+        if (contactPoints == undefined || contactPoints == null || contactPoints.length < 1) {
+            return contactPoints;
         }
-        let firstName = email.split('.')[0];
-        firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
-        let lastName;
-        // non matrix id may have email address format firstname.lastName@email.com so split that accordingly
-        if (email.includes('@')) {
-            lastName = email.split('@')[0].split('.').pop();
-        // matrix id has ':' in middle of address, so just use that to split and format names
-        } else if (email.includes(':')) {
-            lastName = email.split(':')[0].split('.').pop();
-        }
-        lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1);
-        const fullName = firstName + " " + lastName;
-        return fullName;
+        let contacts = getFormattedPhoneNumberAndType(contactPoints);
+        let phoneType = '';
+        let phoneNumber = '';
+        phoneType = contacts.map((val) => phoneType = val.phoneType);
+        let phoneTypeFormatted = getTextLabelFromEnum(phoneType)
+        phoneNumber = contacts.map((val) => val.phoneNum);
+        return phoneNumber ? (<div key={phoneType}><span>{phoneTypeFormatted} - {phoneNumber}</span></div>): null;
     }
 
     // avatar for who is fulfilling the given role
-    _renderAvatar(name: string){
+    _renderAvatar(name: string) {
         const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
         return <BaseAvatar
             className='mx_InviteDialog_userTile_avatar'
@@ -214,7 +171,6 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
             width={36}
             height={36} />;
     }
-
 
     _renderRoleDetailView = () => {
         return this.state.roles.map((role, index) => {
@@ -230,8 +186,8 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
                     <tr><th>{this.getFormattedRoleIDTextLabel("primaryRoleID", headerElement)}</th><td>{primaryRoleID}</td></tr>
                     <tr><th>{this.getFormattedRoleIDTextLabel("displayName", headerElement)}</th><td>{displayName}</td></tr>
                     <tr><th>{this.getFormattedRoleIDTextLabel("description", headerElement)}</th><td>{description}</td></tr>
-                    <tr><th>{this.getFormattedRoleIDTextLabel("primaryLocationID", headerElement)}</th><td>{this.getFormattedRoleIds(primaryLocationID)}</td></tr>
-                    <tr><th>{this.getFormattedRoleIDTextLabel("contactPoints", headerElement)}</th><td>{this.getFormattedPhoneNumber(contactPoints)}</td></tr>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("primaryLocationID", headerElement)}</th><td>{getFormattedRoleIds(primaryLocationID)}</td></tr>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("contactPoints", headerElement)}</th><td>{this._renderPhoneNumbers(contactPoints)}</td></tr>
                 </tbody>
             </table>
         })
@@ -244,7 +200,7 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
         return <div className="mx_role_fulfilledBy">
             <h3>Role Fulfilled By:</h3>
             {users.map((emailAddr, index) => {
-                const name = this.getNameFromEmail(emailAddr) || this.getDisplayNameFromAPI(emailAddr);
+                const name = getNameFromEmail(emailAddr) || this.getDisplayNameFromAPI(emailAddr);
                 return name && <span className="mx_role_fulfilledBy_user" key={index}>
                     <li>{this._renderAvatar(name)}</li>
                     <li>{name}</li>
@@ -257,7 +213,7 @@ export default class RoleDirectoryView extends Component<IProps, IState> {
         const Spinner = sdk.getComponent("elements.Spinner");
         if (this.state.loading) return <Spinner w={22} h={22} />;
         if (this.state.error) {
-            return <div style = {{color: 'red'}}>
+            return <div style={{ color: 'red' }}>
                 <p>Something bad happened! Requested resource could not be found.</p>
                 <p>Internal Server Error Occured.</p>
             </div>
