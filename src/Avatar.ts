@@ -98,7 +98,8 @@ export function defaultAvatarUrlForString(s: string): string {
     // overwritten color value in custom themes
     const cssVariable = `--avatar-background-colors_${colorIndex}`;
     const cssValue = document.body.style.getPropertyValue(cssVariable);
-    const color = ((config.avatarColors) ? getSpecificColorFromConfig(s) : undefined) || cssValue || defaultColors[colorIndex];
+    const color = ((config.avatarColors) ? getSpecificColorFromConfig(s) : undefined) ||
+                  cssValue || defaultColors[colorIndex];
     let dataUrl = colorToDataURLCache.get(color);
     if (!dataUrl) {
         // validate color as this can come from account_data
@@ -119,23 +120,34 @@ export function defaultAvatarUrlForString(s: string): string {
  * You can configure your own color in object in config file
  * Not having this config or not having color in config parameter would default
  * avatar colors back to matrix color
+ * configAvatarColors needs to be passed from config and read via config.ts file
+ * configAvatarColors needs to be obj{key:value} pair type in config
  * @param {string} s
- * @param {string} randomlySelectedAvatarColor randomly selected color from config
- * @param {object} configAvatarColors needs to be obj{key:value} pair type in config
- * @param {object} avatarColors needs to be passed from config and read via config.ts file
 */
 function getSpecificColorFromConfig(s: string): string {
     let configAvatarColors = config.avatarColors;
-    let avatarColors = configAvatarColors[s];
+    let avatarFromConfigColors = configAvatarColors[s];
     let numOfColors = Object.keys(configAvatarColors).length;
     let total = 0;
     for (let i = 0; i < s.length; ++i) {
         total += s.charCodeAt(i);
     }
     const colorIndex = total % numOfColors;
-    const defaultToOtherColors = String(Object.values(configAvatarColors)[colorIndex]);
-    let randomlySelectedAvatarColor = String(Object.values(configAvatarColors)[Math.floor(Math.random() * numOfColors)]);
-    return (avatarColors || defaultToOtherColors || randomlySelectedAvatarColor);
+    /**
+     * defaultToOtherConfigColors calculates color based on length of username which would remain same even
+     * when page is refreshed and user would like to see same color when page is refreshed.
+     */
+    const defaultToOtherConfigColors = String(Object.values(configAvatarColors)[colorIndex]);
+    /**
+     * randomlySelectedAvatarConfigColor randomly selected color from config
+     * randomly selected color would not be used if there is no 'undefined', 'null' returned
+     * A randomly selected color would be only selected if username is not string
+     * or if there is a system issue that results invalid name string so ultimately it is going to randomly
+     * select color from given list of colors from config file from configAvatarColors.
+    */
+    let randomlySelectedAvatarConfigColor = String(Object.values(configAvatarColors)[Math.floor(Math.random() * numOfColors)]);
+    const color = avatarFromConfigColors || defaultToOtherConfigColors || randomlySelectedAvatarConfigColor;
+    return color;
 }
 
 /**
