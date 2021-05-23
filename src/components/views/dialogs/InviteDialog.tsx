@@ -248,6 +248,7 @@ interface IDMRoomTileProps {
     isAvailable: boolean;  // determines whether or not member role has a person fulfilling that role
     roleCategoryId: string;
     kind: string;
+    error: any;
 }
 
 class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
@@ -275,7 +276,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             detailView.scrollIntoView();
         } else {
             detailView.style.display = "none";
-            viewDetailBtn.innerHTML = "View Detail";
+            viewDetailBtn.innerHTML = "View";
         }
     }
 
@@ -386,6 +387,11 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             <DirectoryDetailView queryId={this.props.member.name}/>
         </div>
 
+        const errorText = this.props.error ? (<div style={{ color: 'red' }}>
+            <p>Something bad happened! Requested resource could not be found.</p>
+            <p>{this.props.error}</p>
+        </div>) : null;
+
         return (
             <div className='mx_InviteDialog_roomTile' onClick={this._onClick}>
                 {stackedAvatar}
@@ -398,6 +404,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                 {(this.props.kind === KIND_Role_Directory_Search) && roleIsFilledOrUnfilled}
                 {config.show_favorite_icon_in_directory_search && favorite}
                 {viewMemberDetail}
+                {errorText}
             </div>
         );
     }
@@ -1031,10 +1038,13 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         suggestions: []
                     });
                 }
-            }).catch(e => {
+            }).catch(err => {
                 console.error("Error searching role directory:");
-                console.error(e);
-                this.setState({ serverResultsMixin: [] }); // clear results because it's moderately fatal
+                console.error(err);
+                this.setState({
+                    serverResultsMixin: [],
+                    errorText: err
+                }); // clear results because it's moderately fatal
             });
     };
 
@@ -1418,6 +1428,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 isAvailable={r.user.available || false}
                 roleCategoryId={r.user.roleCategoryId || null}
                 kind={this.props.kind}
+                error= {this.state.errorText}
             />
         ));
         return (

@@ -215,7 +215,7 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
         if (this.state.error) {
             return <div style={{ color: 'red' }}>
                 <p>Something bad happened! Requested resource could not be found.</p>
-                <p>Internal Server Error Occured.</p>
+                <p>Internal Server Error Occurred.</p>
             </div>
         }
         return <React.Fragment>
