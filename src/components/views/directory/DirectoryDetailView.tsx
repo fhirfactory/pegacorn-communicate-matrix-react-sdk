@@ -152,8 +152,8 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
             return contactPoints;
         }
         let contacts = getFormattedPhoneNumberAndType(contactPoints);
-        let phoneType = '';
-        let phoneNumber = '';
+        let phoneType;
+        let phoneNumber;
         phoneType = contacts.map((val) => phoneType = val.phoneType);
         let phoneTypeFormatted = getTextLabelFromEnum(phoneType)
         phoneNumber = contacts.map((val) => val.phoneNum);

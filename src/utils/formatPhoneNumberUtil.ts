@@ -11,7 +11,7 @@ export function getFormattedPhoneNumberAndType(value) {
     }
     const phoneNumber = value.map((value) => {
         let newPhoneNumber = new Array(value);
-        // Generates landline or mobile number
+        // Formats given text into properly formatted landline and mobile numbers
         let phoneNumberType = newPhoneNumber.map((value) => value.type);
         //find actual phone number digit
         let phoneNumber = '';
