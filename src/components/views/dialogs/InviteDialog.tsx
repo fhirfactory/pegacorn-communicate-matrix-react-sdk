@@ -380,7 +380,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         :<span className="mx_InviteDialog_roomTile_unavailable">Not Filled</span>;
 
         const viewDetailBtn = <AccessibleButton id="mx_viewDetailBtn" kind="primary" onClick={ev => this.onClickView(ev)}>
-           View Detail
+           View
             </AccessibleButton>
 
         const viewMemberDetail = <div id="mx_table_role_detail" style={{ display: 'none' }}>
