@@ -383,7 +383,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             </AccessibleButton>
 
         const viewMemberDetail = <div id="mx_table_role_detail" style={{ display: 'none' }}>
-            <DirectoryDetailView roleId={this.props.member.name}/>
+            <DirectoryDetailView queryId={this.props.member.name}/>
         </div>
 
         return (

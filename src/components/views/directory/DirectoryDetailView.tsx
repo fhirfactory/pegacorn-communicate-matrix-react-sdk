@@ -29,7 +29,7 @@ interface IProps {
         value?: string
     ];
     displayName?: string;
-    roleId?: string;
+    queryId?: string;
     description?: string;
     primaryOrganizationID?: string;
     primaryRoleCategoryID?: string;
@@ -71,7 +71,7 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
         primaryRoleID: PropTypes.string,
         identifiers: PropTypes.array,
         location: PropTypes.string,
-        roleId: PropTypes.string,
+        queryId: PropTypes.string,
         description: PropTypes.string,
         contactPoints: PropTypes.array
     };
@@ -94,9 +94,9 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
     }
 
     getRoleDetail() {
-        const searchQuery = this.props.roleId;
-        const roleId = encodeURIComponent(searchQuery);
-        const view_role_detail = config.search_all_roles + roleId;
+        const searchQuery = this.props.queryId;
+        const queryId = encodeURIComponent(searchQuery);
+        const view_role_detail = config.search_all_roles + queryId;
         // api data
         fetch(view_role_detail, {
             method: "GET"
