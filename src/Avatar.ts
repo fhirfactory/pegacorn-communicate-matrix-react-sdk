@@ -117,29 +117,41 @@ export function defaultAvatarUrlForString(s: string): string {
 /**
  * If client is particular about role colors  user role/user directory category then
  * approach below would be sufficient to replace colors configured in custom config as well as color
- * You can configure your own color in object in config file
+ * You can configure your own color in 'avatarColors' keypair in config file by type of role category
  * Not having this config or not having color in config parameter would default
  * avatar colors back to matrix color
- * configAvatarColors needs to be passed from config and read via config.ts file
+ * configAvatarColors needs to be passed from config and read via config.json + config.ts files
  * configAvatarColors needs to be obj{key:value} pair type in config
  * @param {string} s
 */
 function getSpecificColorFromConfig(s: string): string {
-    let configAvatarColors = config.avatarColors;
-    let avatarFromConfigColors = configAvatarColors[s];
-    let numOfColors = Object.keys(configAvatarColors).length;
-    let total = 0;
-    for (let i = 0; i < s.length; ++i) {
-        total += s.charCodeAt(i);
-    }
-    const colorIndex = total % numOfColors;
+    let configuredAvatarColorsKeyPair = config.avatarColors;
+    let selectedAvatarColor = '';
     /**
-     * defaultToOtherConfigColors calculates color based on length of username which would remain same even
-     * when page is refreshed and user would like to see same color when page is refreshed.
+     * Key (s) needs to find a match in config keypair value stored in "avatarColors"
+     * If matching value is found then just use that value otherwise go to next step where
+     * condition will apply for non matching role category
      */
-    const defaultToOtherConfigColors = String(Object.values(configAvatarColors)[colorIndex]);
-    const color = avatarFromConfigColors || defaultToOtherConfigColors;
-    return color;
+    let selectedAvatarColorFromConfig = configuredAvatarColorsKeyPair[s];
+    if (selectedAvatarColorFromConfig) {
+        selectedAvatarColor = selectedAvatarColorFromConfig;
+    }
+    /**
+     * If no color key matches form given 's' to keypair in config.json
+     * then make color stable for avatar by calculating index based on
+     * length of 's' string passed in. For all non matching name key,
+     * select color based on name length which will never fail.
+     */
+    if (selectedAvatarColorFromConfig == undefined || !selectedAvatarColorFromConfig) {
+        let numOfColors = Object.keys(configuredAvatarColorsKeyPair).length;
+        let total = 0;
+        for (let i = 0; i < s.length; ++i) {
+            total += s.charCodeAt(i);
+        }
+        const colorIndex = total % numOfColors;
+        selectedAvatarColor = String(Object.values(configuredAvatarColorsKeyPair)[colorIndex]);
+    }
+    return selectedAvatarColor;
 }
 
 /**
