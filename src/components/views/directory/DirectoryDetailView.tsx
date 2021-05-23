@@ -61,7 +61,7 @@ interface IState {
  * but can be changed to view by longName or something else as well if need it be.
  */
 
-export default class RoleDirectoryView extends Component<IProps, IState> {
+export default class DirectoryDetailView extends Component<IProps, IState> {
 
     static propTypes = {
         simplifiedID: PropTypes.string,

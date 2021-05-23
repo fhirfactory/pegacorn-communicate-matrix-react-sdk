@@ -330,7 +330,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
     render() {
         const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-        const RoleDetailView = sdk.getComponent("directory.RoleDirectoryDetail");
+        const DirectoryDetailView = sdk.getComponent("directory.DirectoryDetailView");
         let timestamp = null;
         if (this.props.lastActiveTs) {
             const humanTs = humanizeTime(this.props.lastActiveTs);
@@ -383,7 +383,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             </AccessibleButton>
 
         const viewMemberDetail = <div id="mx_table_role_detail" style={{ display: 'none' }}>
-            <RoleDetailView roleId={this.props.member.name}/>
+            <DirectoryDetailView roleId={this.props.member.name}/>
         </div>
 
         return (
