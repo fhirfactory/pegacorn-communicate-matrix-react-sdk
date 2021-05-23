@@ -138,15 +138,7 @@ function getSpecificColorFromConfig(s: string): string {
      * when page is refreshed and user would like to see same color when page is refreshed.
      */
     const defaultToOtherConfigColors = String(Object.values(configAvatarColors)[colorIndex]);
-    /**
-     * randomlySelectedAvatarConfigColor randomly selected color from config
-     * randomly selected color would not be used if there is no 'undefined', 'null' returned
-     * A randomly selected color would be only selected if username is not string
-     * or if there is a system issue that results invalid name string so ultimately it is going to randomly
-     * select color from given list of colors from config file from configAvatarColors.
-    */
-    let randomlySelectedAvatarConfigColor = String(Object.values(configAvatarColors)[Math.floor(Math.random() * numOfColors)]);
-    const color = avatarFromConfigColors || defaultToOtherConfigColors || randomlySelectedAvatarConfigColor;
+    const color = avatarFromConfigColors || defaultToOtherConfigColors;
     return color;
 }
 
