@@ -139,10 +139,9 @@ function getSpecificColorFromConfig(s: string): string {
     /**
      * If no color key matches form given 's' to keypair in config.json
      * then make color stable for avatar by calculating index based on
-     * length of 's' string passed in. For all non matching name key,
-     * select color based on name length which will never fail.
+     * content of 's' string passed in.
      */
-    if (selectedAvatarColorFromConfig == undefined || !selectedAvatarColorFromConfig) {
+    else if (selectedAvatarColorFromConfig == undefined || !selectedAvatarColorFromConfig) {
         let numOfColors = Object.keys(configuredAvatarColorsKeyPair).length;
         let total = 0;
         for (let i = 0; i < s.length; ++i) {
@@ -150,6 +149,8 @@ function getSpecificColorFromConfig(s: string): string {
         }
         const colorIndex = total % numOfColors;
         selectedAvatarColor = String(Object.values(configuredAvatarColorsKeyPair)[colorIndex]);
+    } else {
+        return;
     }
     return selectedAvatarColor;
 }
