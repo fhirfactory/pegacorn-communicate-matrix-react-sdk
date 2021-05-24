@@ -978,6 +978,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             this.setState({
                 numOfRecordsFromSearchAPI: totalRecords
             });
+        }).catch((error) => {
+            this.setState({
+                numOfRecordsFromSearchAPI: 0,
+                errorText: error
+            })
         })
 
         // Find roles
@@ -1006,11 +1011,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     role_category = value["primaryRoleCategoryID"];
                     // filled or not filled status
                     // if activePractitionerSet array is non-empty someone is fulfilling that role
-                    if (value.activePractitionerSet?.length >= 1) {
-                        roleIsActive = true;
-                    } else {
-                        roleIsActive = false;
-                    }
+                    roleIsActive = (value.activePractitionerSet?.length >= 1) || false;
                 });
 
                 // update favorite roles
