@@ -375,6 +375,8 @@ role, service and people search in UI. `directory` config parameter would have a
 - To create your own favorites, you need to do `PUT` request on `base-api + user-id + search-by-favorites-uri`. API needs to be aligned with role, people or services favorite. If favorarite is searched via practitioner role, it will bring favorites in organisation, service and roles.
 - `UIFeature.identityServer` is a default user setting flag which controls whether or not to search user through matrix api which has been set to false in order to turn off search in matrix server. Not using this flag would result error appear on search window which would say "Identity Server has not been enabled...".
 - `use_custom_text_label_on_left_menu` has been used to change the default text on left menu which previously mentioned about explore public rooms, or send message through matrix api/people directory. This flag contains string so you could modify text directly through config. Not having config value would result text return to matrix.
+- `searchIsOnRoleOrPeopleOrServiceDirectory` has been used to divert matrix based search through `MatrixPeg` api to pegacorn communicate api. This flag enables directory search for people, role, and services then based on context the search redirects to people, service and role underneath the function that
+actually does searches.
 
 224329
 Web: As an Authenticated Practitioner, all avatars on web display Lingo colors by role category so that I am shown accessibility friendly colors

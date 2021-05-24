@@ -57,7 +57,8 @@ export const KIND_ROLE_DIRECTORY_SEARCH = "search_role_directory";
 export const KIND_SERVICE_DIRECTORY_SEARCH = "search_service_directory";
 export const KIND_PEOPLE_DIRECTORY_SEARCH = "search_people_directory";
 
-const INITIAL_ROOMS_SHOWN = config.numberOfRecordsToShowInSearch || 3; // Number of rooms to show at first
+const INITIAL_ROOMS_SHOWN = config.numberOfRecordsToShowInSearch
+                            || 3; // Number of rooms to show at first
 const INCREMENT_ROOMS_SHOWN = 5; // Number of rooms to add when 'show more' is clicked
 
 // This is the interface that is expected by various components in this file. It is a bit
@@ -207,8 +208,10 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
                 url={getHttpUriForMxc(
                     MatrixClientPeg.get().getHomeserverUrl(), this.props.member.getMxcAvatarUrl(),
                     avatarSize, avatarSize, "crop")}
-                name={(config.avatarColors ? this.props.member.roleCategoryId: null) || this.props.member.name}
-                idName={(config.avatarColors ? this.props.member.roleCategoryId: null) || this.props.member.userId}
+                name={(config.avatarColors ? this.props.member.roleCategoryId: null)
+                       || this.props.member.name}
+                idName={(config.avatarColors ? this.props.member.roleCategoryId: null)
+                         || this.props.member.userId}
                 width={avatarSize}
                 height={avatarSize} />;
 
@@ -316,7 +319,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         return result;
     }
 
-    searchIsOnRolePeopleServiceDirectory = () => {
+    searchIsOnRoleOrPeopleOrServiceDirectory = () => {
         if (this.props.kind === KIND_ROLE_DIRECTORY_SEARCH) {
             return true;
         } else if (this.props.kind === KIND_PEOPLE_DIRECTORY_SEARCH) {
@@ -347,8 +350,10 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                 url={getHttpUriForMxc(
                     MatrixClientPeg.get().getHomeserverUrl(), this.props.member.getMxcAvatarUrl(),
                     avatarSize, avatarSize, "crop")}
-                name={(config.avatarColors ? this.props.member.roleCategoryId: null) || this.props.member.name}
-                idName={(config.avatarColors ? this.props.member.roleCategoryId: null) || this.props.member.userId}
+                name={(config.avatarColors ? this.props.member.roleCategoryId: null)
+                       || this.props.member.name}
+                idName={(config.avatarColors ? this.props.member.roleCategoryId: null)
+                         || this.props.member.userId}
                 width={avatarSize}
                 height={avatarSize} />;
 
@@ -400,7 +405,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                     <div className='mx_InviteDialog_roomTile_userId'>{caption}</div>
                 </span>
                 {timestamp}
-                {this.searchIsOnRolePeopleServiceDirectory() && viewDetailBtn}
+                {this.searchIsOnRoleOrPeopleOrServiceDirectory() && viewDetailBtn}
                 {(this.props.kind === KIND_ROLE_DIRECTORY_SEARCH) && roleIsFilledOrUnfilled}
                 {config.show_favorite_icon_in_directory_search && favorite}
                 {viewMemberDetail}
@@ -876,7 +881,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
     onChangeFilter = (ev: React.MouseEvent<HTMLInputElement>) => {
         ev.stopPropagation();
-        if (!this.searchIsOnRolePeopleServiceDirectory()) return;
+        if (!this.searchIsOnRoleOrPeopleOrServiceDirectory()) return;
         const eventTarget = ev.currentTarget;
         let filterByFavoriteEvent = eventTarget.parentNode.textContent.includes("Favorite");
         let filterByNameEvent = eventTarget.parentNode.textContent.includes("Name");
@@ -896,14 +901,14 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     _onClearSearchResult = () => {
-        if(!this.searchIsOnRolePeopleServiceDirectory()) return;
+        if(!this.searchIsOnRoleOrPeopleOrServiceDirectory()) return;
         this.setState({
             serverResultsMixin: [],
             numOfRecordsFromSearchAPI: 0
         });
     }
 
-    searchIsOnRolePeopleServiceDirectory = () => {
+    searchIsOnRoleOrPeopleOrServiceDirectory = () => {
         if (this.props.kind === KIND_ROLE_DIRECTORY_SEARCH) {
             return true;
         } else if (this.props.kind === KIND_PEOPLE_DIRECTORY_SEARCH) {
@@ -1049,7 +1054,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     };
 
     _updateSuggestions = async (term) => {
-       this.searchIsOnRolePeopleServiceDirectory() ?  this._updateDirectorySearchFromAPI(term):
+       this.searchIsOnRoleOrPeopleOrServiceDirectory() ?  this._updateDirectorySearchFromAPI(term):
         MatrixClientPeg.get().searchUserDirectory({term}).then(async r => {
             if (term !== this.state.filterText) {
                 // Discard the results - we were probably too slow on the server-side to make
@@ -1334,7 +1339,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             sectionName = kind === 'recents' ? _t("Recently Direct Messaged") : _t("Suggestions");
         }
 
-        if (this.searchIsOnRolePeopleServiceDirectory()) {
+        if (this.searchIsOnRoleOrPeopleOrServiceDirectory()) {
             if(this.state.numOfRecordsFromSearchAPI > 0){
                 sectionName = 'Search Results';
             }
@@ -1387,8 +1392,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         // sort sourceMembers before displaying in UI, sort alphabetically
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
         // https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value
-        if (this.searchIsOnRolePeopleServiceDirectory() && config.sortAlphabeticallyInAscendingOrder) {
-            //   sourceMembers = _.orderBy(sourceMembers, sourceMembers.map(m => m.user.name));
+        if (this.searchIsOnRoleOrPeopleOrServiceDirectory() && config.sortAlphabeticallyInAscendingOrder) {
             sourceMembers = sourceMembers.sort((a, b) => {
                 const nameA = a.user.name.toLowerCase();
                 const nameB = b.user.name.toLowerCase();
@@ -1503,7 +1507,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     _renderClearSearchButton() {
-        if(!this.searchIsOnRolePeopleServiceDirectory()) return null;
+        if(!this.searchIsOnRoleOrPeopleOrServiceDirectory()) return null;
         return <div className='mx_InvitedDialog_clearButton'>
             <AccessibleButton onClick={this._onClearSearchResult} kind='primary'>
                 <span>Clear search result</span>
@@ -1512,7 +1516,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     _renderFilterOptions() {
-        if(!this.searchIsOnRolePeopleServiceDirectory()) return null;
+        if(!this.searchIsOnRoleOrPeopleOrServiceDirectory()) return null;
         return <div className="mx_InvitedDialog_filterOptions">
             <p>Filter By:</p>
             <StyledMenuItemCheckbox
@@ -1535,7 +1539,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
     _renderRecordCount() {
     //if it is not role, service, people directory search don't display record count
-        if (!this.searchIsOnRolePeopleServiceDirectory()) return null;
+        if (!this.searchIsOnRoleOrPeopleOrServiceDirectory()) return null;
         let totalMembersTiles = document.getElementsByClassName("mx_InviteDialog_roomTile");
         let numOfTotalRecords;
         let totalDisplayedResults;
