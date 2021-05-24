@@ -942,7 +942,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 this.setState({
                     favorites: response.favourites
                 })
-            })
+            }).catch((err) => {
+                this.setState({
+                    errorText: err
+                })
+            });
     }
 
     _updateDirectorySearchFromAPI = async (term: string) => {
