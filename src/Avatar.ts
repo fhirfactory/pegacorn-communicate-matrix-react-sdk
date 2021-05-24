@@ -243,53 +243,31 @@ export function getFirstAndLastNameInitialLetters(name: string): string {
     // If it is single string then this will cover edge case of only one word user
     if (name.search(/[ .,-]+/i) < 0) return getInitialLetter(name);
 
-    /**
-     * if name is an email address (Used by avatar when user is logged in)
-    */
     try {
-        let firstName = '';
+        // if the name is a matrix id, remove the matrix domain
+        const nameWithoutMatrixDomain = name.split(':')[0];
+
+        /**
+          * Split first and last-names based on regular expression. It checks following usernames patterns
+          * "firstname.lastname", "firstname-lastname", "firstname lastname, "lastname, firstname"
+          * Based on https://stackoverflow.com/questions/10346722/how-can-i-split-a-javascript-string-by-white-space-or-comma
+          */
+        const fullName = nameWithoutMatrixDomain.split(/[ .,-]+/);
+        let firstName = fullName[0];
         let lastName = '';
-        let firstNameInitial = '';
-        let lastNameInitial = '';
-        let firstAndLastInitials = '';
-
-        // find out if name input is an email for avatar
-        const nameIsInMatrixIdFormat = name.indexOf(':') > -1;
-        if (nameIsInMatrixIdFormat) {
-
-            //find first and last names from email address
-            let nameFromMatrixId = name.split(':')[0].split('.');
-            firstName = nameFromMatrixId[0];
-            if (nameFromMatrixId.length > 1) {
-                lastName = nameFromMatrixId[1];
-            }
-            firstNameInitial = getInitialLetter(firstName);
-            lastNameInitial = getInitialLetter(lastName);
-            firstAndLastInitials = firstNameInitial + lastNameInitial;
-            return firstAndLastInitials;
-        }
-            /**
-             * Split first and last-names based on regular expression. It checks following usernames patterns
-             * "firstname.lastname", "firstname-lastname", "firstname lastname, "lastname, firstname"
-             * Based on https://stackoverflow.com/questions/10346722/how-can-i-split-a-javascript-string-by-white-space-or-comma
-            */
-        else if (name.length > 1 && !nameIsInMatrixIdFormat) {
-            let fullName = name.split(/[ .,-]+/);
-            firstName = fullName[0];   // gives first name
-            lastName = fullName[1];  // gives last name
-            if(name.includes(',')){
+        if (fullName.length > 1) {
+            lastName = fullName[1];
+            if (nameWithoutMatrixDomain.includes(',')) {
                 firstName = fullName[1];
                 lastName = fullName[0];
             }
-            firstNameInitial = firstName[0];
-            lastNameInitial = lastName[0];
-            firstAndLastInitials = firstNameInitial + lastNameInitial;
-            return firstAndLastInitials.toUpperCase();
         }
+        const firstAndLastInitials = getInitialLetter(firstName) + getInitialLetter(lastName);
+        return firstAndLastInitials;
     } catch (e) {
         /**
          * If there is a problem translating then just grab first name initials as matrix default
          */
-            return getInitialLetter(name);
+        return getInitialLetter(name);
     }
 }
