@@ -720,8 +720,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         let newMember: Member;
         if (this.state.filterText.startsWith('@')) {
             // Assume mxid
-            newMember = new DirectoryMember({
-                user_id: this.state.filterText, display_name: null, avatar_url: null
+            newMember = new DirectoryMember({user_id: this.state.filterText, display_name: null, avatar_url: null
                 , available: false, favorite: false, roleCategoryId: null
             });
         } else if (SettingsStore.getValue(UIFeature.IdentityServer)) {
@@ -883,9 +882,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         ev.stopPropagation();
         if (!this.searchIsOnRoleOrPeopleOrServiceDirectory()) return;
         const eventTarget = ev.currentTarget;
-        let filterByFavoriteEvent = eventTarget.parentNode.textContent.includes("Favorite");
         let filterByNameEvent = eventTarget.parentNode.textContent.includes("Name");
         if(filterByNameEvent) return;
+        let filterByFavoriteEvent = eventTarget.parentNode.textContent.includes("Favorite");
         if (filterByFavoriteEvent) {
             let favorite = this.state.favorites;
             let filteredFavoriteResults;
