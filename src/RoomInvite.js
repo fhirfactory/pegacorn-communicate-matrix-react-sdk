@@ -22,7 +22,7 @@ import MultiInviter from './utils/MultiInviter';
 import Modal from './Modal';
 import * as sdk from './';
 import { _t } from './languageHandler';
-import InviteDialog, {KIND_DM, KIND_INVITE, KIND_Role_Directory_Search} from "./components/views/dialogs/InviteDialog";
+import InviteDialog, {KIND_DM, KIND_INVITE, KIND_ROLE_DIRECTORY_SEARCH} from "./components/views/dialogs/InviteDialog";
 import CommunityPrototypeInviteDialog from "./components/views/dialogs/CommunityPrototypeInviteDialog";
 import {CommunityPrototypeStore} from "./stores/CommunityPrototypeStore";
 
@@ -68,7 +68,7 @@ export function showRoleDirectorySearchDialog(initialText) {
     // This dialog handles the room creation internally - we don't need to worry about it.
     const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
     Modal.createTrackedDialog(
-        'Start Role Search', '', InviteDialog, {kind: KIND_Role_Directory_Search, initialText},
+        'Start Role Search', '', InviteDialog, {kind: KIND_ROLE_DIRECTORY_SEARCH, initialText},
         /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
     );
 }

@@ -53,9 +53,9 @@ export const KIND_DM = "dm";
 export const KIND_INVITE = "invite";
 export const KIND_CALL_TRANSFER = "call_transfer";
 // role and service directory
-export const KIND_Role_Directory_Search = "search_role_directory";
-export const KIND_Service_Directory_Search = "search_service_directory";
-export const KIND_People_Directory_Search = "search_people_directory";
+export const KIND_ROLE_DIRECTORY_SEARCH = "search_role_directory";
+export const KIND_SERVICE_DIRECTORY_SEARCH = "search_service_directory";
+export const KIND_PEOPLE_DIRECTORY_SEARCH = "search_people_directory";
 
 const INITIAL_ROOMS_SHOWN = config.numberOfRecordsToShowInSearch || 3; // Number of rooms to show at first
 const INCREMENT_ROOMS_SHOWN = 5; // Number of rooms to add when 'show more' is clicked
@@ -317,11 +317,11 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
     }
 
     searchIsOnRolePeopleServiceDirectory = () => {
-        if (this.props.kind === KIND_Role_Directory_Search) {
+        if (this.props.kind === KIND_ROLE_DIRECTORY_SEARCH) {
             return true;
-        } else if (this.props.kind === KIND_People_Directory_Search) {
+        } else if (this.props.kind === KIND_PEOPLE_DIRECTORY_SEARCH) {
             return true;
-        } else if (this.props.kind === KIND_Service_Directory_Search) {
+        } else if (this.props.kind === KIND_SERVICE_DIRECTORY_SEARCH) {
             return true;
         } else {
             return false;
@@ -401,7 +401,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                 </span>
                 {timestamp}
                 {this.searchIsOnRolePeopleServiceDirectory() && viewDetailBtn}
-                {(this.props.kind === KIND_Role_Directory_Search) && roleIsFilledOrUnfilled}
+                {(this.props.kind === KIND_ROLE_DIRECTORY_SEARCH) && roleIsFilledOrUnfilled}
                 {config.show_favorite_icon_in_directory_search && favorite}
                 {viewMemberDetail}
                 {errorText}
@@ -904,11 +904,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     searchIsOnRolePeopleServiceDirectory = () => {
-        if (this.props.kind === KIND_Role_Directory_Search) {
+        if (this.props.kind === KIND_ROLE_DIRECTORY_SEARCH) {
             return true;
-        } else if (this.props.kind === KIND_People_Directory_Search) {
+        } else if (this.props.kind === KIND_PEOPLE_DIRECTORY_SEARCH) {
             return true;
-        } else if (this.props.kind === KIND_Service_Directory_Search) {
+        } else if (this.props.kind === KIND_SERVICE_DIRECTORY_SEARCH) {
             return true;
         } else {
             return false;
@@ -923,7 +923,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         // get user id
         const user_id_encoded = encodeURI(MatrixClientPeg.get().getUserId());
         let favorite_api = config.api_base_path + config.prefix + user_id_encoded;
-        if (this.props.kind === KIND_Role_Directory_Search) {
+        if (this.props.kind === KIND_ROLE_DIRECTORY_SEARCH) {
             favorite_api = config.api_base_path + config.prefix + user_id_encoded
                 + config.search_by_favorite.role_suffix;
         }
@@ -945,7 +945,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         let search_api_path;
         // form an api path based on context
 
-        if (this.props.kind === KIND_Role_Directory_Search) {
+        if (this.props.kind === KIND_ROLE_DIRECTORY_SEARCH) {
             if (!term) {
                 search_api_path = config.search_all_roles
             }
@@ -1667,7 +1667,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             title = _t("Transfer");
             buttonText = _t("Transfer");
             goButtonFn = this._transferCall;
-        } else if (this.props.kind === KIND_Role_Directory_Search) {
+        } else if (this.props.kind === KIND_ROLE_DIRECTORY_SEARCH) {
             title = "Role Directory Search";
             buttonText = "Start Discussion";
             goButtonFn = this._startDm;
