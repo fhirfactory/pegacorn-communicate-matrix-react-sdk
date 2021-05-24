@@ -290,8 +290,6 @@ export function getFirstAndLastNameInitialLetters(name: string): string {
         /**
          * If there is a problem translating then just grab first name initials as matrix default
          */
-        if (e instanceof Error) {
             return getInitialLetter(name);
-        }
     }
 }
