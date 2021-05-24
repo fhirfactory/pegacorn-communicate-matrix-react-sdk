@@ -394,7 +394,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
 
         const errorText = this.props.error ? (<div style={{ color: 'red' }}>
             <p>Something bad happened! Requested resource could not be found.</p>
-            <p>Please try again later.</p>
+            <p>{this.props.error}</p>
         </div>) : null;
 
         return (
@@ -943,7 +943,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 })
             }).catch((err) => {
                 this.setState({
-                    errorText: err
+                    errorText: 'Error occurred while getting favorites'
                 })
             });
     }
@@ -1048,11 +1048,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     });
                 }
             }).catch(err => {
-                console.error("Error searching role directory:");
-                console.error(err);
                 this.setState({
                     serverResultsMixin: [],
-                    errorText: err
+                    errorText: 'Error in fetching directory result'
                 }); // clear results because it's moderately fatal
             });
     };
