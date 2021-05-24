@@ -389,7 +389,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
 
         const errorText = this.props.error ? (<div style={{ color: 'red' }}>
             <p>Something bad happened! Requested resource could not be found.</p>
-            <p>{this.props.error}</p>
+            <p>Please try again later.</p>
         </div>) : null;
 
         return (
