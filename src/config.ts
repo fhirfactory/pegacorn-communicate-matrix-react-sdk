@@ -74,7 +74,7 @@ export const tabbedViewSecondaryLogoAltText =  tabbedView?.secondaryLogoAltText;
 export const directory = config['directory'];
 
 // turn off explore public room
-export const showExplorePublicRoom = config.roomDirectory?.showExplorePublicRoomTile ?? true;
+export const showExplorePublicRooms = config.roomDirectory?.showExplorePublicRooms ?? true;
 
 // matrix default server selection dropdown
 export const showPublicRoomServerSelectionDropdown = config.roomDirectory.explorePublicRoomServerSelectionDropdown ?? true;

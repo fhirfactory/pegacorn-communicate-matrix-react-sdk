@@ -34,7 +34,6 @@ import MiniAvatarUploader, {AVATAR_SIZE} from "../views/elements/MiniAvatarUploa
 import Analytics from "../../Analytics";
 import CountlyAnalytics from "../../CountlyAnalytics";
 import * as customConfig from "../../config";
-import { role_directory_feature_name, showExplorePublicRoom, showRoleDirectory} from "../../config";
 
 const onClickSendDm = () => {
     Analytics.trackEvent('home_page', 'button', 'dm');
@@ -101,7 +100,7 @@ const UserWelcomeTop = () => {
 const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
     const config = SdkConfig.get();
     const pageUrl = getHomePageUrl(config);
-    const showWelcomeToElementText = customConfig.showWelcomeToElementText;    
+    const showWelcomeToElementText = customConfig.showWelcomeToElementText;
     const showLiberateYourCommunicationText = customConfig.showLiberateYourCommunicationText;
     if (pageUrl) {
         const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
@@ -120,11 +119,11 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
 
         introSection = <React.Fragment>
             <img src={logoUrl} alt={config.brand} />
-            
-            {showWelcomeToElementText &&  
+
+            {showWelcomeToElementText &&
             <h1>{ _t("Welcome to %(appName)s", { appName: config.brand }) }</h1>
             }
-            
+
             {showLiberateYourCommunicationText &&
             <h4>{ _t("Liberate your communication") }</h4>
             }
@@ -139,7 +138,7 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
                 <AccessibleButton onClick={onClickSendDm} className="mx_HomePage_button_sendDm">
                     { _t("Send a Direct Message") }
                 </AccessibleButton>
-                {showExplorePublicRoom &&
+                {customConfig.showExplorePublicRooms &&
                 <AccessibleButton onClick={onClickExplore} className="mx_HomePage_button_explore">
                     { _t("Explore Public Rooms") }
                 </AccessibleButton>
@@ -149,9 +148,9 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
                 </AccessibleButton>
             </div>
             <div className="mx_HomePage_default_buttons">
-                {showRoleDirectory &&
+                {customConfig.showRoleDirectory &&
                     <AccessibleButton onClick={onClickRoleDirectory} className="mx_HomePage_button_role">
-                        {role_directory_feature_name}
+                        {customConfig.role_directory_feature_name}
                     </AccessibleButton>
                 }
 

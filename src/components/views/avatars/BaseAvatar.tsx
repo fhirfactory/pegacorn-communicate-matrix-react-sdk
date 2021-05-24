@@ -109,7 +109,8 @@ const BaseAvatar = (props: IProps) => {
     const [imageUrl, onError] = useImageUrl({url, urls});
 
     if (!imageUrl && defaultToInitialLetter) {
-        const initialLetter = showFirstLastNameIntialsOnAvatarBackground ? AvatarLogic.getFirstAndLastNameInitialLetters(name) : AvatarLogic.getInitialLetter(name);
+        const initialLetter = showFirstLastNameIntialsOnAvatarBackground ? AvatarLogic.getFirstAndLastNameInitialLetters(name) :
+                              AvatarLogic.getInitialLetter(name);
         const textNode = (
             <span
                 className="mx_BaseAvatar_initial"

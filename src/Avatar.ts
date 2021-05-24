@@ -257,12 +257,12 @@ export function getFirstAndLastNameInitialLetters(name: string): string {
 
         // find out if name input is an email for avatar
         const nameIsInMatrixIdFormat = name.indexOf(':') > -1;
-        if (name.length > 1 && nameIsInMatrixIdFormat) {
+        if (nameIsInMatrixIdFormat) {
 
             //find first and last names from email address
             let nameFromMatrixId = name.split(':')[0].split('.');
             firstName = nameFromMatrixId[0];
-            if (nameFromMatrixId[nameFromMatrixId.length - 1]) {
+            if (nameFromMatrixId.length > 1) {
                 lastName = nameFromMatrixId[1];
             }
             firstNameInitial = getInitialLetter(firstName);
@@ -272,7 +272,7 @@ export function getFirstAndLastNameInitialLetters(name: string): string {
         }
             /**
              * Split first and last-names based on regular expression. It checks following usernames patterns
-             * "firstname.lastname", "firstname-lastname", "firstname lastname, "firstname, lastname"
+             * "firstname.lastname", "firstname-lastname", "firstname lastname, "lastname, firstname"
              * Based on https://stackoverflow.com/questions/10346722/how-can-i-split-a-javascript-string-by-white-space-or-comma
             */
         else if (name.length > 1 && !nameIsInMatrixIdFormat) {
@@ -293,7 +293,7 @@ export function getFirstAndLastNameInitialLetters(name: string): string {
          * If there is a problem translating then just grab first name initials as matrix default
          */
         if (e instanceof Error) {
-            getInitialLetter(name);
+            return getInitialLetter(name);
         }
     }
 }
