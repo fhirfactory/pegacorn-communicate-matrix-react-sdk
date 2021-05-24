@@ -984,7 +984,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             })
         })
 
-        // Find roles
+        // Find roles, services, and people
 
         fetch(search_api_path, {
             method: "GET",
@@ -998,15 +998,15 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
                 // create a new object and assign user_id, display_name
                 let newObj = { user_id: '', display_name: '', avatar_url: '' }
-                let role_display_name = '';
-                let role_user_id = '';
-                let role_category = '';
+                let display_name;
+                let user_id;
+                let role_category;
                 let roleIsActive = false;
                 newObj = results.map((value) => {
-                    role_display_name = value["displayName"];
-                    newObj.display_name = role_display_name;
-                    role_user_id = value["simplifiedID"];
-                    newObj["user_id"] = role_user_id;
+                    display_name = value["displayName"];
+                    newObj.display_name = display_name;
+                    user_id = value["simplifiedID"];
+                    newObj["user_id"] = user_id;
                     role_category = value["primaryRoleCategoryID"];
                     // filled or not filled status
                     // if activePractitionerSet array is non-empty someone is fulfilling that role
@@ -1017,17 +1017,20 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 this._updateFavoritesForCurrentUser();
                 // update server result mixin(search result) in state
                 if (results.length > 0) {
+                    // Only update unique results in search results, remove duplicates
+                    let serverResults = this.state.serverResultsMixin;
+                    let uniqueServerResults = serverResults.filter(m => m.userId !== user_id);
                     this.setState({
-                        serverResultsMixin: [...this.state.serverResultsMixin, {
+                        serverResultsMixin: [...uniqueServerResults, {
                             user: new DirectoryMember({
-                                user_id: role_user_id,
-                                display_name: role_display_name,
+                                user_id: user_id,
+                                display_name: display_name,
                                 avatar_url: '',
                                 favorite: false,
                                 available: roleIsActive,
                                 roleCategoryId: role_category
                             }),
-                            userId: role_user_id,
+                            userId: user_id,
                         }],
                         recents: [],
                         suggestions: []
