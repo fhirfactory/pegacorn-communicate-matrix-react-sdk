@@ -141,7 +141,7 @@ function getSpecificColorFromConfig(s: string): string {
      * then make color stable for avatar by calculating index based on
      * content of 's' string passed in.
      */
-    else if (selectedAvatarColorFromConfig == undefined || !selectedAvatarColorFromConfig) {
+    else {
         let numOfColors = Object.keys(configuredAvatarColorsKeyPair).length;
         let total = 0;
         for (let i = 0; i < s.length; ++i) {
@@ -149,8 +149,6 @@ function getSpecificColorFromConfig(s: string): string {
         }
         const colorIndex = total % numOfColors;
         selectedAvatarColor = String(Object.values(configuredAvatarColorsKeyPair)[colorIndex]);
-    } else {
-        return;
     }
     return selectedAvatarColor;
 }
