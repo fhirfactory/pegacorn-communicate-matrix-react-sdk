@@ -1019,9 +1019,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 if (results.length > 0) {
                     // Only update unique results in search results, remove duplicates
                     let serverResults = this.state.serverResultsMixin;
-                    let uniqueServerResults = serverResults.filter(m => m.userId !== user_id);
+                    let newServerResults = serverResults.filter(m => m.userId !== user_id);
                     this.setState({
-                        serverResultsMixin: [...uniqueServerResults, {
+                        serverResultsMixin: [...newServerResults, {
                             user: new DirectoryMember({
                                 user_id: user_id,
                                 display_name: display_name,
