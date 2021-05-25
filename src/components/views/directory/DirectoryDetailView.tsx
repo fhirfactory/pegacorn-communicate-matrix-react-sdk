@@ -148,16 +148,14 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
 
     // render phone number text with types ( Cellphone or Extension)
     _renderPhoneNumbers(contactPoints) {
-        if (contactPoints == undefined || contactPoints == null || contactPoints.length < 1) {
+        if (contactPoints == undefined || contactPoints == null) {
             return contactPoints;
         }
         let contacts = getFormattedPhoneNumberAndType(contactPoints);
-        let phoneType;
-        let phoneNumber;
-        phoneType = contacts.map((val) => phoneType = val.phoneType);
-        let phoneTypeFormatted = getTextLabelFromEnum(phoneType)
-        phoneNumber = contacts.map((val) => val.phoneNum);
-        return phoneNumber ? (<div key={phoneType}><span>{phoneTypeFormatted} - {phoneNumber}</span></div>): null;
+        return contacts.map((value, index) => {
+            let phoneType = getTextLabelFromEnum(value.phoneType);
+            return value ? (<div key={index} style={{ margin: '5px 0' }}>{phoneType} - {value.phoneNumber}</div>) : null;
+        })
     }
 
     // avatar for who is fulfilling the given role
@@ -175,16 +173,15 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
     _renderRoleDetailView = () => {
         return this.state.roles.map((role, index) => {
             let headerElement = Object.keys(this.state.roles[0]);
-            const { simplifiedID, primaryRoleCategoryID, primaryRoleID, primaryLocationID,
+            const { primaryRoleCategoryID, primaryRoleID, primaryLocationID,
                 primaryOrganizationID, displayName, description, contactPoints } = role //destructuring the role object/array
             return <table key={index} className="mx_role_table">
                 <caption><h2>Practitioner Registered Role Detail</h2></caption>
                 <tbody>
-                    <tr><th>{this.getFormattedRoleIDTextLabel("simplifiedID", headerElement)}</th><td>{simplifiedID}</td></tr>
+                    <tr><th>{this.getFormattedRoleIDTextLabel("displayName", headerElement)}</th><td>{displayName}</td></tr>
                     <tr><th>{this.getFormattedRoleIDTextLabel("primaryRoleCategoryID", headerElement)}</th><td>{primaryRoleCategoryID}</td></tr>
                     <tr><th>{this.getFormattedRoleIDTextLabel("primaryOrganizationID", headerElement)}</th><td>{primaryOrganizationID}</td></tr>
                     <tr><th>{this.getFormattedRoleIDTextLabel("primaryRoleID", headerElement)}</th><td>{primaryRoleID}</td></tr>
-                    <tr><th>{this.getFormattedRoleIDTextLabel("displayName", headerElement)}</th><td>{displayName}</td></tr>
                     <tr><th>{this.getFormattedRoleIDTextLabel("description", headerElement)}</th><td>{description}</td></tr>
                     <tr><th>{this.getFormattedRoleIDTextLabel("primaryLocationID", headerElement)}</th><td>{getFormattedRoleIds(primaryLocationID)}</td></tr>
                     <tr><th>{this.getFormattedRoleIDTextLabel("contactPoints", headerElement)}</th><td>{this._renderPhoneNumbers(contactPoints)}</td></tr>
