@@ -9,7 +9,8 @@ export enum DirectoryEnum {
     contactPoints = "Contact",
     CH = "Canberra Hospital",
     pabx_extension = "Office Phone : ",
-    mobile = "Mobile Phone: "
+    landline = "Office Phone : ",
+    mobile = "Mobile Phone : "
 
 }
 

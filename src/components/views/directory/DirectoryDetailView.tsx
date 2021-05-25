@@ -148,8 +148,8 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
 
     // render phone number text with types ( Cellphone or Extension)
     _renderPhoneNumbers(contactPoints) {
-        if (contactPoints == undefined || contactPoints == null) {
-            return contactPoints;
+        if (contactPoints == undefined || contactPoints == null || contactPoints.length < 1) {
+            return 'Not Provided';
         }
         let contacts = getFormattedPhoneNumberAndType(contactPoints);
         return contacts.map((value, index) => {
