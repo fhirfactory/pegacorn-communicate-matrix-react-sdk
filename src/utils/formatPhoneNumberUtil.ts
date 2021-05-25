@@ -15,21 +15,26 @@ export function getFormattedPhoneNumberAndType(value) {
         let phoneNumberType = newPhoneNumber.map((value) => value.type);
         //find actual phone number digit
         let phoneNumber = '';
-        // Phone number is formatted further in (02) xxxxx format if 02 is found in initial of phone number text
+        // Office/work phone number is formatted further in (02) xxxxx format landline
+        // if 02 is found in initial of phone number text
+        // Mobile phone number that starts with 04 is formatted with proper spaces
+        // if not already formatted
         newPhoneNumber.map((phoneNum) => {
             let phoneNumberUnformatted = phoneNum.value;
-            if (phoneNumberUnformatted.charAt(1).includes('2')) {
+            if (phoneNumberUnformatted.startsWith('04') && !phoneNumberUnformatted.includes(' ')) {
+                phoneNumber = phoneNumberUnformatted.slice(0,4) + phoneNumberUnformatted.slice(4, 6) + phoneNumberUnformatted.slice(6);
+            } if (phoneNumberUnformatted.charAt(1).includes('2')) {
                 phoneNumber = "(" + phoneNumberUnformatted.slice(0, 2) + ") " + phoneNumberUnformatted.slice(2);
-            } else {
+            }
+            else {
                 phoneNumber = phoneNum.value;
             }
         });
-        const phoneFormat = phoneNumberType.toString().charAt(0).toUpperCase() + phoneNumberType.toString().slice(1).toLowerCase();
+        const phoneFormat = phoneNumberType.toString().toLowerCase();
         let finalPhoneNumbers = new Object({
             "phoneType": phoneFormat,
-            "phoneNum": phoneNumber
+            "phoneNumber": phoneNumber
         })
-
         return finalPhoneNumbers;
     });
 

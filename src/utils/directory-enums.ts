@@ -8,7 +8,9 @@ export enum DirectoryEnum {
     practitionerRoleADGroup = "Practitioner Role ADGroup",
     contactPoints = "Contact",
     CH = "Canberra Hospital",
-    Pabx_extension = "Landline : "
+    pabx_extension = "Office Phone : ",
+    mobile = "Mobile Phone: "
+
 }
 
 export const getTextLabelFromEnum = (value) => {
