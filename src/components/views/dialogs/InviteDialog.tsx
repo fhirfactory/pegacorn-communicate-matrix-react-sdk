@@ -99,7 +99,7 @@ class Member {
     /**
      * Determines what is category of current role category
      * It is used by rendering right avatar color according to
-     * category id, also used by name initials
+     * category id, and by name initials in avatar.
      * Default will be set to null
      */
     get roleCategoryId(): string { throw new Error("Member class not implemented"); }
@@ -114,7 +114,7 @@ class DirectoryMember extends Member {
     _roleCategoryId: string;
 
     constructor(userDirResult: {user_id: string, display_name: string, avatar_url: string,
-                favorite?: false, available?: false, roleCategoryId: string}) {
+                favorite?: false, available?: false, roleCategoryId?: string}) {
         super();
         this._userId = userDirResult.user_id;
         this._displayName = userDirResult.display_name;
@@ -721,7 +721,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         if (this.state.filterText.startsWith('@')) {
             // Assume mxid
             newMember = new DirectoryMember({user_id: this.state.filterText, display_name: null, avatar_url: null
-                , available: false, favorite: false, roleCategoryId: null
             });
         } else if (SettingsStore.getValue(UIFeature.IdentityServer)) {
             // Assume email
@@ -1155,10 +1154,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         user: new DirectoryMember({
                             user_id: lookup.mxid,
                             display_name: profile.displayname,
-                            avatar_url: profile.avatar_url,
-                            favorite: false,
-                            available: false,
-                            roleCategoryId: null
+                            avatar_url: profile.avatar_url
                         }),
                         userId: lookup.mxid,
                     }],
@@ -1270,10 +1266,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 toAdd.push(new DirectoryMember({
                     user_id: address,
                     display_name: displayName,
-                    avatar_url: avatarUrl,
-                    available: false,
-                    favorite: false,
-                    roleCategoryId: null
+                    avatar_url: avatarUrl
                 }));
             } catch (e) {
                 console.error("Error looking up profile for " + address);
@@ -1515,7 +1508,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         if(!this.searchIsOnRoleOrPeopleOrServiceDirectory()) return null;
         return <div className='mx_InvitedDialog_clearButton'>
             <AccessibleButton onClick={this._onClearSearchResult} kind='primary'>
-                <span>Clear search result</span>
+                <span>Clear All</span>
             </AccessibleButton>
         </div>
     }
