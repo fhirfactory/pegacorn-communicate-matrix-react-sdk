@@ -84,25 +84,6 @@ class Member {
      * avatar MXC URL or null if none set. For 3PIDs this should always be null.
      */
     getMxcAvatarUrl(): string { throw new Error("Member class not implemented"); }
-    /**
-    * Determines whether or not member listed is a favorited member
-    * Unless value is provided, default is set to false
-    */
-    get favorite(): boolean { throw new Error("Member class not implemented"); }   // determines whether or not member is favorite
-
-    /**
-     * Determines whether or not given member is available for chat
-     * Unless value is provided default is set to false
-    */
-    get available(): boolean { throw new Error("Member class not implemented"); }  // determines whether or not to initiate chats
-
-    /**
-     * Determines what is category of current role category
-     * It is used by rendering right avatar color according to
-     * category id, and by name initials in avatar.
-     * Default will be set to null
-     */
-    get roleCategoryId(): string { throw new Error("Member class not implemented"); }
 }
 
 class DirectoryMember extends Member {
