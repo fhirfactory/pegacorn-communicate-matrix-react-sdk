@@ -154,7 +154,7 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
         let contacts = getFormattedPhoneNumberAndType(contactPoints);
         return contacts.map((value, index) => {
             let phoneType = getTextLabelFromEnum(value.phoneType);
-            return value ? (<div style={{ margin: '5px 0' }} key={index}>{phoneType}  {value.phoneNumber}</div>) : null;
+            return value ? (<div style={{ margin: '5px 0' }} key={index}>{phoneType} : {value.phoneNumber}</div>) : null;
         })
     }
 

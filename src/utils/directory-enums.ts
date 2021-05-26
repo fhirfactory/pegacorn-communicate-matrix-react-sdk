@@ -8,9 +8,9 @@ export enum DirectoryEnum {
     practitionerRoleADGroup = "Practitioner Role ADGroup",
     contactPoints = "Contact",
     CH = "Canberra Hospital",
-    pabx_extension = "Office Phone : ",
-    landline = "Office Phone : ",
-    mobile = "Mobile Phone : "
+    pabx_extension = "Office Phone",
+    landline = "Personal Phone Number",
+    mobile = "Mobile Phone"
 
 }
 
