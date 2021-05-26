@@ -16,6 +16,11 @@ export function getFormattedRoleIds(key) {
     // if role ids are not listed in enums format using followings.
     const formattedValues = () => {
         key = key.charAt(0).toUpperCase() + key.slice(1); // turn first letter to capital
+        /**
+         * Based on https://stackoverflow.com/questions/7225407/convert-camelcasetext-to-sentence-case-text
+         * From camelCase split text where capital and small case are identified then keep space between two
+         * words then at the end if comma is found then replace with space
+        */
         key = key.replace(/([A-Z]+)/g, ",$1").replace(/^,/, "");
         return key.split(',').join(' ');
     }
