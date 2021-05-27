@@ -1995,12 +1995,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                  */
                 const LoggedInView = sdk.getComponent('structures.LoggedInView');
 
-               
+                const roleSelector = SdkConfig.get()["role_selector"];//"role-selection"
+                const roleSelectorText = roleSelector?.text;// SdkConfig.get()["role_selector_name"];//"role-selection"
+                const roleSelectorUrl = roleSelector?.url;//SdkConfig.get()["role_selector_url"];//'/role-selection/#'
+
                 let ref = document.referrer;
-                console.log("document.referrer" + document.referrer);
                 console.log(ref);
-                console.log(ref?.toLowerCase()?.includes("role-selection"));
-                if(ref?.toLowerCase()?.includes("role-selection"))
+                console.log(ref?.toLowerCase()?.includes(roleSelectorText));
+                if(ref?.toLowerCase()?.includes(roleSelectorText))
                 {
                     view = (
                         <LoggedInView
@@ -2017,7 +2019,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
                 else
                 {
-                    window.location.href = '/role-selection/#';
+                    window.location.href = roleSelectorUrl;
                 }
                                 
                
