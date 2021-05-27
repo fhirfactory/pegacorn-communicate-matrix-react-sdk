@@ -1995,10 +1995,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                  */
                 const LoggedInView = sdk.getComponent('structures.LoggedInView');
 
-                console.log("document.referrer" + document.referrer);
+               
                 let ref = document.referrer;
-
-                if(ref.toLowerCase().includes("role-selection"))
+                console.log("document.referrer" + document.referrer);
+                console.log(ref);
+                console.log(ref?.toLowerCase()?.includes("role-selection"));
+                if(ref?.toLowerCase()?.includes("role-selection"))
                 {
                     view = (
                         <LoggedInView
