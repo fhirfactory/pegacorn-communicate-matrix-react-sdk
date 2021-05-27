@@ -2004,7 +2004,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 console.log(ref!= "");
                 console.log(ref?.toLowerCase()?.includes(roleSelectorText));
                 
-                if(ref != "" || ref?.toLowerCase()?.includes(roleSelectorText))
+                if(ref !="" && ref?.toLowerCase()?.includes(roleSelectorText))
                 {
                     view = (
                         <LoggedInView
