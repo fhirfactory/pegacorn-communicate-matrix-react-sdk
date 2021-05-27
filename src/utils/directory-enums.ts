@@ -9,9 +9,11 @@ export enum DirectoryEnum {
     contactPoints = "Contact",
     CH = "Canberra Hospital",
     pabx_extension = "Office Phone",
+    personal_phone = "Personal Mobile Number",
     landline = "Personal Phone Number",
-    mobile = "Mobile Phone"
-
+    mobile = "Work Mobile",
+    facsimile = "FAX",
+    pager = "Pager"
 }
 
 export const getTextLabelFromEnum = (value) => {

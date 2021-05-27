@@ -22,7 +22,7 @@ export function getFormattedPhoneNumberAndType(value) {
         newPhoneNumber.map((phoneNum) => {
             let phoneNumberUnformatted = phoneNum.value;
             if (phoneNumberUnformatted.startsWith('04') && !phoneNumberUnformatted.includes(' ')) {
-                phoneNumber = phoneNumberUnformatted.slice(0,4) + phoneNumberUnformatted.slice(4, 6) + phoneNumberUnformatted.slice(6);
+                phoneNumber = phoneNumberUnformatted.slice(0, 4) + ' ' + phoneNumberUnformatted.slice(4, 6) + ' ' + phoneNumberUnformatted.slice(6);
             } if (phoneNumberUnformatted.charAt(1).includes('2')) {
                 phoneNumber = "(" + phoneNumberUnformatted.slice(0, 2) + ") " + phoneNumberUnformatted.slice(2);
             }
