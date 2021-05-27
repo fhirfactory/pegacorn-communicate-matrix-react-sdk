@@ -82,14 +82,16 @@ const TAG_ORDER: TagID[] = [
     DefaultTagID.ServerNotice,
     DefaultTagID.Suggested,
     DefaultTagID.Archived,
-    // pegacorn communicate - role directory
+
+    // -- Custom Tags Directory --
+
     DefaultTagID.RoleDirectory
 ];
 const CUSTOM_TAGS_BEFORE_TAG = DefaultTagID.LowPriority;
 const ALWAYS_VISIBLE_TAGS: TagID[] = [
     DefaultTagID.DM,
     DefaultTagID.Untagged,
-    // pegacorn - communicate
+    // -- Custom Directory Tags --
     DefaultTagID.RoleDirectory
 ];
 
@@ -160,10 +162,10 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
         // have dialer support.
     },
     [DefaultTagID.RoleDirectory]: {
-        sectionLabel: _td("Role"),
+        sectionLabel: _td("Roles"),
         isInvite: false,
         defaultHidden: false,
-        addRoomLabel: "Search roles"
+        addRoomLabel: _td("Search Roles and Start Discussion"),
     },
     [DefaultTagID.Untagged]: {
         sectionLabel: _td("Rooms"),

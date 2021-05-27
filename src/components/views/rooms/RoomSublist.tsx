@@ -302,6 +302,16 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         if (this.props.onAddRoom) this.props.onAddRoom();
     };
 
+    private onSearchDirectory = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        const currentNodeAriaLabel = e.currentTarget.getAttribute('aria-label');
+        if (currentNodeAriaLabel.includes('Role')) {
+            dis.dispatch({ action: 'search_role_directory' });
+        } else {
+            return;
+        }
+    }
+
     private applyHeightChange(newHeight: number) {
         const heightInTiles = Math.ceil(this.layout.pixelsToTiles(newHeight - this.padding));
         this.layout.visibleTiles = Math.min(this.numTiles, heightInTiles);
@@ -672,6 +682,18 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                             <ContextMenuTooltipButton
                                 tabIndex={tabIndex}
                                 onClick={this.onAddRoomContextMenu}
+                                className="mx_RoomSublist_auxButton"
+                                tooltipClassName="mx_RoomSublist_addRoomTooltip"
+                                aria-label={this.props.addRoomLabel || _t("Add room")}
+                                title={this.props.addRoomLabel}
+                                isExpanded={!!this.state.addRoomContextMenuPosition}
+                            />
+                        );
+                    } else {
+                        addRoomButton = (
+                            <ContextMenuTooltipButton
+                                tabIndex={tabIndex}
+                                onClick={this.onSearchDirectory}
                                 className="mx_RoomSublist_auxButton"
                                 tooltipClassName="mx_RoomSublist_addRoomTooltip"
                                 aria-label={this.props.addRoomLabel || _t("Add room")}
