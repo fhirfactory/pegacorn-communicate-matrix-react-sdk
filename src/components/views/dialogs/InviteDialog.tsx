@@ -887,14 +887,13 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         let filterByFavoriteEvent = eventTarget.parentNode.textContent.includes("Favorite");
         if (filterByFavoriteEvent) {
             let favorite = this.state.favorites;
-            let filteredFavoriteResults;
+            let filteredFavoriteResults = [];
             for(let fav in favorite){
              filteredFavoriteResults = this.state.serverResultsMixin.filter(m => m.user.name.indexOf(fav) !== -1);
             }
             this.setState({
                 serverResultsMixin: filteredFavoriteResults,
-                favoriteFilterIsSelected: true,
-                suggestions: []
+                favoriteFilterIsSelected: true
             })
         }
     }
