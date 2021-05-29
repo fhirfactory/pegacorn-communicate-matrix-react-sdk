@@ -258,7 +258,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "MessageComposerInput.showStickersButton": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Show stickers button'),
-        default: true,
+        default: false,
     },
     // TODO: Wire up appropriately to UI (FTUE notifications)
     "Notifications.alwaysShowBadgeCounts": {
