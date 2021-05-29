@@ -236,6 +236,9 @@ export function getFirstAndLastNameInitialLetters(name: string): string {
         return undefined;
     }
 
+    // If it is single string then this will cover edge case of only one word user
+    if (name.search(/[ .,-]+/i) < 0) return getInitialLetter(name);
+
     try {
         // if the name is a matrix id, remove the matrix domain
         const nameWithoutMatrixDomain = name.split(':')[0];
