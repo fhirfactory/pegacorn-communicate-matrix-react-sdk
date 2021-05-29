@@ -128,7 +128,7 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
 
     getDisplayNameFromAPI(emailId: string): string {
         if (emailId.indexOf("@") === -1) return null;
-        const api = config.api_base_path + config.prefix + emailId;
+        const api = config.communicate_api_base_path + config.prefix + emailId;
         fetch(api, {
             method: "GET"
         }).then(res => res.json())

@@ -121,16 +121,16 @@ export const people_directory = directory?.people;
 // APIs
 
 // base api
-export const api_base_path = directory?.api.base_path;
+export const communicate_api_base_path = directory?.api.base_path;
 
 // prefix
 export const prefix = directory?.api.prefix;
 
 // search all roles
-export const search_all_roles = api_base_path + directory?.api?.search_all_roles;
+export const search_all_roles = communicate_api_base_path + directory?.api?.search_all_roles;
 
 // search roles by a short name
-export const search_role_by_displayName = api_base_path + directory.api.search_role_by_displayName;
+export const search_role_by_displayName = communicate_api_base_path + directory.api.search_role_by_displayName;
 
 // api to filter by favorites;
 export const search_by_favorite = directory.api.favourites;
