@@ -77,11 +77,11 @@ export const directory = config['directory'];
 export const showExplorePublicRooms = config.roomDirectory?.showExplorePublicRooms ?? true;
 
 // matrix default server selection dropdown
-export const showPublicRoomServerSelectionDropdown = config.roomDirectory.explorePublicRoomServerSelectionDropdown ?? true;
+export const showPublicRoomServerSelectionDropdown = config.roomDirectory?.showExplorePublicRoomServerSelectionDropdown ?? true;
 
-// use directory related text instead of normal text on left menu (can be used to modify default text on left menu)
-// This would be very useful when menu on left is used entirely for directories are used and public room is not used.
-export const use_custom_text_label_on_left_menu: string = config.use_custom_text_label_on_left_menu;
+// At the bottom of the left hand navigation panel, specify directory related help text (which is always shown), instead of normal 
+// conditionally shown text
+export const left_hand_nav_help_text: string = config.left_hand_nav_help_text;
 
 /***
  *  role directory config list

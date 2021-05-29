@@ -54,6 +54,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { ISpaceSummaryRoom } from "../../structures/SpaceRoomDirectory";
 import RoomAvatar from "../avatars/RoomAvatar";
 import * as config from "../../../config";
+
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
     onFocus: (ev: React.FocusEvent) => void;
@@ -92,7 +93,7 @@ const ALWAYS_VISIBLE_TAGS: TagID[] = [
     DefaultTagID.DM,
     DefaultTagID.Untagged,
     // -- Custom Directory Tags --
-    DefaultTagID.RoleDirectory
+    (config.showRoleDirectory ? DefaultTagID.RoleDirectory : '')
 ];
 
 interface ITagAesthetics {
@@ -164,7 +165,7 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
     [DefaultTagID.RoleDirectory]: {
         sectionLabel: _td("Roles"),
         isInvite: false,
-        defaultHidden: false,
+        defaultHidden: !config.showRoleDirectory,
         addRoomLabel: _td("Search Roles and Start Discussion"),
     },
     [DefaultTagID.Untagged]: {
@@ -565,6 +566,11 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
     public render() {
         let explorePrompt: JSX.Element;
+        if (config.left_hand_nav_help_text) {
+            explorePrompt = <div className="mx_RoomList_explorePrompt">
+                <div>{config.left_hand_nav_help_text}</div>
+            </div>
+        } else
         if (!this.props.isMinimized) {
             if (this.state.isNameFiltering) {
                 explorePrompt = <div className="mx_RoomList_explorePrompt">
@@ -610,12 +616,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     </div>;
                 }
             }
-        }
-
-        if (!!config.use_custom_text_label_on_left_menu) {
-            explorePrompt = <div className="mx_RoomList_explorePrompt">
-                <div>{config.use_custom_text_label_on_left_menu}</div>
-            </div>
         }
 
         const sublists = this.renderSublists();

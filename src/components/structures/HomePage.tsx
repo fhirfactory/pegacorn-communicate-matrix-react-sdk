@@ -135,6 +135,13 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
         <div className="mx_HomePage_default_wrapper">
             { introSection }
             <div className="mx_HomePage_default_buttons">
+                {customConfig.showRoleDirectory &&
+                    <AccessibleButton onClick={onClickRoleDirectory} className="mx_HomePage_button_role">
+                        {customConfig.role_directory_feature_name}
+                    </AccessibleButton>
+                }
+            </div>
+            <div className="mx_HomePage_default_buttons">
                 <AccessibleButton onClick={onClickSendDm} className="mx_HomePage_button_sendDm">
                     { _t("Send a Direct Message") }
                 </AccessibleButton>
@@ -146,14 +153,6 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
                 <AccessibleButton onClick={onClickNewRoom} className="mx_HomePage_button_createGroup">
                     { _t("Create a Group Chat") }
                 </AccessibleButton>
-            </div>
-            <div className="mx_HomePage_default_buttons">
-                {customConfig.showRoleDirectory &&
-                    <AccessibleButton onClick={onClickRoleDirectory} className="mx_HomePage_button_role">
-                        {customConfig.role_directory_feature_name}
-                    </AccessibleButton>
-                }
-
             </div>
         </div>
     </AutoHideScrollbar>;

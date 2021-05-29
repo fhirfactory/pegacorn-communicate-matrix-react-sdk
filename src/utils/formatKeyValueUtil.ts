@@ -1,4 +1,5 @@
 import { getTextLabelFromEnum } from "./directory-enums";
+import {capitaliseFirstCharacter} from "./strings";
 
 /**
  * A utility function that formats given key and
@@ -15,7 +16,7 @@ export function getFormattedRoleIds(key) {
     const formattedValuesWithEnums = getTextLabelFromEnum(key);
     // if role ids are not listed in enums format using followings.
     const formattedValues = () => {
-        key = key.charAt(0).toUpperCase() + key.slice(1); // turn first letter to capital
+        key = capitaliseFirstCharacter(key);
         /**
          * Based on https://stackoverflow.com/questions/7225407/convert-camelcasetext-to-sentence-case-text
          * From camelCase split text where capital and small case are identified then keep space between two

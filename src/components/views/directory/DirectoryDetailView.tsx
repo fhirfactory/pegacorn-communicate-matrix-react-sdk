@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import * as PropTypes from 'prop-types';
 import * as sdk from "../../../index";
 import * as config from "../../../config";
+import {_t} from '../../../languageHandler';
 import { getFormattedRoleIds } from "../../../utils/formatKeyValueUtil";
 import { getFormattedPhoneNumberAndType } from "../../../utils/formatPhoneNumberUtil";
 import { getNameFromEmail } from "../../../utils/formatEmailUtil";
@@ -105,8 +106,10 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
                 let emails = [];
                 let roleArrayResponse = [];
                 let entries = response.entry;
-                roleArrayResponse.push(entries);
-                roleArrayResponse.map(val => emails = val.activePractitionerSet);
+                if (entries) {
+                    roleArrayResponse.push(entries);
+                    roleArrayResponse.map(val => emails = val.activePractitionerSet);
+                }
                 this.setState({
                     roles: roleArrayResponse,
                     showUserRoleTable: true,
@@ -210,9 +213,9 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
         const Spinner = sdk.getComponent("elements.Spinner");
         if (this.state.loading) return <Spinner w={22} h={22} />;
         if (this.state.error) {
+            console.error("An unxpected error occurred in DirectoryDetailView ", this.state.error);
             return <div style={{ color: 'red' }}>
-                <p>Something bad happened! Requested resource could not be found.</p>
-                <p>Internal Server Error Occurred.</p>
+                <p>{_t("There was a problem communicating with the server. Please try again.")}</p>
             </div>
         }
         return <React.Fragment>

@@ -369,14 +369,10 @@ role, service and people search in UI. `directory` config parameter would have a
 - The filter options on this user story is limited to filter by name and filter by favorites. Favorite filter is a bit cloudy as this means we would have to go and filter the favorites by calling a different api that contains practitioner as user and find what favorites were there and if that favorite is listed in role list then that means a certain display name is a favorite.
 - Matrix sorts given list of users by the time user was last active. This has been changed if directory search occurs for role, people and service then sort by name.
 - `search_role_by_favorite` config parameter has been added to allow search favorite for currently logged in user. Favorite works by practitioner, role and services types so it is meant to bring role favorites only if context window for search is meant to be applied to role search.
-- `showExplorePublicRoomTile` has been used in config in order to hide the default button on homepage which opens explore public room.
-- `use_custom_text_label_on_left_menu` flag has been used to change default matrix text
- "Use the + sign to make a new room or to chat or to explore public rooms".Using this text implied we support 'explore public room' which we don't. It is controlled by configurable flag which contains text that needs to be shown on left menu panel.
+- `showExplorePublicRoomTile` controls if the Explore Pulic Rooms tile/button is shown allows the button on the authenticated home page, defaults to true
+- `left_hand_nav_help_text` allows help text to always be shown at the bottom of the left hand navigation, instead of the default conditionally shown text.  By default this value is null, so the default conditionally shown text applies.
 - To create your own favorites, you need to do `PUT` request on `base-api + user-id + search-by-favorites-uri`. API needs to be aligned with role, people or services favorite. If favorarite is searched via practitioner role, it will bring favorites in organisation, service and roles.
 - `UIFeature.identityServer` is a default user setting flag which controls whether or not to search user through matrix api which has been set to false in order to turn off search in matrix server. Not using this flag would result error appear on search window which would say "Identity Server has not been enabled...".
-- `use_custom_text_label_on_left_menu` has been used to change the default text on left menu which previously mentioned about explore public rooms, or send message through matrix api/people directory. This flag contains string so you could modify text directly through config. Not having config value would result text return to matrix.
-- `searchIsOnRoleOrPeopleOrServiceDirectory` has been used to divert matrix based search through `MatrixPeg` api to pegacorn communicate api. This flag enables directory search for people, role, and services then based on context the search redirects to people, service and role underneath the function that
-actually does searches.
 
 224329
 Web: As an Authenticated Practitioner, all avatars on web display Lingo colors by role category so that I am shown accessibility friendly colors

@@ -209,10 +209,10 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
                 url={getHttpUriForMxc(
                     MatrixClientPeg.get().getHomeserverUrl(), this.props.member.getMxcAvatarUrl(),
                     avatarSize, avatarSize, "crop")}
-                name={(config.avatarColors ? this.props.member.roleCategoryId: null)
-                       || this.props.member.name}
-                idName={(config.avatarColors ? this.props.member.roleCategoryId: null)
-                         || this.props.member.userId}
+                name={(config.avatarColors ? this.props.member.roleCategoryId: null) ||
+                      this.props.member.name}
+                idName={(config.avatarColors ? this.props.member.roleCategoryId: null) ||
+                        this.props.member.userId}
                 width={avatarSize}
                 height={avatarSize} />;
 
@@ -351,10 +351,10 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                 url={getHttpUriForMxc(
                     MatrixClientPeg.get().getHomeserverUrl(), this.props.member.getMxcAvatarUrl(),
                     avatarSize, avatarSize, "crop")}
-                name={(config.avatarColors ? this.props.member.roleCategoryId: null)
-                       || this.props.member.name}
-                idName={(config.avatarColors ? this.props.member.roleCategoryId: null)
-                         || this.props.member.userId}
+                name={(config.avatarColors ? this.props.member.roleCategoryId: null) ||
+                      this.props.member.name}
+                idName={(config.avatarColors ? this.props.member.roleCategoryId: null) ||
+                        this.props.member.userId}
                 width={avatarSize}
                 height={avatarSize} />;
 
@@ -393,9 +393,11 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             <DirectoryDetailView queryId={this.props.member.name}/>
         </div>
 
+        if (this.props.error) {
+            console.error("An unxpected error occurred in InviteDialog ", this.props.error);
+        }
         const errorText = this.props.error ? (<div style={{ color: 'red' }}>
-            <p>Something bad happened! Requested resource could not be found.</p>
-            <p>{this.props.error}</p>
+            <p>{_t("There was a problem communicating with the server. Please try again.")}</p>
         </div>) : null;
 
         return (
@@ -942,7 +944,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 })
             }).catch((err) => {
                 this.setState({
-                    errorText: 'Error occurred while getting favorites'
+                    errorText: err
                 })
             });
     }
@@ -1009,14 +1011,14 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     role_category = value["primaryRoleCategoryID"];
                     // filled or not filled status
                     // if activePractitionerSet array is non-empty someone is fulfilling that role
-                    roleIsActive = (value.activePractitionerSet?.length >= 1) || false;
+                    roleIsActive = (value.activePractitionerSet?.length >= 1) ?? false;
                 });
 
                 // update favorite roles
                 this._updateFavoritesForCurrentUser();
                 // update server result mixin(search result) in state
                 if (results.length > 0) {
-                    // Only update unique results in search results, remove duplicates
+                    // Don't add search results, for entries for user_id that are already shown
                     let serverResults = this.state.serverResultsMixin;
                     let newServerResults = serverResults.filter(m => m.userId !== user_id);
                     this.setState({
@@ -1039,7 +1041,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 // if filter by favorite is selected, and user tries to search favorite only
                 if (results.length > 0 && this.state.favoriteFilterIsSelected) {
                     const serverResults = this.state.serverResultsMixin;
-                    let filteredByFavoriteResults;
+                    let filteredByFavoriteResults = [];
                     for (let fav in this.state.favorites) {
                         filteredByFavoriteResults = serverResults.filter(m => m.user.name.indexOf(fav) !== -1);
                     }
@@ -1052,7 +1054,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             }).catch(err => {
                 this.setState({
                     serverResultsMixin: [],
-                    errorText: 'Error in fetching directory result'
+                    errorText: err
                 }); // clear results because it's moderately fatal
             });
     };
@@ -1549,7 +1551,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         if (totalDisplayedResults < 1 || this.state.numOfRecordsFromSearchAPI < 1) return null;
         if (this.state.favoriteFilterIsSelected) return null;
         return <div className="mx_InvitedDialog_totalRecords">
-        {totalDisplayedResults && <p>Showing {totalDisplayedResults} records of {numOfTotalRecords ? numOfTotalRecords: totalDisplayedResults}</p>}
+        {/* TODO uncomment when working properly
+           totalDisplayedResults && <p>Showing {totalDisplayedResults} records of {numOfTotalRecords ? numOfTotalRecords: totalDisplayedResults}</p>*/}
         </div>
     }
 

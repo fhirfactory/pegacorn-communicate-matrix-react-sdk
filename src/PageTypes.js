@@ -22,5 +22,5 @@ export default {
     RoomDirectory: "room_directory",
     UserView: "user_view",
     GroupView: "group_view",
-    MyGroups: "my_groups"
+    MyGroups: "my_groups",
 };

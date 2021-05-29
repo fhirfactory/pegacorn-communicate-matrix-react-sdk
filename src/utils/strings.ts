@@ -63,6 +63,13 @@ export function selectText(target: Element) {
     selection.addRange(range);
 }
 
+export function capitaliseFirstCharacter(target: String) {
+	if (!target) {
+		return null;
+	}
+	return target.charAt(0).toUpperCase() + target.slice(1);
+}
+
 /**
  * Copy rich text to user's clipboard
  * It will overwrite user's selection range

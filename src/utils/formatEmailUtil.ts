@@ -1,3 +1,5 @@
+import {capitaliseFirstCharacter} from "./strings";
+
 /**
  * This utility function converts email into a valid name and it is used by directory to
  * display who is fulfilling roles. This can be used elsewhere where use case requires converting
@@ -11,17 +13,12 @@ export function getNameFromEmail(email: string): string {
     if (email[0] === '@') {  // remove @ initial (valid in matrix id)
         email = email.substring(1);
     }
-    let firstName = email.split('.')[0];
-    firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
-    let lastName;
     // non matrix id may have email address format firstname.lastName@email.com so split that accordingly
-    if (email.includes('@')) {
-        lastName = email.split('@')[0].split('.').pop();
-        // matrix id has ':' in middle of address, so just use that to split and format names
-    } else if (email.includes(':')) {
-        lastName = email.split(':')[0].split('.').pop();
-    }
-    lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1);
+    // matrix id has ':' in middle of address, so just use that to split and format names
+    const delimiter = email.includes('@') ? '@' : ':';
+    const names = email.split(delimiter)[0].split('.');
+    const firstName = capitaliseFirstCharacter(names[0]);
+    const lastName = capitaliseFirstCharacter(names.pop());
     const fullName = firstName + " " + lastName;
     return fullName;
 }

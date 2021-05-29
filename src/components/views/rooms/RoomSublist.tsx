@@ -51,6 +51,7 @@ import { objectExcluding, objectHasDiff } from "../../../utils/objects";
 import ExtraTile from "./ExtraTile";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 import IconizedContextMenu from "../context_menus/IconizedContextMenu";
+import * as config from "../../../config";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
@@ -689,7 +690,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                                 isExpanded={!!this.state.addRoomContextMenuPosition}
                             />
                         );
-                    } else {
+                    } else if (config.showRoleDirectory) {
                         addRoomButton = (
                             <ContextMenuTooltipButton
                                 tabIndex={tabIndex}

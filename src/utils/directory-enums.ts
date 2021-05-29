@@ -11,8 +11,8 @@ export enum DirectoryEnum {
     pabx_extension = "Office Phone",
     personal_phone = "Personal Mobile Number",
     landline = "Personal Phone Number",
-    mobile = "Work Mobile",
-    facsimile = "FAX",
+    mobile = "Mobile Phone",
+    facsimile = "Fax",
     pager = "Pager"
 }
 
