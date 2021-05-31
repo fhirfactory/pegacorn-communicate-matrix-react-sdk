@@ -338,6 +338,58 @@ Web: Sign In Screen Lingo Re-Branding and Update
  - `authenticatedHomeScreen.showWelcomeToElementText` controls whether or not to show the "Welcome to [config.brand]" text on the authenticated home screen.  By default it's true.
  - `authenticatedHomeScreen.showLiberateYourCommunicationText` controls whether or not to show the "Liberate Your communication" text on the authenticated home screen.  By default it's true.
  - `loginScreen.showHomeServerInfo` controls whether or not to show the Home Server information. By default it's true.
- - `loginScreen.ssoButtonDefaultClass` optional value, to override the default of mx_SSOButton_default 
+ - `loginScreen.ssoButtonDefaultClass` optional value, to override the default of mx_SSOButton_default
  - `loginScreen.changeSigninToLoginTextLabel` controls whether or not to replace the instances of "Sign In" to "Log In" on the Login screen. By default it's false.
 NOTE: the custom styling of these banners, buttons and logos is done via the theme e.g. \res\themes\light\css\_light.scss
+
+
+194064
+Web: As an Authenticated Practitioner, I should be able to Search the Role Directory, so that I can locate a Role and view their details
+=========================================================================================================================================
+
+# API config
+- Directory related APIs are stored in config.json which externalizes all the urls we use throughout the time.
+- Role directory can be viewed from homepage/landing page tile where a tile says "Search roles" or similar.
+- The practitioner role comes from `/PractitionerRoles` api. Same would be the case of view detail of practitionerRole when a detail is clicked on search page
+- Search a particular role search comes from `/PractitionerRoles/search?displayName={insert parameter}` api.
+- Search functionality allows users to login and bring a list of roles in directory and underlying `API` that hangs these records on UI would be `PractionerRoles`. Once user starts typing without applying filters user would search `PractitionerRoles/search?term`.
+- User story requires front end UI to display profile picture of practitioner which comes from avatar-url which cant be shown due to fact that we don't store any images at the database. This condition may change in future and we may need to come back and change avatar url point to user profile which contains user profile photo. At the moment mocked backend users/practitioner profile do not lead to any profile image , neither in homeserver or backend.
+- Default `Avatar` letter initials has been changed from having one initial to first and last names initials to make it meaningful.
+- Config parameters `role`, `people`, `service` have been introduced in order to align the text and apis in
+role, service and people search in UI. `directory` config parameter would have all keys for directories. By default `roomDirectory` was the config parameter which contained servers details listed so in order to separate concern from roomDirectory which is not utilized for searching roles, people or services, new config parameter `directory` was introduced.
+- `directory` config value contains `base_api` which is basePath for all directory api calls.
+- `showRoleDirectory` config parameter has been introduced to display role directory tile on landing homepage which was not there by default. If no config value is passed in then it will default to not display search roles tile on homepage.
+- The search mechanism for `roles, people and services` we are going to use `InviteDialog.tsx` which is a dialog prompt to add users by searching in user directory. By default matrix points all api calls to `MatrixPeg.get..` apis which lead to user detail being unresolvable for role, people and service search at the moment as we want to get search working when api call is made to pegacorn communicate's backend. A separate condition which is triggered based on context has been used to switch search functionality between MatrixPeg to customized api. This value is not config item but other config values would control display of buttons which trigger role. `_searchIsOnRoleServicePeopleDir` function manages whether or not to send api calls to matrix or to redirect to our own.
+- `show_favorite_icon_in_directory_search` flag has been introduced as config value in order to show favorite icon next to role search which was required in user story to identify whether a role is a favorite one in search history that user in past might have clicked.
+- `search_all_roles` config value in api config contains api for searching all roles.
+- `search_role_by_displayName` config value in api config contains api for searching role by displayName as key parameter.
+- `numberOfRecordsToShowInSearch` parameter has been used to control how many roles, services, people to display as search list by default when search is triggered. Matrix had default of 3 searches suggestions to be listed which has been left to default by applying this config mentioned above which defaults search results to 25 at the moment.
+- `X-Total-Count` gives total count results of how many records were found at database during search.
+- Search on roles only displays if matching text has been found in displayName text during search.
+- The filter options on this user story is limited to filter by name and filter by favorites. Favorite filter is a bit cloudy as this means we would have to go and filter the favorites by calling a different api that contains practitioner as user and find what favorites were there and if that favorite is listed in role list then that means a certain display name is a favorite.
+- Matrix sorts given list of users by the time user was last active. This has been changed if directory search occurs for role, people and service then sort by name.
+- `search_role_by_favorite` config parameter has been added to allow search favorite for currently logged in user. Favorite works by practitioner, role and services types so it is meant to bring role favorites only if context window for search is meant to be applied to role search.
+- `showExplorePublicRoomTile` controls if the Explore Pulic Rooms tile/button is shown allows the button on the authenticated home page, defaults to true
+- `left_hand_nav_help_text` allows help text to always be shown at the bottom of the left hand navigation, instead of the default conditionally shown text.  By default this value is null, so the default conditionally shown text applies.
+- To create your own favorites, you need to do `PUT` request on `base-api + user-id + search-by-favorites-uri`. API needs to be aligned with role, people or services favorite. If favorarite is searched via practitioner role, it will bring favorites in organisation, service and roles.
+- `UIFeature.identityServer` is a default user setting flag which controls whether or not to search user through matrix api which has been set to false in order to turn off search in matrix server. Not using this flag would result error appear on search window which would say "Identity Server has not been enabled...".
+
+224329
+Web: As an Authenticated Practitioner, all avatars on web display Lingo colors by role category so that I am shown accessibility friendly colors
+================================================================================================================================================
+
+- This user story implements avatar colors according to role categories. Even though role directory talks about roles primarily. To make colors compliant with lingo colors and to align role directory UI to role selector app, colors have been implemented by configurable setting parameter called `avatarColor`.
+- `avatarColor` config contains 9 colors in total which are implemented according to role category by finding matching key from role search category. If matching key is not found then its going to render default color of matrix which would be color accent.
+- If no colors are found in configuration then instead of using matrix default color which do not pass accessibility criteria, the color selector algorithm is going to lookup for randomly selected color from group of 9 colors for role category. They have been specified as meeting accessibility criteria.
+- Not finding any config parameter in `avatarColor` would default web app to default to custom theme colors `--avatar-background-colors` from `custom-themes` array in `setting-defaults`. In order to make themed color work, theme should have been enforced as `default-theme` parameter in config file. Matrix OOTB behaviour would be it prioritises colors in this order `custom-theme-avatar-colors > hardcoded matrix color`. A new approach has been used by using `avatarColors` keypair values in config. In InviteDialog, role search currently uses role category and requirement was to display avatar first and last initials and color by role category which has been done through finding matching keypair value. The name string that is passed to function in `Avatar.ts` file is looked up into config.json file and then if not found it uses default matrix pattern which is find color through index that is size of name string and that index in configured color would be used to find color from config. This alternate approach ensures we can have our own configured avatar colors instead of defaulting to matrix hardcoded color or theme based colors. For logged in user display avatar color which is most likely apply would be configured color other than matching keypair (as described above, find it through nameIndexTotal % number of colors in config). An instance of not configuring colors would lead to using matrix default colors or custom-theme colors.
+
+224274
+Web:  As an authenticated Practitioner I would like to see my first and last name initials on avatar.
+=====================================================================================================
+- This user story is small user story which implements first and last initials on avatar so instead of showing
+first name initials, its better to show two initials. Also, when role directory user story was implemented that
+required changing avatar initials in search list to contain role category initials which would be first category
+initial and last category initial, therefore this user story has been written in order to include flow for logged in user on authenticated landing homepage.
+- `show_first_last_char_initials_on_avatar` config value has been introduced which is used to control whether or not to show first and last character in avatar, not having this config value set as true in config will default avatar character to initial letter that is found in user's username when user is logged in. A function has been written in `Avatar.ts` file which will show first and lastName initials if name corresponds to formats `firstname.lastname`, `firstname-lastname`, `firstname + space +lastname`, `firstname+comma+lastname`. This function can be extended to include other name formats. For single name avatar will display initial of one word. Not implementing this user story mean it would be hard to apply colors to role search to bring initials of two words. For consistency this user story will give easy change to sync first and last name initials on Lingo web UI avatar.
+
+
