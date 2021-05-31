@@ -236,9 +236,6 @@ export function getFirstAndLastNameInitialLetters(name: string): string {
         return undefined;
     }
 
-    // If it is single string then this will cover edge case of only one word user
-    if (name.search(/[ .,-]+/i) < 0) return getInitialLetter(name);
-
     try {
         // if the name is a matrix id, remove the matrix domain
         const nameWithoutMatrixDomain = name.split(':')[0];
@@ -258,9 +255,11 @@ export function getFirstAndLastNameInitialLetters(name: string): string {
                 lastName = fullName[0];
             }
         }
-        const firstAndLastInitials = getInitialLetter(firstName) + getInitialLetter(lastName);
+        const firstAndLastInitials = getInitialLetter(firstName) + (getInitialLetter(lastName) || '');
+//		console.log("In Avatar name=" + name + ", firstAndLastInitials=" + firstAndLastInitials);
         return firstAndLastInitials;
     } catch (e) {
+		console.log("Error in Avatar", e);
         /**
          * If there is a problem translating then just grab first name initials as matrix default
          */

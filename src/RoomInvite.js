@@ -22,7 +22,8 @@ import MultiInviter from './utils/MultiInviter';
 import Modal from './Modal';
 import * as sdk from './';
 import { _t } from './languageHandler';
-import InviteDialog, {KIND_DM, KIND_INVITE, KIND_ROLE_DIRECTORY_SEARCH} from "./components/views/dialogs/InviteDialog";
+import InviteDialog, {KIND_DM, KIND_INVITE} from "./components/views/dialogs/InviteDialog";
+import {KIND_ROLE_DIRECTORY_SEARCH} from "./DirectoryService";
 import CommunityPrototypeInviteDialog from "./components/views/dialogs/CommunityPrototypeInviteDialog";
 import {CommunityPrototypeStore} from "./stores/CommunityPrototypeStore";
 

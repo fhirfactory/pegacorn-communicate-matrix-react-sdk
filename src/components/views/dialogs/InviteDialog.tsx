@@ -43,6 +43,7 @@ import CountlyAnalytics from "../../../CountlyAnalytics";
 import {Room} from "matrix-js-sdk/src/models/room";
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import * as config from '../../../config';
+import * as directoryService from '../../../DirectoryService';
 import AccessibleButton from '../elements/AccessibleButton';
 import { StyledMenuItemCheckbox } from '../../structures/ContextMenu';
 
@@ -52,10 +53,6 @@ import { StyledMenuItemCheckbox } from '../../structures/ContextMenu';
 export const KIND_DM = "dm";
 export const KIND_INVITE = "invite";
 export const KIND_CALL_TRANSFER = "call_transfer";
-// role and service directory
-export const KIND_ROLE_DIRECTORY_SEARCH = "search_role_directory";
-export const KIND_SERVICE_DIRECTORY_SEARCH = "search_service_directory";
-export const KIND_PEOPLE_DIRECTORY_SEARCH = "search_people_directory";
 
 const INITIAL_ROOMS_SHOWN = config.numberOfRecordsToShowInSearch
                             || 3; // Number of rooms to show at first
@@ -320,18 +317,6 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         return result;
     }
 
-    searchIsOnRoleOrPeopleOrServiceDirectory = () => {
-        if (this.props.kind === KIND_ROLE_DIRECTORY_SEARCH) {
-            return true;
-        } else if (this.props.kind === KIND_PEOPLE_DIRECTORY_SEARCH) {
-            return true;
-        } else if (this.props.kind === KIND_SERVICE_DIRECTORY_SEARCH) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     render() {
         const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
@@ -383,7 +368,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             </span> : null;
 
         const roleIsFilledOrUnfilled = this.props.isAvailable ? <span className="mx_InviteDialog_roomTile_available">Filled</span>
-        :<span className="mx_InviteDialog_roomTile_unavailable">Not Filled</span>;
+        :<span className="mx_InviteDialog_roomTile_unavailable">Unfilled</span>;
 
         const viewDetailBtn = <AccessibleButton id="mx_viewDetailBtn" kind="primary" onClick={ev => this.onClickView(ev)}>
            View
@@ -408,8 +393,8 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                     <div className='mx_InviteDialog_roomTile_userId'>{caption}</div>
                 </span>
                 {timestamp}
-                {this.searchIsOnRoleOrPeopleOrServiceDirectory() && viewDetailBtn}
-                {(this.props.kind === KIND_ROLE_DIRECTORY_SEARCH) && roleIsFilledOrUnfilled}
+                {directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind) && viewDetailBtn}
+                {(this.props.kind === directoryService.KIND_ROLE_DIRECTORY_SEARCH) && roleIsFilledOrUnfilled}
                 {config.show_favorite_icon_in_directory_search && favorite}
                 {viewMemberDetail}
                 {errorText}
@@ -882,7 +867,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
     onChangeFilter = (ev: React.MouseEvent<HTMLInputElement>) => {
         ev.stopPropagation();
-        if (!this.searchIsOnRoleOrPeopleOrServiceDirectory()) return;
+        if (!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) return;
         const eventTarget = ev.currentTarget;
         let filterByNameEvent = eventTarget.parentNode.textContent.includes("Name");
         if(filterByNameEvent) return;
@@ -901,23 +886,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     _onClearSearchResult = () => {
-        if(!this.searchIsOnRoleOrPeopleOrServiceDirectory()) return;
+        if(!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) return;
         this.setState({
             serverResultsMixin: [],
             numOfRecordsFromSearchAPI: 0
         });
-    }
-
-    searchIsOnRoleOrPeopleOrServiceDirectory = () => {
-        if (this.props.kind === KIND_ROLE_DIRECTORY_SEARCH) {
-            return true;
-        } else if (this.props.kind === KIND_PEOPLE_DIRECTORY_SEARCH) {
-            return true;
-        } else if (this.props.kind === KIND_SERVICE_DIRECTORY_SEARCH) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /**
@@ -926,141 +899,92 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     _updateFavoritesForCurrentUser() {
         // Find favorites from relevant api (roles / services)
         // get user id
-        const user_id_encoded = encodeURI(MatrixClientPeg.get().getUserId());
-        let favorite_api = config.communicate_api_base_path + config.prefix + user_id_encoded;
-        if (this.props.kind === KIND_ROLE_DIRECTORY_SEARCH) {
-            favorite_api = config.communicate_api_base_path + config.prefix + user_id_encoded
-                + config.search_by_favorite.role_suffix;
-        }
-        fetch(favorite_api, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
+        directoryService.getFavoritesForCurrentUser(this.props.kind)
+	    .then(response => {
+            if (!response.errorText) {
+                this.setState({
+                    favorites: response.favorites
+                });
+            } else {
+                this.setState(response);
             }
-        }).then(res => res.json())
-            .then(response => {
-                this.setState({
-                    favorites: response.favourites
-                })
-            }).catch((err) => {
-                this.setState({
-                    errorText: err
-                })
-            });
-    }
+		})
+    };
 
     _updateDirectorySearchFromAPI = async (term: string) => {
 
-        let search_api_path;
-        // form an api path based on context
+        directoryService.getMatchingRecords(term, this.props.kind)
+	    .then(response => {
+			if (!response) {
+				return;
+			}
+			if (!response.errorText) {
+				//Note these are set to collections by the map function
+				let display_name;
+				let user_id;
+				let role_category;
+				let roleIsActive = false;
+				response.results.map((value) => {
+					display_name = value.display_name;
+					user_id = value.user_id;
+					role_category = value.role_category;
+					roleIsActive = value.roleIsActive;
+				});
 
-        if (this.props.kind === KIND_ROLE_DIRECTORY_SEARCH) {
-            if (!term) {
-                search_api_path = config.search_all_roles
-            }
-            if (term == this.state.filterText) {
-                search_api_path = config.search_role_by_displayName + term;
-            }
-        }
+				// update favorite roles
+				this._updateFavoritesForCurrentUser();
+				
+				// update server result mixin(search result) in state
+				if (response.results.length > 0) {
+					// Don't add search results, for entries for user_id that are already shown
+					let serverResults = this.state.serverResultsMixin;
+					let newServerResults = serverResults.filter(m => m.userId !== user_id);
+					this.setState({
+						numOfRecordsFromSearchAPI: response.numOfRecordsFromSearchAPI,
+						serverResultsMixin: [...newServerResults, {
+							user: new DirectoryMember({
+								user_id: user_id,
+								display_name: display_name,
+								avatar_url: '',
+								favorite: false,
+								available: roleIsActive,
+								roleCategoryId: role_category
+							}),
+							userId: user_id,
+						}],
+						recents: [],
+						suggestions: []
+					});
+				} else {
+					this.setState({
+						numOfRecordsFromSearchAPI: response.numOfRecordsFromSearchAPI
+					});
+				}
 
-        // Find total counts of records for currently entered term in search field
-
-        fetch(search_api_path, {
-            method: "GET",
-            //   mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }
-        ).then(async res => {
-            const totalRecords = Number(res.headers.get('X-Total-Count'));
-
-            this.setState({
-                numOfRecordsFromSearchAPI: totalRecords
-            });
-        }).catch((error) => {
-            this.setState({
-                numOfRecordsFromSearchAPI: 0,
-                errorText: error
-            })
-        })
-
-        // Find roles, services, and people
-
-        fetch(search_api_path, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then((res) => res.json())
-            .then(results => {
-                if (!results) results = [];
-
-                // create a new object and assign user_id, display_name
-                let newObj = { user_id: '', display_name: '', avatar_url: '' }
-                let display_name;
-                let user_id;
-                let role_category;
-                let roleIsActive = false;
-                newObj = results.map((value) => {
-                    display_name = value["displayName"];
-                    newObj.display_name = display_name;
-                    user_id = value["simplifiedID"];
-                    newObj["user_id"] = user_id;
-                    role_category = value["primaryRoleCategoryID"];
-                    // filled or not filled status
-                    // if activePractitionerSet array is non-empty someone is fulfilling that role
-                    roleIsActive = (value.activePractitionerSet?.length >= 1) ?? false;
-                });
-
-                // update favorite roles
-                this._updateFavoritesForCurrentUser();
-                // update server result mixin(search result) in state
-                if (results.length > 0) {
-                    // Don't add search results, for entries for user_id that are already shown
-                    let serverResults = this.state.serverResultsMixin;
-                    let newServerResults = serverResults.filter(m => m.userId !== user_id);
-                    this.setState({
-                        serverResultsMixin: [...newServerResults, {
-                            user: new DirectoryMember({
-                                user_id: user_id,
-                                display_name: display_name,
-                                avatar_url: '',
-                                favorite: false,
-                                available: roleIsActive,
-                                roleCategoryId: role_category
-                            }),
-                            userId: user_id,
-                        }],
-                        recents: [],
-                        suggestions: []
-                    });
-                }
-
-                // if filter by favorite is selected, and user tries to search favorite only
-                if (results.length > 0 && this.state.favoriteFilterIsSelected) {
-                    const serverResults = this.state.serverResultsMixin;
-                    let filteredByFavoriteResults = [];
-                    for (let fav in this.state.favorites) {
-                        filteredByFavoriteResults = serverResults.filter(m => m.user.name.indexOf(fav) !== -1);
-                    }
-                    this.setState({
-                        serverResultsMixin: filteredByFavoriteResults,
-                        recents: [],
-                        suggestions: []
-                    });
-                }
-            }).catch(err => {
-                this.setState({
-                    serverResultsMixin: [],
-                    errorText: err
-                }); // clear results because it's moderately fatal
-            });
+				// if filter by favorite is selected, and user tries to search favorite only
+				if (response.results.length > 0 && this.state.favoriteFilterIsSelected) {
+					const serverResults = this.state.serverResultsMixin;
+					let filteredByFavoriteResults = [];
+					for (let fav in this.state.favorites) {
+						filteredByFavoriteResults = serverResults.filter(m => m.user.name.indexOf(fav) !== -1);
+					}
+					this.setState({
+						serverResultsMixin: filteredByFavoriteResults,
+						recents: [],
+						suggestions: []
+					});
+				}
+			} else {
+				this.setState({
+					serverResultsMixin: [],
+					errorText: response.errorText
+				}); // clear results because it's moderately fatal
+			}
+		})
     };
 
     _updateSuggestions = async (term) => {
-       this.searchIsOnRoleOrPeopleOrServiceDirectory() ?  this._updateDirectorySearchFromAPI(term):
+        directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind) ?  this._updateDirectorySearchFromAPI(term):
         MatrixClientPeg.get().searchUserDirectory({term}).then(async r => {
             if (term !== this.state.filterText) {
                 // Discard the results - we were probably too slow on the server-side to make
@@ -1339,7 +1263,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             sectionName = kind === 'recents' ? _t("Recently Direct Messaged") : _t("Suggestions");
         }
 
-        if (this.searchIsOnRoleOrPeopleOrServiceDirectory()) {
+        if (directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) {
             if(this.state.numOfRecordsFromSearchAPI > 0){
                 sectionName = 'Search Results';
             }
@@ -1392,7 +1316,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         // sort sourceMembers before displaying in UI, sort alphabetically
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
         // https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value
-        if (this.searchIsOnRoleOrPeopleOrServiceDirectory() && config.sortAlphabeticallyInAscendingOrder) {
+        if (directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind) && config.sortAlphabeticallyInAscendingOrder) {
             sourceMembers = sourceMembers.sort((a, b) => {
                 const nameA = a.user.name.toLowerCase();
                 const nameB = b.user.name.toLowerCase();
@@ -1428,7 +1352,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 onToggle={this._toggleMember}
                 highlightWord={this.state.filterText}
                 isSelected={this.state.targets.some(t => t.userId === r.userId)}
-                isFavorite={(this.state.favorites?.indexOf(r.user.name)  !== -1) || false}
+                isFavorite={(this.state.favorites?.indexOf(r.user.name) !== -1) || false}
                 isAvailable={r.user.available || false}
                 roleCategoryId={r.user.roleCategoryId || null}
                 kind={this.props.kind}
@@ -1507,7 +1431,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     _renderClearSearchButton() {
-        if(!this.searchIsOnRoleOrPeopleOrServiceDirectory()) return null;
+        if(!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) return null;
         return <div className='mx_InvitedDialog_clearButton'>
             <AccessibleButton onClick={this._onClearSearchResult} kind='primary'>
                 <span>Clear All</span>
@@ -1516,7 +1440,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     _renderFilterOptions() {
-        if(!this.searchIsOnRoleOrPeopleOrServiceDirectory()) return null;
+        if(!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) return null;
         return <div className="mx_InvitedDialog_filterOptions">
             <p>Filter By:</p>
             <StyledMenuItemCheckbox
@@ -1539,7 +1463,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
     _renderRecordCount() {
     //if it is not role, service, people directory search don't display record count
-        if (!this.searchIsOnRoleOrPeopleOrServiceDirectory()) return null;
+        if (!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) return null;
         let totalMembersTiles = document.getElementsByClassName("mx_InviteDialog_roomTile");
         let numOfTotalRecords;
         let totalDisplayedResults;
@@ -1672,7 +1596,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             title = _t("Transfer");
             buttonText = _t("Transfer");
             goButtonFn = this._transferCall;
-        } else if (this.props.kind === KIND_ROLE_DIRECTORY_SEARCH) {
+        } else if (this.props.kind === directoryService.KIND_ROLE_DIRECTORY_SEARCH) {
             title = "Role Directory Search";
             buttonText = "Start Discussion";
             goButtonFn = this._startDm;

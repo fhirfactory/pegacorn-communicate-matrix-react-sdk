@@ -7,6 +7,7 @@ import { getFormattedRoleIds } from "../../../utils/formatKeyValueUtil";
 import { getFormattedPhoneNumberAndType } from "../../../utils/formatPhoneNumberUtil";
 import { getNameFromEmail } from "../../../utils/formatEmailUtil";
 import { getTextLabelFromEnum } from "../../../utils/directory-enums";
+import * as directoryService from '../../../DirectoryService';
 
 /*
 Copyright 2020 The Matrix.org Foundation C.I.C.
@@ -96,46 +97,38 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
 
     getRoleDetail() {
         const searchQuery = this.props.queryId;
-        const queryId = encodeURIComponent(searchQuery);
-        const view_role_detail = config.search_all_roles + queryId;
-        // api data
-        fetch(view_role_detail, {
-            method: "GET"
-        }).then(res => res.json())
-            .then((response) => {
-                let emails = [];
-                let roleArrayResponse = [];
-                let entries = response.entry;
-                if (entries) {
-                    roleArrayResponse.push(entries);
-                    roleArrayResponse.map(val => emails = val.activePractitionerSet);
-                }
+
+        directoryService.getRoleDetail(searchQuery)
+	    .then(response => {
+            if (!response.errorText) {
                 this.setState({
-                    roles: roleArrayResponse,
+                    roles: response.roles,
                     showUserRoleTable: true,
                     loading: false,
-                    activeRoleEmails: emails
-                })
-            }).catch(err => {
-                if (err instanceof Error) {
-                    this.setState({
-                        error: err,
-                        loading: false
-                    })
-                }
-            });
+                    activeRoleEmails: response.activeRoleEmails
+                });
+            } else {
+				this.setState({
+					error: response.errorText,
+					loading: false
+				});
+            }
+		});
     }
 
     getDisplayNameFromAPI(emailId: string): string {
-        if (emailId.indexOf("@") === -1) return null;
-        const api = config.communicate_api_base_path + config.prefix + emailId;
-        fetch(api, {
-            method: "GET"
-        }).then(res => res.json())
-            .then((response) => {
-                let displayName = response.entry.displayName;
-                this.setState({ displayName: displayName })
-            })
+        const promise = directoryService.getPractionerDisplayName(emailId);
+        if (!promise) return null;
+		promise
+	    .then(response => {
+            if (!response.errorText) {
+                this.setState({
+                    displayName: response.displayName
+                });
+            } else {
+                this.setState(response);
+            }
+		});
         let fullName = this.state.displayName;
         return fullName;
     }
