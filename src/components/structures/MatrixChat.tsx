@@ -85,7 +85,6 @@ import { showToast as showMobileGuideToast } from '../../toasts/MobileGuideToast
 import SpaceStore from "../../stores/SpaceStore";
 import SpaceRoomDirectory from "./SpaceRoomDirectory";
 import { isE2EEEnabledInWellKnown } from '../../utils/WellKnownUtils';
-import { string } from 'prop-types';
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -2001,10 +2000,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 const roleSelectorUrl = roleSelector?.url;//SdkConfig.get()["role_selector_url"];//'/role-selection/#'
 
                 let ref = document.referrer;
-                console.log(ref!= "");
-                console.log(ref?.toLowerCase()?.includes(roleSelectorText));
                 
-                if(ref !="" && ref?.toLowerCase()?.includes(roleSelectorText))
+                if(ref?.toLowerCase()?.includes(roleSelectorText))
                 {
                     view = (
                         <LoggedInView
