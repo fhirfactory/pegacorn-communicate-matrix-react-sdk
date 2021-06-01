@@ -375,7 +375,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             </AccessibleButton>
 
         const viewMemberDetail = <div id="mx_table_role_detail" style={{ display: 'none' }}>
-            <DirectoryDetailView queryId={this.props.member.name}/>
+            <DirectoryDetailView queryId={this.props.member.userId}/>
         </div>
 
         if (this.props.error) {
@@ -933,7 +933,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
 				// update favorite roles
 				this._updateFavoritesForCurrentUser();
-				
+
 				// update server result mixin(search result) in state
 				if (response.results.length > 0) {
 					// Don't add search results, for entries for user_id that are already shown
