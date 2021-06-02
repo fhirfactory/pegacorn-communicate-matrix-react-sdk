@@ -392,4 +392,25 @@ required changing avatar initials in search list to contain role category initia
 initial and last category initial, therefore this user story has been written in order to include flow for logged in user on authenticated landing homepage.
 - `show_first_last_char_initials_on_avatar` config value has been introduced which is used to control whether or not to show first and last character in avatar, not having this config value set as true in config will default avatar character to initial letter that is found in user's username when user is logged in. A function has been written in `Avatar.ts` file which will show first and lastName initials if name corresponds to formats `firstname.lastname`, `firstname-lastname`, `firstname + space +lastname`, `firstname+comma+lastname`. This function can be extended to include other name formats. For single name avatar will display initial of one word. Not implementing this user story mean it would be hard to apply colors to role search to bring initials of two words. For consistency this user story will give easy change to sync first and last name initials on Lingo web UI avatar.
 
+225005
+Web: Web: Landing Page Side Menu User Interface Background Colour
+=======================================================================
+- This is a very small user story which was to change color of left panel menu. By Default background color was gray which did not set enough contrast to pass the usability/accessibility test so this has been changed to `rgb(217,217, 217)` which sets background color to dark gray and on contrast testing , it did pass the test.
+
+192963
+Web: As an Authenticated Practitioner, I should be able to Search the Person Directory, so that I can locate a Person and view their details
+=============================================================================================================================================
+- All the APIs are externalized into config.json file and mapped through config.ts file as variables which are consumed. For more notes on this please read role directory user story (194064) user story.
+- Service directory can be searched through left panel as well as from home page landing page tile which would have text label 'Search People'.
+- `showUserPresenceIndicator` flag has been used to render user presence status (onlin, offline) status. `UserPresence` view renders user status on UI according to context which may switch from people to role depending upon if on client side search is on People or Role.
+- `showPeopleDirectory` flag has been used to add tile on landing page , not setting value to true on config file for this flag would return app defaulting to matrix.
+
+
+194734
+Web: Web: As an Authenticated Practitioner, I should be able to Search the Service Directory, so that I can locate a Service and view their details
+====================================================================================================================================================
+- All the APIs are externalized into config.json file and mapped through config.ts file as variables which are consumed. For more notes on this please read role directory user story (194064) user story.
+- Service directory can be searched through left panel as well as from home page landing page tile which would have text label 'Search Services'.
+- `showUserPresenceIndicator` flag is effectively applied to Person Directory and Role Directory but has no effect on Service directory as it does not need to show user presence status.
+- `showServiceDirectory` has been used to show/hide service directory search. Not having this flag would return app back to matrix default which wont display service directory tile.
 
