@@ -66,6 +66,24 @@ export function getDirectorySearchAPIInContext(term, kind) {
     return search_api_path;
 }
 
+/**
+ * Forms favorite api based on current context of search
+ * @param The kind is directory search context
+*/
+export function getFavoriteApiFromContext(kind) {
+       // Find favorites from relevant api (roles / people / services)
+    // get user id
+    const user_id_encoded = encodeURI(MatrixClientPeg.get().getUserId());
+    let favorite_api = config.communicate_api_base_path + config.prefix + user_id_encoded;
+    if (kind === KIND_ROLE_DIRECTORY_SEARCH) {
+        favorite_api += config.search_by_favorite.role_suffix;
+    } else if (kind === KIND_PEOPLE_DIRECTORY_SEARCH) {
+        favorite_api += config.search_by_favorite.people_suffix;
+    } else if ((kind === KIND_SERVICE_DIRECTORY_SEARCH)) {
+        favorite_api += config.search_by_favorite.service_suffix;
+    }
+    return favorite_api;
+}
 
 /**
  * This will be used by service, role and people search by switching api based on search context
@@ -101,6 +119,42 @@ export const getFavoritesForCurrentUser = (kind) => {
         });
 }
 
+/**
+ * Updates favorites based on people, role, service directory context
+ *        - otherwise a fetch Promise, so calling code can either
+ *          call this method asynchronously:
+ *              updateFavoritesForCurrentUser(id).then(response => {
+ *                  <code to process response>
+ *              })
+ *          OR synchronously:
+ *              const response = await updateFavoritesForCurrentUser(id);
+ *              <code to process response>
+ *          The response will be
+ *          - an object with an errorText property if an error occurs
+ *          - otherwise an object with a displayName property
+ * @param kind The search context which is currently used.
+ * @param favourites All the favorite by type (people, service, person) based on context
+ */
+export const updateFavoritesForCurrentUser = (kind, favourites) => {
+    let favorite_api = getFavoriteApiFromContext(kind);
+    let currentFavoritePayload = JSON.stringify({ favourites: favourites });
+    return fetch(favorite_api, {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: currentFavoritePayload
+    }).then(res => res.json())
+        .then(response => {
+            return {
+                favorites: response.favourites
+            };
+        }).catch((err) => {
+            return {
+                errorText: err
+            };
+        });
+}
 
 /**
  * RETURN - null if the specified kind parameter is not supported;
