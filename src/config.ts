@@ -12,26 +12,30 @@ const config = SdkConfig.get();
 const loginScreen = config['loginScreen'];
 
 const authenticatedHomeScreen = config['authenticatedHomeScreen'];
-export const authenticatedHomeScreenLogoConfigHeight = authenticatedHomeScreen?.logo?.height ?? '48px';
-
-const logoConfig = config['logo'];
 
 // As the config values are booleans, we use the
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator (??)
 // to safely provide a default boolean value to optional config values that provide boolean values.
 // We also use https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining (?.) to handle if the config
 // hierarchy doesn't exist
-export const signInTextNeedsToBeReplaced = loginScreen?.changeSigninToLoginTextLabel ?? false;
+export const changeSigninToLoginTextLabel = loginScreen?.changeSigninToLoginTextLabel ?? false;
 
-// background color on login screen
-// used by app-web to load a colored background instead of lake image
-// Sign in text - change to login
-export const changeSigninWithLoginTextLabel = () => {
-    console.log('change sign in text', signInTextNeedsToBeReplaced);
-    if (signInTextNeedsToBeReplaced) {
-        document.querySelector('label').innerHTML = document.querySelector('label').innerHTML.replace(/Sign in/g, "Log in");
-        document.querySelector('input').innerHTML = document.querySelector('input').innerHTML.replace(/Sign in/g, "Log in");
-        document.querySelector('h2').innerHTML = document.querySelector('h2').innerHTML.replace(/Sign in/g, "Log in");
+export const updateDocumentForSelector = (selector) => {
+	let object = document.querySelector(selector);
+	if (object !== null) {
+		object.innerHTML = object.innerHTML.replace(/Sign in/g, "Log in");
+		if (object.value) {
+			object.value = object.value.replace(/Sign in/g, "Log in");
+		}
+	}
+}
+
+export const updateTerminologyInDocument = () => {
+    console.log('change sign in text', changeSigninToLoginTextLabel);
+    if (changeSigninToLoginTextLabel) {
+        updateDocumentForSelector('h2');
+        updateDocumentForSelector('.mx_Login_type_label');
+        updateDocumentForSelector('.mx_Login_submit');
     }
 }
 
@@ -53,13 +57,93 @@ export const showLiberateYourCommunicationText = authenticatedHomeScreen?.showLi
 //show/hide welcome to {brand} text
 export const showWelcomeToElementText = authenticatedHomeScreen?.showWelcomeToElementText ?? true;
 
-//find logo secondary
-export const logoSecondary = logoConfig?.logo_secondary ?? null;
-
-
 // tab condition
-export const tabbedView =config['tabbedView'];
-export const tabbedViewdisplaySecondaryLogo  = tabbedView?.displaySecondaryLogo ?? false;
-export const logoUrlTabbedViewFooter =  tabbedView?.secondaryLogoUrl;
-export const logoDescTabbedViewFooter =  tabbedView?.secondaryLogoAltText;
+export const tabbedView = config['tabbedView'];
+export const tabbedViewShowSecondaryLogo  = tabbedView?.showSecondaryLogo ?? false;
+export const tabbedViewSecondaryLogoUrl =  tabbedView?.secondaryLogoUrl;
+export const tabbedViewSecondaryLogoAltText =  tabbedView?.secondaryLogoAltText;
 
+/**
+ * Authenticated homepage directory ui flow
+ * 'explore public room options' can be switched off
+ * and many more tiles on homepage for users to click and
+ * navigate to.
+ */
+
+// get directory config
+export const directory = config['directory'];
+
+// turn off explore public room
+export const showExplorePublicRooms = config.roomDirectory?.showExplorePublicRooms ?? true;
+
+// matrix default server selection dropdown
+export const showPublicRoomServerSelectionDropdown = config.roomDirectory?.showExplorePublicRoomServerSelectionDropdown ?? true;
+
+// At the bottom of the left hand navigation panel, specify directory related help text (which is always shown), instead of normal 
+// conditionally shown text
+export const left_hand_nav_help_text: string = config.left_hand_nav_help_text;
+
+/***
+ *  role directory config list
+ */
+export const role_directory = directory?.role;
+
+export const showRoleDirectory = role_directory.showRoleDirectory ?? false;
+
+export const role_directory_feature_name = role_directory?.name;
+
+export const role_directory_description = role_directory?.feature_description;
+
+export const role_directory_placeholder = role_directory?.placeholder;
+
+export const showAdvancedDirectorySearchDropdown = role_directory?.showAdvancedDirectorySearchDropdown ?? false;
+
+
+/***
+ *  service directory config list
+ */
+export const numberOfRecordsToShowInSearch = directory?.numberOfRecordsToShowInSearch ?? null;
+
+// show favorite icon in directory search
+export const show_favorite_icon_in_directory_search = directory?.show_favorite_icon_in_directory_search ?? false;
+
+export const showServiceDirectory = directory?.showServiceDirectory ?? false;
+
+export const service_directory = directory?.service;
+
+export const service_directory_name = directory?.name;
+
+/**
+ * people's directory config list
+*/
+export const people_directory = directory?.people;
+
+// APIs
+
+// base api
+export const communicate_api_base_path = directory?.api.base_path;
+
+// prefix
+export const prefix = directory?.api.prefix;
+
+// search all roles
+export const search_all_roles = communicate_api_base_path + directory?.api?.search_all_roles;
+
+// search roles by a short name
+export const search_role_by_displayName = communicate_api_base_path + directory.api.search_role_by_displayName;
+
+// api to filter by favorites;
+export const search_by_favorite = directory.api.favourites;
+
+
+/**
+ * Avatar
+ */
+export const showFirstLastNameIntialsOnAvatarBackground = config.show_first_last_char_initials_on_avatar ?? false;
+
+export const avatarColors = config.avatarColors;
+
+/**
+ * Sort alphabetically (currently applied by directory feature but in future it can be applied to many other features)
+ */
+export const sortAlphabeticallyInAscendingOrder = config.sort_directory_view_alphabetically;

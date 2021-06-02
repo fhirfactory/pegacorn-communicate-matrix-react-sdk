@@ -51,6 +51,7 @@ import { objectExcluding, objectHasDiff } from "../../../utils/objects";
 import ExtraTile from "./ExtraTile";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 import IconizedContextMenu from "../context_menus/IconizedContextMenu";
+import * as config from "../../../config";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
@@ -302,6 +303,16 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         if (this.props.onAddRoom) this.props.onAddRoom();
     };
 
+    private onSearchDirectory = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        const currentNodeAriaLabel = e.currentTarget.getAttribute('aria-label');
+        if (currentNodeAriaLabel.includes('Role')) {
+            dis.dispatch({ action: 'search_role_directory' });
+        } else {
+            return;
+        }
+    }
+
     private applyHeightChange(newHeight: number) {
         const heightInTiles = Math.ceil(this.layout.pixelsToTiles(newHeight - this.padding));
         this.layout.visibleTiles = Math.min(this.numTiles, heightInTiles);
@@ -546,8 +557,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     private renderMenu(): React.ReactElement {
         let contextMenu = null;
         if (this.state.contextMenuPosition) {
-            //todo:sam need to fix this logic based on requirements.
-            const isAlphabetical = false;// RoomListStore.instance.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
+            const isAlphabetical = RoomListStore.instance.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
             const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
 
             // Invites don't get some nonsense options, so only add them if we have to.
@@ -680,6 +690,18 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                                 isExpanded={!!this.state.addRoomContextMenuPosition}
                             />
                         );
+                    } else if (config.showRoleDirectory) {
+                        addRoomButton = (
+                            <ContextMenuTooltipButton
+                                tabIndex={tabIndex}
+                                onClick={this.onSearchDirectory}
+                                className="mx_RoomSublist_auxButton"
+                                tooltipClassName="mx_RoomSublist_addRoomTooltip"
+                                aria-label={this.props.addRoomLabel || _t("Add room")}
+                                title={this.props.addRoomLabel}
+                                isExpanded={!!this.state.addRoomContextMenuPosition}
+                            />
+                        );
                     }
 
                     const collapseClasses = classNames({
@@ -708,12 +730,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                     // If we're minimized, we want it below the header so it
                     // doesn't become sticky.
                     // The same applies to the notification badge.
-                    
-                    //let visibleRooms = 0;
-                    //if (this.state.rooms) {
-                    //todo:sam display count of chats in the bracket
-                    let  visibleRooms = this.state.rooms?.slice(0, this.numVisibleTiles);
-                    //}
+                    let visibleRooms = this.state.rooms?.slice(0,this.numVisibleTiles);
                     return (
                         <div
                             className={classes}

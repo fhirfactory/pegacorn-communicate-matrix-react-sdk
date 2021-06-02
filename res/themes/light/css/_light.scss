@@ -14,7 +14,7 @@ $monospace-font-family: Inconsolata, Twemoji, 'Apple Color Emoji', 'Segoe UI Emo
 
 // unified palette
 // try to use these colors when possible
-$accent-color:  #0DBD8B;
+$accent-color: #0DBD8B;
 $accent-bg-color: rgba(3, 179, 129, 0.16);
 $notice-primary-color: #ff4b55;
 $notice-primary-bg-color: rgba(255, 75, 85, 0.16);
@@ -293,8 +293,6 @@ $authpage-lang-color: #4e5054;
 $authpage-primary-color: #232f32;
 $authpage-secondary-color: #61708b;
 
-$authfooter-text-align:center;
-
 $dark-panel-bg-color: $secondary-accent-color;
 $panel-gradient: rgba(242, 245, 248, 0), rgba(242, 245, 248, 1);
 
@@ -382,7 +380,7 @@ $composer-shadow-color: rgba(0, 0, 0, 0.04);
 }
 
 .mx_TopBanner {
-    background: linear-gradient(90deg, $accent-color, #253686);
+    background-color: $accent-color;
     min-height: 2em;
     box-shadow: 0 .25rem .5rem rgba(0, 0, 0, .15)!important;
     transition: 0.4s;

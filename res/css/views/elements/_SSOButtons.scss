@@ -55,7 +55,7 @@ limitations under the License.
         background-color: $button-primary-bg-color;
     }
 
-    .mx_SSOButton_default_inverse{
+    .mx_SSOButton_default_inverse {
         color: $button-secondary-bg-color;
         background-color: $button-primary-bg-color;
         border-color: $button-secondary-bg-color;
@@ -64,6 +64,10 @@ limitations under the License.
         color: $button-primary-bg-color;
         background-color: $button-primary-fg-color;
     }
+
+    .mx_SSOButton_onlyButton {
+        margin-top: 30px;
+     }
 
     .mx_SSOButton_mini {
         box-sizing: border-box;
