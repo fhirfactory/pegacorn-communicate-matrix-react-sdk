@@ -164,3 +164,9 @@ export const avatarColors = config.avatarColors;
  * Sort alphabetically (currently applied by directory feature but in future it can be applied to many other features)
  */
 export const sortAlphabeticallyInAscendingOrder = config.sort_directory_view_alphabetically;
+
+/**
+ * Show user presence indicators on directory (online, offline status used by people directory and filled/unfilled status used by role directory)
+ * Service directory won't use user presence indicator at the moment.
+ */
+export const showUserPresenceIndicator = directory.showUserPresenceIndicator ?? false;
