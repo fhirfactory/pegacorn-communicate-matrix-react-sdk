@@ -13,7 +13,9 @@ export enum DirectoryEnum {
     landline = "Personal Phone Number",
     mobile = "Mobile Phone",
     facsimile = "Fax",
-    pager = "Pager"
+    pager = "Pager",
+    email = "Email",
+    containedOrganizations = "Member Organizations"
 }
 
 export const getTextLabelFromEnum = (value) => {
