@@ -36,6 +36,36 @@ export const searchIsOnRoleOrPeopleOrServiceDirectory = (kind) => {
         return false;
     }
 }
+/**
+ * Forms directory search api based on current context of search
+ * @param The term is search term entered in directory search
+ * @param The kind is directory search context
+*/
+export function getDirectorySearchAPIInContext(term, kind) {
+    let search_api_path;
+    console.log(`Search context is ${kind}, search kind is ${term}`)
+    if (kind === KIND_ROLE_DIRECTORY_SEARCH) {
+        if (!term) {
+            search_api_path = config.search_all_roles
+        } else {
+            search_api_path = config.search_role_by_displayName + term;
+        }
+    } else if (kind === KIND_PEOPLE_DIRECTORY_SEARCH) {
+        if (!term) {
+            search_api_path = config.api_search_people;
+        } else {
+            search_api_path = config.search_people_by_displayName + term;
+        }
+    } else if (kind === KIND_SERVICE_DIRECTORY_SEARCH) {
+        if (!term) {
+            search_api_path = config.api_search_service
+        } else {
+            search_api_path = config.search_service_by_displayName + term;
+        }
+    }
+    return search_api_path;
+}
+
 
 /**
  * This will be used by service, role and people search by switching api based on search context
@@ -52,13 +82,8 @@ export const searchIsOnRoleOrPeopleOrServiceDirectory = (kind) => {
  *        - otherwise an object with a favorites property
  */
 export const getFavoritesForCurrentUser = (kind) => {
-    // Find favorites from relevant api (roles / services)
-    // get user id
-    const user_id_encoded = encodeURI(MatrixClientPeg.get().getUserId());
-    let favorite_api = config.communicate_api_base_path + config.prefix + user_id_encoded;
-    if (kind === KIND_ROLE_DIRECTORY_SEARCH) {
-        favorite_api += config.search_by_favorite.role_suffix;
-    }
+
+    let favorite_api = getFavoriteApiFromContext(kind);
     return fetch(favorite_api, {
         method: "GET",
         headers: {
@@ -76,6 +101,7 @@ export const getFavoritesForCurrentUser = (kind) => {
         });
 }
 
+
 /**
  * RETURN - null if the specified kind parameter is not supported;
  *        - otherwise a fetch Promise, so calling code can either
@@ -90,22 +116,23 @@ export const getFavoritesForCurrentUser = (kind) => {
  *          - an object with an errorText property if an error occurs
  *          - otherwise an object with an numOfRecordsFromSearchAPI and results (an array
  *            of objects with display_name, user_id, role_category and roleIsActive properties)
+ * @param term The term that is used when search is displayed by directory
+ * @param kind The kind of search in directory context such as role, people, service
  */
 export const getMatchingRecords = (term: string, kind) => {
     if (!searchIsOnRoleOrPeopleOrServiceDirectory(kind)) {
         return null;
     }
-
-    let search_api_path;
+    let search_api_path = getDirectorySearchAPIInContext(term, kind);
     // form an api path based on context
 
-    if (kind === KIND_ROLE_DIRECTORY_SEARCH) {
-        if (!term) {
-            search_api_path = config.search_all_roles
-        } else {
-            search_api_path = config.search_role_by_displayName + term;
-        }
-    }
+    // if (kind === KIND_ROLE_DIRECTORY_SEARCH) {
+    //     if (!term) {
+    //         search_api_path = config.search_all_roles
+    //     } else {
+    //         search_api_path = config.search_role_by_displayName + term;
+    //     }
+    // }
 
     // Find roles, services, and people
     return fetch(search_api_path, {
@@ -122,17 +149,34 @@ export const getMatchingRecords = (term: string, kind) => {
         } else {
             totalRecords = Number(res.headers.get('X-Total-Count'));
         }
-
         console.log("totalRecords=" + totalRecords);
+
+        let identifiers;
+        let short_name;
+        let long_name;
+        results.map(val =>  identifiers = val.identifiers);
+        identifiers.map(val => {
+            if (val.type == "ShortName") {
+                short_name = val.leafValue;
+            }
+            if (val.type == "LongName") {
+                long_name = val.leafValue;
+            }
+        });
+
         let mappedResults = results.map(value => ({
-            display_name: value["description"],
+            display_name: value["displayName"],
             user_id: value["simplifiedID"],
             role_category: value["primaryRoleCategoryID"],
+            long_name: long_name,
+            short_name: short_name,
             // filled or not filled status
             // if activePractitionerSet array is non-empty someone is fulfilling that role
             roleIsActive: (value.activePractitionerSet?.length >= 1) ?? false
+
         }));
         console.log("mappedResults.length=" + mappedResults.length + ", mappedResults=" + JSON.stringify(mappedResults));
+        console.log("Mapped identifier results are", JSON.stringify(mappedResults.identifiers));
 
         return {
             numOfRecordsFromSearchAPI: totalRecords,
@@ -158,25 +202,31 @@ export const getMatchingRecords = (term: string, kind) => {
  *        The response will be
  *        - an object with an errorText property if an error occurs
  *        - otherwise an object with roles and activeRoleEmails properties
+ * @param searchIdInContext The id of service, people or role @type string,
+ * @param searchContext The search in context
+ *
  */
-export const getRoleDetail = (roleId: string) => {
-    const queryId = encodeURIComponent(roleId);
-    const view_role_detail = config.search_all_roles + queryId;
+export const getRolePersonServiceDetail = (searchContext: string, searchIdInContext: string) => {
+    const queryId = encodeURIComponent(searchIdInContext);
+    const view_detail_api = getDirectorySearchAPIInContext(null, searchContext) + queryId;
     // api data
-    return fetch(view_role_detail, {
+    return fetch(view_detail_api, {
         method: "GET"
     }).then(res => res.json())
         .then(response => {
             let emails = [];
             let roleArrayResponse = [];
+            let currentUserActiveRoles = [];
             let entries = response.entry;
             if (entries) {
                 roleArrayResponse.push(entries);
-                roleArrayResponse.map(val => emails = val.activePractitionerSet);
+                roleArrayResponse.map(val => emails = val.activePractitionerSet);  // used to find active practitioner by role directory
+                roleArrayResponse.map(val => currentUserActiveRoles = val.currentPractitionerRoles)  // used to find active roles for particular practitioner at given time ()
             }
             return {
                 roles: roleArrayResponse,
-                activeRoleEmails: emails
+                activeRoleEmails: emails,
+                activeUserActiveRoles: currentUserActiveRoles
             };
         }).catch(err => {
             return {
@@ -198,13 +248,15 @@ export const getRoleDetail = (roleId: string) => {
  *          The response will be
  *          - an object with an errorText property if an error occurs
  *          - otherwise an object with a displayName property
+ * @param id The id for current practitioner which must be a string and
+ * @type id Must be a string
  */
 export const getPractionerDisplayName = (id: string) => {
     if (id.indexOf("@") === -1) return null;
-    const queryId = encodeURIComponent(roleId);
+    const queryId = encodeURIComponent(id);
     const view_role_detail = config.communicate_api_base_path + config.prefix + queryId;
     // api data
-    return fetch(api, {
+    return fetch(view_role_detail, {
         method: "GET"
     }).then(res => res.json())
         .then(response => {
@@ -217,3 +269,18 @@ export const getPractionerDisplayName = (id: string) => {
             };
         });
 }
+
+export const getRoleCategoryName = (roleName: string) => {
+    const api = config.search_all_roles + encodeURIComponent(roleName);
+    let roleCategory;
+    fetch(api, { method: "GET" })
+        .then(res => res.json())
+        .then((response) => {
+            return {
+                roleCategory: response.entry.primaryRoleCategoryID
+            }
+        })
+    return roleCategory;
+}
+
+
