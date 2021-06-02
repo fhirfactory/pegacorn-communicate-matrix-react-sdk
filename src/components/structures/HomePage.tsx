@@ -58,6 +58,19 @@ const onClickRoleDirectory = () => {
     CountlyAnalytics.instance.track("home_page_button", { button: "search_role_directory" });
     dis.dispatch({action: 'search_role_directory'});
 }
+
+const onClickPeopleDirectory = () => {
+    Analytics.trackEvent('home_page', 'button', 'search_people_directory');
+    CountlyAnalytics.instance.track("home_page_button", { button: "search_role_directory" });
+    dis.dispatch({action: 'search_people_directory'});
+}
+
+const onClickServiceDirectory = () => {
+    Analytics.trackEvent('home_page', 'button', 'search_service_directory');
+    CountlyAnalytics.instance.track("home_page_button", { button: "search_role_directory" });
+    dis.dispatch({action: 'search_service_directory'});
+}
+
 interface IProps {
     justRegistered?: boolean;
 }
@@ -138,6 +151,16 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
                 {customConfig.showRoleDirectory &&
                     <AccessibleButton onClick={onClickRoleDirectory} className="mx_HomePage_button_role">
                         {customConfig.role_directory_feature_name}
+                    </AccessibleButton>
+                }
+                {customConfig.showPeopleDirectory &&
+                    <AccessibleButton onClick={onClickPeopleDirectory} className="mx_HomePage_button_people">
+                        Search People
+                    </AccessibleButton>
+                }
+                {customConfig.showServiceDirectory &&
+                    <AccessibleButton onClick={onClickServiceDirectory} className="mx_HomePage_button_service">
+                        Search Services
                     </AccessibleButton>
                 }
             </div>
