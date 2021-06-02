@@ -2888,6 +2888,8 @@
     "Enter": "Enter",
     "Space": "Space",
     "End": "End",
+    "Services": "Services",
     "Roles": "Roles",
-    "Search Roles and Start Discussion": "Search Roles and Start Discussion"
+    "Search Roles and Start Discussion": "Search Roles and Start Discussion",
+    "Search Services and Start Discussion": "Search Services and Start Discussion"
 }
