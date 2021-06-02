@@ -86,14 +86,16 @@ const TAG_ORDER: TagID[] = [
 
     // -- Custom Tags Directory --
 
-    DefaultTagID.RoleDirectory
+    DefaultTagID.RoleDirectory,
+    DefaultTagID.ServiceDirectory
 ];
 const CUSTOM_TAGS_BEFORE_TAG = DefaultTagID.LowPriority;
 const ALWAYS_VISIBLE_TAGS: TagID[] = [
     DefaultTagID.DM,
     DefaultTagID.Untagged,
     // -- Custom Directory Tags --
-    (config.showRoleDirectory ? DefaultTagID.RoleDirectory : '')
+    (config.showRoleDirectory ? DefaultTagID.RoleDirectory : ''),
+    (config.showServiceDirectory ?  DefaultTagID.ServiceDirectory: '')
 ];
 
 interface ITagAesthetics {
@@ -167,6 +169,12 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
         isInvite: false,
         defaultHidden: !config.showRoleDirectory,
         addRoomLabel: _td("Search Roles and Start Discussion"),
+    },
+    [DefaultTagID.ServiceDirectory]: {
+        sectionLabel: _td("Services"),
+        isInvite: false,
+        defaultHidden: false,
+        addRoomLabel: _td("Search Services and Start Discussion"),
     },
     [DefaultTagID.Untagged]: {
         sectionLabel: _td("Rooms"),
