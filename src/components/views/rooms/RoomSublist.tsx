@@ -308,6 +308,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         const currentNodeAriaLabel = e.currentTarget.getAttribute('aria-label');
         if (currentNodeAriaLabel.includes('Role')) {
             dis.dispatch({ action: 'search_role_directory' });
+        } else if (currentNodeAriaLabel.includes('Service')) {
+            dis.dispatch({ action: 'search_service_directory' });
         } else {
             return;
         }
