@@ -40,7 +40,9 @@ import Notifier from '../../Notifier';
 import Modal from "../../Modal";
 import Tinter from "../../Tinter";
 import * as sdk from '../../index';
-import { showRoomInviteDialog, showStartChatInviteDialog, showRoleDirectorySearchDialog  } from '../../RoomInvite';
+import { showRoomInviteDialog, showStartChatInviteDialog,
+        showRoleDirectorySearchDialog, showPeopleDirectorySearchDialog,
+        showServiceDirectorySearchDialog  } from '../../RoomInvite';
 import * as Rooms from '../../Rooms';
 import linkifyMatrix from "../../linkify-matrix";
 import * as Lifecycle from '../../Lifecycle';
@@ -741,6 +743,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case 'search_role_directory':
                showRoleDirectorySearchDialog(payload.initialText || "");
                 break;
+             // Directory search (people)
+             case 'search_people_directory':
+                showPeopleDirectorySearchDialog(payload.initialText || "");
+                 break;
+            // Directory search (service)
+            case 'search_service_directory':
+                showServiceDirectorySearchDialog(payload.initialText || "");
+                 break;
             case 'view_last_screen':
                 // This function does what we want, despite the name. The idea is that it shows
                 // the last room we were looking at or some reasonable default/guess. We don't
