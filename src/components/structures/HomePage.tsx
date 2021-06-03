@@ -53,6 +53,11 @@ const onClickNewRoom = () => {
     dis.dispatch({action: 'view_create_room'});
 };
 
+const onClickRoleDirectory = () => {
+    Analytics.trackEvent('home_page', 'button', 'search_role_directory');
+    CountlyAnalytics.instance.track("home_page_button", { button: "search_role_directory" });
+    dis.dispatch({action: 'search_role_directory'});
+}
 interface IProps {
     justRegistered?: boolean;
 }
@@ -95,7 +100,7 @@ const UserWelcomeTop = () => {
 const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
     const config = SdkConfig.get();
     const pageUrl = getHomePageUrl(config);
-    const showWelcomeToElementText = customConfig.showWelcomeToElementText;    
+    const showWelcomeToElementText = customConfig.showWelcomeToElementText;
     const showLiberateYourCommunicationText = customConfig.showLiberateYourCommunicationText;
     if (pageUrl) {
         const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
@@ -108,33 +113,20 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
     } else {
         const brandingConfig = config.branding;
         let logoUrl = "themes/element/img/logos/element-logo.svg";
-        const logoSecondaryDescription = customConfig?.logoSecondary?.description || config.brand;
-        const logoHeight  = customConfig?.authenticatedHomeScreenLogoConfigHeight;
-        const logoUrlSecondary = config.logo?.logo_secondary?.imgUrl;
         if (brandingConfig && brandingConfig.authHeaderLogoUrl) {
             logoUrl = brandingConfig.authHeaderLogoUrl;
         }
 
-        const logoStyle = {
-            height: logoHeight || '48px'
-        }
-
-        const logoSecondaryStyle = {
-           margin: customConfig?.logoSecondary?.margin || '0 10px',
-           height: customConfig?.logoSecondary?.height || '55px'
-        }
-
         introSection = <React.Fragment>
-            {logoUrlSecondary && <img src={logoUrlSecondary} style={logoSecondaryStyle} alt={logoSecondaryDescription} />}
-            <img src={logoUrl} alt={config.brand} style={logoStyle}/>  
-            
-            {showWelcomeToElementText &&  
+            <img src={logoUrl} alt={config.brand} />
+
+            {showWelcomeToElementText &&
             <h1>{ _t("Welcome to %(appName)s", { appName: config.brand }) }</h1>
             }
-            
+
             {showLiberateYourCommunicationText &&
-            <h4>{ _t("Liberate your communication") }</h4>   
-            }    
+            <h4>{ _t("Liberate your communication") }</h4>
+            }
         </React.Fragment>;
     }
 
@@ -143,12 +135,21 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
         <div className="mx_HomePage_default_wrapper">
             { introSection }
             <div className="mx_HomePage_default_buttons">
+                {customConfig.showRoleDirectory &&
+                    <AccessibleButton onClick={onClickRoleDirectory} className="mx_HomePage_button_role">
+                        {customConfig.role_directory_feature_name}
+                    </AccessibleButton>
+                }
+            </div>
+            <div className="mx_HomePage_default_buttons">
                 <AccessibleButton onClick={onClickSendDm} className="mx_HomePage_button_sendDm">
                     { _t("Send a Direct Message") }
                 </AccessibleButton>
+                {customConfig.showExplorePublicRooms &&
                 <AccessibleButton onClick={onClickExplore} className="mx_HomePage_button_explore">
                     { _t("Explore Public Rooms") }
                 </AccessibleButton>
+                }
                 <AccessibleButton onClick={onClickNewRoom} className="mx_HomePage_button_createGroup">
                     { _t("Create a Group Chat") }
                 </AccessibleButton>

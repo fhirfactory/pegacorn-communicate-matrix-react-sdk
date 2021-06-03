@@ -29,20 +29,3 @@ limitations under the License.
         display: none;
     }
 }
-
-.mx_AuthHeaderSecondaryLogo{
-    margin-top: 15px;
-    flex: 1;
-    padding: 0 25px;
-    height:100px;
-    width: 100px;
-}
-.mx_AuthHeaderSecondaryLogo img {
-    height:100px;
-    width: 100px;
-}
-@media only screen and (max-width: 480px) {
-    .mx_AuthHeaderSecondaryLogo {
-        display: none;
-    }
-}

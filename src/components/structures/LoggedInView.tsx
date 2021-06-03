@@ -674,7 +674,9 @@ class LoggedInView extends React.Component<IProps, IState> {
                 resizeNotifier={this.props.resizeNotifier}
             />
         );
-        const displayTopBanner = SdkConfig.get().displayTopBanner??false;
+
+        const showTopBanner = SdkConfig.get().showTopBanner ?? false;
+
         return (
             <MatrixClientContext.Provider value={this._matrixClient}>
                 <div
@@ -684,8 +686,8 @@ class LoggedInView extends React.Component<IProps, IState> {
                     aria-hidden={this.props.hideToSRUsers}
                 >
                     <ToastContainer />
-                    {displayTopBanner && <div  className='mx_TopBanner'>
-                        <h1></h1>                       
+                    {showTopBanner && <div className='mx_TopBanner'>
+                        <h1></h1>
                     </div>}
                     <DragDropContext onDragEnd={this._onDragEnd}>
                         <div ref={this._resizeContainer} className={bodyClasses}>

@@ -24,6 +24,7 @@ import AccessibleButton from "./AccessibleButton";
 import {_t} from "../../../languageHandler";
 import {IdentityProviderBrand, IIdentityProvider, ISSOFlow} from "../../../Login";
 import AccessibleTooltipButton from "./AccessibleTooltipButton";
+import * as config from '../../../config';
 
 interface ISSOButtonProps extends Omit<IProps, "flow"> {
     idp: IIdentityProvider;
@@ -56,6 +57,7 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     idp,
     primary,
     mini,
+	ssoFlowOnly,
     ...props
 }) => {
     const label = idp ? _t("Continue with %(provider)s", { provider: idp.name }) : _t("Sign in with single sign-on");
@@ -76,17 +78,25 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
         icon = <img src={src} height="24" width="24" alt={idp.name} />;
     }
 
+    const SSOButtonDefaultClass = 'mx_SSOButton_default' + (ssoFlowOnly ? '' : '_inverse');
+
     const classes = classNames("mx_SSOButton", {
         [brandClass]: brandClass,
         mx_SSOButton_mini: mini,
-        mx_SSOButton_default_inverse: !idp,
+        [SSOButtonDefaultClass]: !idp,
         mx_SSOButton_primary: primary,
+		mx_SSOButton_onlyButton: ssoFlowOnly,
     });
+
+	let updatedLabel = label;
+	if (config.changeSigninToLoginTextLabel) {
+		updatedLabel = updatedLabel.replace(/Sign in/g, "Log in");
+	}
 
     if (mini) {
         // TODO fallback icon
         return (
-            <AccessibleTooltipButton {...props} title={label} className={classes} onClick={onClick}>
+            <AccessibleTooltipButton {...props} title={updatedLabel} className={classes} onClick={onClick}>
                 { icon }
             </AccessibleTooltipButton>
         );
@@ -95,7 +105,7 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     return (
         <AccessibleButton {...props} className={classes} onClick={onClick}>
             { icon }
-            { label }
+            { updatedLabel }
         </AccessibleButton>
     );
 };
@@ -110,7 +120,7 @@ interface IProps {
 
 const MAX_PER_ROW = 6;
 
-const SSOButtons: React.FC<IProps> = ({matrixClient, flow, loginType, fragmentAfterLogin, primary}) => {
+const SSOButtons: React.FC<IProps> = ({matrixClient, flow, loginType, fragmentAfterLogin, primary, ssoFlowOnly}) => {
     const providers = flow["org.matrix.msc2858.identity_providers"] || [];
     if (providers.length < 2) {
         return <div className="mx_SSOButtons">
@@ -120,6 +130,7 @@ const SSOButtons: React.FC<IProps> = ({matrixClient, flow, loginType, fragmentAf
                 fragmentAfterLogin={fragmentAfterLogin}
                 idp={providers[0]}
                 primary={primary}
+				ssoFlowOnly={ssoFlowOnly}
             />
         </div>;
     }
@@ -139,6 +150,7 @@ const SSOButtons: React.FC<IProps> = ({matrixClient, flow, loginType, fragmentAf
                         idp={idp}
                         mini={true}
                         primary={primary}
+						ssoFlowOnly={ssoFlowOnly}
                     />
                 )) }
             </div>

@@ -21,6 +21,7 @@ import {Room} from "matrix-js-sdk/src/models/room";
 
 import {MatrixClientPeg} from './MatrixClientPeg';
 import DMRoomMap from './utils/DMRoomMap';
+import * as config from './config';
 
 export type ResizeMethod = "crop" | "scale";
 
@@ -97,7 +98,8 @@ export function defaultAvatarUrlForString(s: string): string {
     // overwritten color value in custom themes
     const cssVariable = `--avatar-background-colors_${colorIndex}`;
     const cssValue = document.body.style.getPropertyValue(cssVariable);
-    const color = cssValue || defaultColors[colorIndex];
+    const color = ((config.avatarColors) ? getSpecificColorFromConfig(s) : undefined) ||
+                  cssValue || defaultColors[colorIndex];
     let dataUrl = colorToDataURLCache.get(color);
     if (!dataUrl) {
         // validate color as this can come from account_data
@@ -110,6 +112,45 @@ export function defaultAvatarUrlForString(s: string): string {
         }
     }
     return dataUrl;
+}
+
+/**
+ * If client is particular about role colors  user role/user directory category then
+ * approach below would be sufficient to replace colors configured in custom config as well as color
+ * You can configure your own color in 'avatarColors' keypair in config file by type of role category
+ * Not having this config or not having color in config parameter would default
+ * avatar colors back to matrix color
+ * configAvatarColors needs to be passed from config and read via config.json + config.ts files
+ * configAvatarColors needs to be obj{key:value} pair type in config
+ * @param {string} s
+*/
+function getSpecificColorFromConfig(s: string): string {
+    let configuredAvatarColorsKeyPair = config.avatarColors;
+    let selectedAvatarColor = '';
+    /**
+     * Key (s) needs to find a match in config keypair value stored in "avatarColors"
+     * If matching value is found then just use that value otherwise go to next step where
+     * condition will apply for non matching role category
+     */
+    let selectedAvatarColorFromConfig = configuredAvatarColorsKeyPair[s];
+    if (selectedAvatarColorFromConfig) {
+        selectedAvatarColor = selectedAvatarColorFromConfig;
+    }
+    /**
+     * If no color key matches form given 's' to keypair in config.json
+     * then make color stable for avatar by calculating index based on
+     * content of 's' string passed in.
+     */
+    else {
+        let numOfColors = Object.keys(configuredAvatarColorsKeyPair).length;
+        let total = 0;
+        for (let i = 0; i < s.length; ++i) {
+            total += s.charCodeAt(i);
+        }
+        const colorIndex = total % numOfColors;
+        selectedAvatarColor = String(Object.values(configuredAvatarColorsKeyPair)[colorIndex]);
+    }
+    return selectedAvatarColor;
 }
 
 /**
@@ -187,4 +228,41 @@ export function avatarUrlForRoom(room: Room, width: number, height: number, resi
         );
     }
     return null;
+}
+
+export function getFirstAndLastNameInitialLetters(name: string): string {
+
+    if (!name) {
+        return undefined;
+    }
+
+    try {
+        // if the name is a matrix id, remove the matrix domain
+        const nameWithoutMatrixDomain = name.split(':')[0];
+
+        /**
+          * Split first and last-names based on regular expression. It checks following usernames patterns
+          * "firstname.lastname", "firstname-lastname", "firstname lastname, "lastname, firstname"
+          * Based on https://stackoverflow.com/questions/10346722/how-can-i-split-a-javascript-string-by-white-space-or-comma
+          */
+        const fullName = nameWithoutMatrixDomain.split(/[ .,-]+/);
+        let firstName = fullName[0];
+        let lastName = '';
+        if (fullName.length > 1) {
+            lastName = fullName[1];
+            if (nameWithoutMatrixDomain.includes(',')) {
+                firstName = fullName[1];
+                lastName = fullName[0];
+            }
+        }
+        const firstAndLastInitials = getInitialLetter(firstName) + (getInitialLetter(lastName) || '');
+//		console.log("In Avatar name=" + name + ", firstAndLastInitials=" + firstAndLastInitials);
+        return firstAndLastInitials;
+    } catch (e) {
+		console.log("Error in Avatar", e);
+        /**
+         * If there is a problem translating then just grab first name initials as matrix default
+         */
+        return getInitialLetter(name);
+    }
 }

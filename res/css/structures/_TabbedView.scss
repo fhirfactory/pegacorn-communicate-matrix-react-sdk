@@ -27,9 +27,17 @@ limitations under the License.
     right: 0;
     margin-top: 8px;
 }
-.mx_AuthFooter_Image_Tabbed{
-    height: 120px;
+
+.mx_TabbedViewFooter {
+    position: absolute;
+    bottom: 0;
 }
+
+.mx_TabbedViewFooter_Image {
+    height: 60px;
+	margin-bottom: 10px;
+}
+
 .mx_TabbedView_tabLabels {
     width: 170px;
     max-width: 170px;
