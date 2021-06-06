@@ -170,3 +170,9 @@ export const sortAlphabeticallyInAscendingOrder = config.sort_directory_view_alp
  * Service directory won't use user presence indicator at the moment.
  */
 export const showUserPresenceIndicator = directory.showUserPresenceIndicator ?? false;
+
+/**
+ * Call button for service directory UI
+ */
+ export const showDirectoryContactViewOnDirectorySearch = directory.showDirectoryContactViewOnDirectorySearch ?? false;
+

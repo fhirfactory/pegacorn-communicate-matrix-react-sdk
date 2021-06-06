@@ -402,7 +402,7 @@ Web: As an Authenticated Practitioner, I should be able to Search the Person Dir
 =============================================================================================================================================
 - All the APIs are externalized into config.json file and mapped through config.ts file as variables which are consumed. For more notes on this please read role directory user story (194064) user story.
 - Service directory can be searched through left panel as well as from home page landing page tile which would have text label 'Search People'.
-- `showUserPresenceIndicator` flag has been used to render user presence status (onlin, offline) status. `UserPresence` view renders user status on UI according to context which may switch from people to role depending upon if on client side search is on People or Role.
+- `showUserPresenceIndicator` flag has been used to render user presence status (online, offline) status. `UserPresence` view renders user status on UI according to context which may switch from people to role depending upon if on client side search is on People or Role.
 - `showPeopleDirectory` flag has been used to add tile on landing page , not setting value to true on config file for this flag would return app defaulting to matrix.
 
 
@@ -413,4 +413,5 @@ Web: Web: As an Authenticated Practitioner, I should be able to Search the Servi
 - Service directory can be searched through left panel as well as from home page landing page tile which would have text label 'Search Services'.
 - `showUserPresenceIndicator` flag is effectively applied to Person Directory and Role Directory but has no effect on Service directory as it does not need to show user presence status.
 - `showServiceDirectory` has been used to show/hide service directory search. Not having this flag would return app back to matrix default which wont display service directory tile.
+- `showDirectoryContactViewOnDirectorySearch` flag has been used to show additional functionality of allowing calls from directory search results in service directory. Not having this config will result no call icon displayed on search results UI, on modal window.
 
