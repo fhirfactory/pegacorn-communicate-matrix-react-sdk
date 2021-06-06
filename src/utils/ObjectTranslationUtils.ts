@@ -1,5 +1,6 @@
 /**
- * returns value from inner key name - obj({key1: value3}) assuming you are passing in value3 as key
+ * Returns an array of key-value pairs from outer key and inner key name
+ * - obj({key1: value3}) assuming you are passing in value3 as key
  * A utility function of object type which iterates through and gets inner value that
  * matches with inner key and makes
  * an array at the end. This is quite useful for altering keypair values in object where
@@ -19,7 +20,7 @@
             key5: value4
         }
     }
-* @param obj An object that contains nested keypair values as specified in above example object
+* @param obj An object that contains nested key-pair values as specified in above example object
 * @param queryKey The key that needs to be either of {k2,k3,k4 in param}
 *
 **/
@@ -31,6 +32,7 @@ export function getKeyPairFromComplexObject(obj: Object, queryKey) {
     let name;
     let description;
     let newObj;
+    let arrayFromNestedObject = [];
     Object.keys(obj).forEach(key => {
         if (typeof obj[key] === 'object') {
             let innerValue = obj[key];
@@ -42,6 +44,8 @@ export function getKeyPairFromComplexObject(obj: Object, queryKey) {
             'name': name,
             'description': description
         });
+
+        arrayFromNestedObject.push(newObj);
     })
-    return newObj;
+    return arrayFromNestedObject;
 }
