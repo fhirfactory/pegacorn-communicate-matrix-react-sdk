@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as directoryService from '../../../DirectoryService';
 interface IProps {
-    searchContext?: string;
+    directorySearchContext?: string;
     available?: boolean;
     online?: boolean;
     active?: boolean;
@@ -11,60 +11,62 @@ interface IProps {
 }
 const UserPresence = (props: IProps) => {
     const {
-        searchContext,
+        directorySearchContext,
         available, // used by role directory
         online, // used by person directory
-        active, // used by person directory (waiting for backend to be ready to synchronize information to see if user is on call)
-        onCall
+        active, // used by person directory (TODO: waiting for decision as opposed to user story requires active/inactive status displayed)
+        onCall  // To Do: waiting for backend
     } = props;
 
     const roleDirectoryPresenceIndicator = () => {
-        if (searchContext === directoryService.KIND_ROLE_DIRECTORY_SEARCH) {
+        if (directorySearchContext === directoryService.KIND_ROLE_DIRECTORY_SEARCH) {
             return available ? (<span className="mx_InviteDialog_roomTile_userPresence" style={{ color: 'green' }}>
                 Filled
-            </span>) : <span className="mx_InviteDialog_roomTile_userPresence" style={{ color: 'red' }}>Unfilled</span>
+            </span>) :
+                <span className="mx_InviteDialog_roomTile_userPresence" style={{ color: 'red' }}>Unfilled</span>
         } else {
             return null;
         }
     }
 
     const peopleDirectoryPresenceIndicators = () => {
-        console.log("Person is online/offline", online);
-        console.log("Role is filled/unfilled", available);
-        console.log("Person is active", active);
-        console.log("Search context is", searchContext);
-        if (searchContext === directoryService.KIND_PEOPLE_DIRECTORY_SEARCH) {
+        if (directorySearchContext === directoryService.KIND_PEOPLE_DIRECTORY_SEARCH) {
             let peopleDirectoryAvailabilityStatus;
-            peopleDirectoryAvailabilityStatus = (
-                active ? <span className="mx_InviteDialog_roomTile_userPresence" style={{ color: 'green' }}>
+            peopleDirectoryAvailabilityStatus = <div>
+                {/* {(online && active) ? <span className="mx_InviteDialog_roomTile_userPresence" style={{ color: 'green' }}>
                     Available
-                    </span> : <span className="mx_InviteDialog_roomTile_userPresence" style={{ color: 'red' }}>
+                    </span> : null} */}
+                {(online && !active) ? <span className="mx_InviteDialog_roomTile_userPresence" style={{ color: 'grey' }}>
                     Unavailable
-                        </span>
-            )
+                        </span> : null}
+            </div>
             let peopleDirectoryOnlineStatus = (
-                online ?
+                (online && active) ?
                     <span className="mx_InviteDialog_roomTile_userPresence" style={{ color: 'green' }}>
                         Online
             </span> : <span className="mx_InviteDialog_roomTile_userPresence" style={{ color: 'red' }}>Offline</span>
             )
+            let personDirectoryOnBusyStatus = (
+                (onCall) ? <span className="mx_InviteDialog_roomTile_userPresence" style={{ color: 'red' }}>OnCall</span> : null
+            );
             return <>
-                {peopleDirectoryAvailabilityStatus}
-                {peopleDirectoryOnlineStatus}
+                <span>{peopleDirectoryOnlineStatus}</span>
+                <span>{peopleDirectoryAvailabilityStatus}</span>
+                <span>{personDirectoryOnBusyStatus}</span>
             </>
         }
     }
 
-    return <div>
+    return <>
         {roleDirectoryPresenceIndicator()}
         {peopleDirectoryPresenceIndicators()}
-    </div>
+    </>
 }
 
 UserPresence.prototype = {
     isAvailable: PropTypes.bool,
     isActive: PropTypes.bool,
     isOnline: PropTypes.bool,
-    searchContext: PropTypes.bool
+    directorySearchContext: PropTypes.bool
 }
 export default UserPresence;
