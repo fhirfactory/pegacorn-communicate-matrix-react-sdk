@@ -218,12 +218,25 @@ export const getMatchingRecords = (term: string, kind) => {
             }
         });
 
+
+        // maps person's loggedin status, and active/inactive status
+        let practitionerStatus;
+        results.map(val => {
+            if (!val.practitionerStatus) {
+                return;
+            }
+            practitionerStatus = val.practitionerStatus;
+        });
+        let loggedIn = (practitionerStatus !== undefined) ? practitionerStatus['loggedIn'] : false; // on service and role directory this wont apply so just return false and skip
+        let active =  (practitionerStatus !== undefined) ? practitionerStatus['active'] : false; // on service and role directory this wont apply so just return false and skip
         let mappedResults = results.map(value => ({
             display_name: value["displayName"],
             user_id: value["simplifiedID"],
             role_category: value["primaryRoleCategoryID"],
             long_name: long_name,
             short_name: short_name,
+            loggedIn: practitionerStatus ? loggedIn: false,
+            active: practitionerStatus ? active: false,
             // filled or not filled status
             // if activePractitionerSet array is non-empty someone is fulfilling that role
             roleIsActive: (value.activePractitionerSet?.length >= 1) ?? false
@@ -231,6 +244,7 @@ export const getMatchingRecords = (term: string, kind) => {
         }));
         console.log("mappedResults.length=" + mappedResults.length + ", mappedResults=" + JSON.stringify(mappedResults));
         console.log("Mapped identifier results are", JSON.stringify(mappedResults.identifiers));
+        console.log(`Mapped practitioner active/loggedIn status are, ${(practitionerStatus !==undefined) ? practitionerStatus['loggedIn'] : false}`);
 
         return {
             numOfRecordsFromSearchAPI: totalRecords,
@@ -278,9 +292,9 @@ export const getRolePersonServiceDetail = (searchContext: string, searchIdInCont
                 roleArrayResponse.map(val => currentUserActiveRoles = val.currentPractitionerRoles)  // used to find active roles for particular practitioner at given time ()
             }
             return {
-                roles: roleArrayResponse,
+                entries: roleArrayResponse,
                 activeRoleEmails: emails,
-                activeUserActiveRoles: currentUserActiveRoles
+                currentPractitionerRoles: currentUserActiveRoles
             };
         }).catch(err => {
             return {
