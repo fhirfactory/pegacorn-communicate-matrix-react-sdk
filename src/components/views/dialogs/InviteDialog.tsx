@@ -1638,13 +1638,14 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         if(!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) return null;
         return <div className="mx_InvitedDialog_filterOptions">
             <p>Filter By:</p>
+            {config.filter_by_displayName_in_directory &&
             <StyledMenuItemCheckbox
                 onClose={null}
                 onChange={this.onChangeFilter.bind(this)}
                 checked={null}
                 className="filter-search-by-name">
                 Name
-           </StyledMenuItemCheckbox>
+           </StyledMenuItemCheckbox>}
            <StyledMenuItemCheckbox
                 onClose={null}
                 onChange={this.onChangeFilter.bind(this)}

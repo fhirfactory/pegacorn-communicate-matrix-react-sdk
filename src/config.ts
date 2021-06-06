@@ -176,3 +176,8 @@ export const showUserPresenceIndicator = directory.showUserPresenceIndicator ?? 
  */
  export const showDirectoryContactViewOnDirectorySearch = directory.showDirectoryContactViewOnDirectorySearch ?? false;
 
+ /**
+ * Filter directory results by display name keyword entered
+ */
+export const filter_by_displayName_in_directory = directory.filter_by_displayName_in_directory ?? false;
+
