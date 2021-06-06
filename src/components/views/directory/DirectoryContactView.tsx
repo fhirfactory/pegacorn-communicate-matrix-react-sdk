@@ -66,7 +66,7 @@ class DirectoryContactView extends React.Component<IDirectoryButtonProps, IState
 
     onChatOptionSelected() {
         this.setState({
-            error: _t("Feature is not supported at the moment.")
+            error: _t("This feature is not supported at the moment.")
         })
     }
 
