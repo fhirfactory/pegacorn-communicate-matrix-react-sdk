@@ -101,6 +101,29 @@ class Member {
         * Default will be set to null
         */
        get roleCategoryId(): string { throw new Error("Member class not implemented"); }
+
+    get longName(): string {  // used by person directory
+        throw new Error("Member class not implemented");
+    }
+
+    get shortName(): string {
+        throw new Error("Member class not implemented");
+    }
+
+    get jobTitle(): boolean {  // used by person directory
+        throw new Error("Member class not implemented");
+    }
+
+    get personIsActive(): boolean {  // used by person directory
+        throw new Error("Member class not implemented");
+    }
+
+    get personIsLoggedIn(): boolean {  // used by person directory
+        throw new Error("Member class not implemented");
+    }
+    get personIsOnCall(): boolean {  // used by person directory
+        throw new Error("Member class not implemented");
+    }
 }
 
 class DirectoryMember extends Member {
@@ -110,16 +133,31 @@ class DirectoryMember extends Member {
     _isFavorite: boolean;
     _isAvailable: boolean;
     _roleCategoryId: string;
+    _longName: string;
+    _shortName: string;
+    _jobTitle: string;
+    _personIsLoggedIn: boolean;
+    _personIsBusy: boolean;
+    _personIsOnCall: boolean;
 
-    constructor(userDirResult: {user_id: string, display_name: string, avatar_url: string,
-                favorite?: false, available?: false, roleCategoryId?: string}) {
+    constructor(userDirResult: {
+        user_id: string, display_name: string, avatar_url: string,
+        favorite?: boolean, available?: false, roleCategoryId?: string,
+        longName?: string, shortName?: string, jobTitle?: string,
+        personIsOnCall?: boolean, personIsLoggedIn?: false, personIsActive?: boolean
+    }) {
         super();
         this._userId = userDirResult.user_id;
         this._displayName = userDirResult.display_name;
         this._avatarUrl = userDirResult.avatar_url;
+        this._roleCategoryId = userDirResult.roleCategoryId;
+        this._longName = userDirResult.longName;
+        this._shortName = userDirResult.shortName;
+        this._jobTitle = userDirResult.jobTitle;
         this._isFavorite = userDirResult.favorite;
         this._isAvailable = userDirResult.available;
-        this._roleCategoryId = userDirResult.roleCategoryId;
+        this._personIsLoggedIn = userDirResult.personIsLoggedIn;
+        this._personIsBusy = userDirResult.personIsActive;;
     }
 
     // These next class members are for the Member interface
@@ -135,16 +173,41 @@ class DirectoryMember extends Member {
         return this._avatarUrl;
     }
 
-    get favorite(): boolean {
-        return this._isFavorite;
+
+    get roleCategoryId(): string { // used by role directory
+        return this._roleCategoryId;
     }
 
-    get available(): boolean {
+    get longName(): string {  // used by person directory
+        return this._longName;
+    }
+
+    get shortName(): string {
+        return this._shortName;
+    }
+
+    get jobTitle(): boolean {  // used by person directory
         return this._isAvailable;
     }
 
-    get roleCategoryId(): string {
-        return this._roleCategoryId;
+    get favorite(): boolean { // used by person, role, service directories
+        return this._isFavorite;
+    }
+
+    get available(): boolean { // used by role directory
+        return this._isAvailable;
+    }
+
+    get personIsLoggedIn(): boolean {  // used by person directory
+        return this._personIsLoggedIn;
+    }
+
+    get personIsActive(): boolean {  // used by person directory
+        return this._personIsBusy;
+    }
+
+    get personIsOnCall(): boolean {  // used by person directory
+        return this._personIsOnCall;
     }
 }
 
@@ -245,7 +308,7 @@ interface IDMRoomTileProps {
     onToggle: (RoomMember) => any;
     highlightWord: string;
     isSelected: boolean;
-    isFavorite: boolean;   // determines whether or not member is your favorite
+    currentUserFavorite: string[];
     isAvailable: boolean;  // determines whether or not member role has a person fulfilling that role
     roleCategoryId: string;
     kind: string;
@@ -253,31 +316,31 @@ interface IDMRoomTileProps {
 }
 
 class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
-    showDetailView = false;
+   onToggleIsEnabled = false;
 
     _onClick = (e) => {
         // Stop the browser from highlighting text
         e.preventDefault();
         e.stopPropagation();
 
-     if(!this.showDetailView)
+     if(!this.onToggleIsEnabled)
         this.props.onToggle(this.props.member);
     };
 
     onClickView(ev: React.MouseEvent<HTMLElement>) {
         ev.preventDefault();
         ev.stopPropagation();
-        this.showDetailView = !this.showDetailView;
+        this.onToggleIsEnabled = !this.onToggleIsEnabled;
 
         const detailView = ev.currentTarget.parentNode.querySelector<HTMLElement>('#mx_table_role_detail');  // selects current detailed view
-        let viewDetailBtn = ev.currentTarget.parentNode.querySelector<HTMLElement>("#mx_viewDetailBtn");  // selects current button clicked
+      //  let viewDetailBtn = ev.currentTarget.parentNode.querySelector<HTMLElement>("#mx_viewDetailBtn");  // selects current button clicked
         if (detailView.style.display === "none") {
             detailView.style.display = "block";
-            viewDetailBtn.innerHTML = "Hide Detail";
-            detailView.scrollIntoView();
+            // viewDetailBtn.innerHTML = "Hide Detail";
+            detailView.scrollIntoView({ behavior: 'smooth' });
         } else {
             detailView.style.display = "none";
-            viewDetailBtn.innerHTML = "View";
+            //   viewDetailBtn.innerHTML = "View";
         }
     }
 
@@ -317,10 +380,29 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         return result;
     }
 
+    handleFavoriteToggle(ev: React.MouseEvent) {
+        this.onToggleIsEnabled = false;
+        let newFavoriteSet: string[] = this.props.currentUserFavorite;
+        if (newFavoriteSet.length > 0) {
+            for (let favorite in this.props.currentUserFavorite) {
+                if (favorite.indexOf(this.props.member.name)) {
+                    newFavoriteSet = newFavoriteSet?.filter(val => val.indexOf(this.props.member.name) !== -1)
+                }
+            }
+        } else {
+            newFavoriteSet.push(this.props.member.userId);
+        }
+        directoryService.updateFavoritesForCurrentUser(this.props.kind, newFavoriteSet);
+    }
+
     render() {
+        console.log("Member is available", this.props.isAvailable);
         const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
         const DirectoryDetailView = sdk.getComponent("directory.DirectoryDetailView");
+        const DirectoryContactView = sdk.getComponent("directory.DirectoryContactView");
+        const Favorites = sdk.getComponent("views.elements.Favorites");
+        const UserPresence = sdk.getComponent("views.elements.UserPresence");
         let timestamp = null;
         if (this.props.lastActiveTs) {
             const humanTs = humanizeTime(this.props.lastActiveTs);
@@ -362,21 +444,72 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             ? _t("Invite by email")
             : this._highlightName(this.props.member.userId);
 
-        const favorite = this.props.isFavorite ?
-            <span className='mx_InviteDialog_roomTile_favorite'>
-                <img src={require("../../../../res/img/element-icons/roomlist/favorite.svg")} title="Your favorite" alt="favorite icon" />
-            </span> : null;
+        const getDirectoryMemberTitleAndCaption = (textType: string) => {
+            let title;
+            let caption;
+            if (this.props.kind === directoryService.KIND_ROLE_DIRECTORY_SEARCH) {
+                title = this.props.member.longName ? this.props.member.longName : this.props.member.shortName;
+                caption = this.props.member.shortName ? this.props.member.shortName : this.props.member.name;
+            } else if (this.props.kind === directoryService.KIND_PEOPLE_DIRECTORY_SEARCH) {
+                title = this.props.member.longName ? this.props.member.longName : this.props.member.shortName;
+                caption = this.props.member.jobTitle ? this.props.member.jobTitle : this.props.member.name;
+            } else if (this.props.kind === directoryService.KIND_SERVICE_DIRECTORY_SEARCH) {
+                title = this.props.member.longName ? this.props.member.longName : this.props.member.shortName;
+                caption = this.props.member.contactEmail || this.props.member.shortName || this.props.member.name;
+            } else {
+                title = this.props.member.name;
+                caption = null;
+            }
+            switch (textType) {
+                case 'title':
+                    return title;
+                case 'caption':
+                    return caption;
+                default:
+                    return;
+            }
+        }
 
-        const roleIsFilledOrUnfilled = this.props.isAvailable ? <span className="mx_InviteDialog_roomTile_available">Filled</span>
-        :<span className="mx_InviteDialog_roomTile_unavailable">Unfilled</span>;
+        // const favorite = this.props.isFavorite ?
+        //     <span className='mx_InviteDialog_roomTile_favorite'>
+        //         <img src={require("../../../../res/img/element-icons/roomlist/favorite.svg")} title="Your favorite" alt="favorite icon" />
+        //     </span> : null;
 
-        const viewDetailBtn = <AccessibleButton id="mx_viewDetailBtn" kind="primary" onClick={ev => this.onClickView(ev)}>
-           View
-            </AccessibleButton>
+        const favorite = <Favorites isFavorite={this.props.member.favorite}
+            displayTooltipOnHover={true}
+            onMouseHover
+            kind={this.props.kind}
+            onClick={(ev) => this.handleFavoriteToggle(ev)}
+            onToggle={(ev) => this.handleFavoriteToggle(ev)}
+        />
+
+        // const userPresenceIndicator = this.props.isAvailable ? <span className="mx_InviteDialog_roomTile_available">
+        //     Filled
+        // </span>
+        // :<span className="mx_InviteDialog_roomTile_unavailable">Not Filled</span>;
+
+        const userPresenceIndicator = <UserPresence online={this.props.member.personIsLoggedIn}
+            available={this.props.isAvailable}
+            active={this.props.member.personIsActive}
+            directorySearchContext={this.props.kind} />
+
+        // const viewDetailBtn = <AccessibleButton id="mx_viewDetailBtn" kind="primary" onClick={ev => this.onClickView(ev)}>
+        //    View
+        //     </AccessibleButton>
+        const viewDetailedInfoIcon = <span id="mx_viewDetailBtn" className=" mx_RightPanel_headerButton mx_AccessibleButton mx_RightPanel_headerButton
+        mx_RightPanel_headerButton_highlight mx_RightPanel_roomSummaryButton"
+            onClick={ev => this.onClickView(ev)}
+            style={{ float: 'right' }} />
 
         const viewMemberDetail = <div id="mx_table_role_detail" style={{ display: 'none' }}>
-            <DirectoryDetailView queryId={this.props.member.name}/>
+            <DirectoryDetailView queryId={this.props.member.userId}
+                favorite={this.props.member.favorite}
+                directorySearchContext={this.props.kind} />
         </div>
+
+        const directoryContactView =
+        <DirectoryContactView isDirectorySearch={directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)}
+                              directorySearchContext={this.props.kind}/>
 
         if (this.props.error) {
             console.error("An unxpected error occurred in InviteDialog ", this.props.error);
@@ -389,14 +522,21 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             <div className='mx_InviteDialog_roomTile' onClick={this._onClick}>
                 {stackedAvatar}
                 <span className="mx_InviteDialog_roomTile_nameStack">
-                    <div className='mx_InviteDialog_roomTile_name'>{this._highlightName(this.props.member.name)}</div>
-                    <div className='mx_InviteDialog_roomTile_userId'>{caption}</div>
+                    <div className='mx_InviteDialog_roomTile_name'>
+                        {directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind) ? getDirectoryMemberTitleAndCaption('title'):
+                        this._highlightName(this.props.member.name)}
+                    </div>
+                    <div className='mx_InviteDialog_roomTile_userId'>
+                        {directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind) ? getDirectoryMemberTitleAndCaption('caption'):
+                        caption}
+                    </div>
                 </span>
                 {timestamp}
-                {directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind) && viewDetailBtn}
-                {(this.props.kind === directoryService.KIND_ROLE_DIRECTORY_SEARCH) && roleIsFilledOrUnfilled}
+                {directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind) && viewDetailedInfoIcon}
                 {config.show_favorite_icon_in_directory_search && favorite}
-                {viewMemberDetail}
+                {config.showUserPresenceIndicator && userPresenceIndicator}
+                {directoryService.searchIsOnRoleOrPeopleOrServiceDirectory ? directoryContactView : null}
+                {directoryService.searchIsOnRoleOrPeopleOrServiceDirectory ? viewMemberDetail : null}
                 {errorText}
             </div>
         );
@@ -429,10 +569,11 @@ interface IInviteDialogState {
     suggestions: { user: Member, userId: string }[];
     numSuggestionsShown: number;
     serverResultsMixin: { user: Member, userId: string }[];
-    threepidResultsMixin: { user: Member, userId: string}[];
+    threepidResultsMixin: { user: Member, userId: string }[];
     canUseIdentityServer: boolean;
     tryingIdentityServer: boolean;
     numOfRecordsFromSearchAPI: number;
+    numOfRecordsDisplayed: number;
     favorites: string[];
     favoriteFilterIsSelected: boolean;
 
@@ -487,6 +628,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             busy: false,
             errorText: null,
             numOfRecordsFromSearchAPI: null,
+            numOfRecordsDisplayed: null,
             favorites: [],
             favoriteFilterIsSelected: false
         };
@@ -870,17 +1012,25 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         if (!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) return;
         const eventTarget = ev.currentTarget;
         let filterByNameEvent = eventTarget.parentNode.textContent.includes("Name");
-        if(filterByNameEvent) return;
         let filterByFavoriteEvent = eventTarget.parentNode.textContent.includes("Favorite");
         if (filterByFavoriteEvent) {
             let favorite = this.state.favorites;
             let filteredFavoriteResults = [];
-            for(let fav in favorite){
+            for (let fav in favorite) {
              filteredFavoriteResults = this.state.serverResultsMixin.filter(m => m.user.name.indexOf(fav) !== -1);
             }
             this.setState({
                 serverResultsMixin: filteredFavoriteResults,
-                favoriteFilterIsSelected: true
+                favoriteFilterIsSelected: true,
+                suggestions: [],
+                recents: []
+            })
+        } else if (filterByNameEvent) {
+            let filteredDisplayNameResults = this.state.serverResultsMixin.filter(m => m.user.name.indexOf(this.state.filterText) !== -1);
+            this.setState({
+                serverResultsMixin: filteredDisplayNameResults,
+                suggestions: [],
+                recents: []
             })
         }
     }
@@ -889,6 +1039,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         if(!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) return;
         this.setState({
             serverResultsMixin: [],
+            numOfRecordsDisplayed: 0,
             numOfRecordsFromSearchAPI: 0
         });
     }
@@ -912,75 +1063,94 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     };
 
     _updateDirectorySearchFromAPI = async (term: string) => {
-
         directoryService.getMatchingRecords(term, this.props.kind)
-	    .then(response => {
-			if (!response) {
-				return;
-			}
-			if (!response.errorText) {
-				//Note these are set to collections by the map function
-				let display_name;
-				let user_id;
-				let role_category;
-				let roleIsActive = false;
-				response.results.map((value) => {
-					display_name = value.display_name;
-					user_id = value.user_id;
-					role_category = value.role_category;
-					roleIsActive = value.roleIsActive;
-				});
+            .then(response => {
+                if (!response) {
+                    return;
+                }
+                if (!response.errorText) {
+                    //Note these are set to collections by the map function
+                    let display_name;
+                    let user_id;
+                    let role_category;
+                    let long_name;
+                    let short_name;
+                    let personIsLoggedIn;
+                    let personIsActive;
+                    let roleIsActive = false;
+                    let user;
+                    let mappedServerSearchResults = [];
+                    let memberIsFavorite = false;
+                    response.results.map((value) => {
+                        display_name = value.display_name;
+                        user_id = value.user_id;
+                        role_category = value.role_category;
+                        roleIsActive = value.roleIsActive;
+                        memberIsFavorite = (this.state.favorites.indexOf(value.user_id) !== -1) ?? false;
+                        long_name = value.long_name;
+                        short_name = value.short_name;
+                        personIsLoggedIn = value.loggedIn ?? false;
+                        personIsActive = value.active ?? false;
 
-				// update favorite roles
-				this._updateFavoritesForCurrentUser();
-				
-				// update server result mixin(search result) in state
-				if (response.results.length > 0) {
-					// Don't add search results, for entries for user_id that are already shown
-					let serverResults = this.state.serverResultsMixin;
-					let newServerResults = serverResults.filter(m => m.userId !== user_id);
-					this.setState({
-						numOfRecordsFromSearchAPI: response.numOfRecordsFromSearchAPI,
-						serverResultsMixin: [...newServerResults, {
-							user: new DirectoryMember({
-								user_id: user_id,
-								display_name: display_name,
-								avatar_url: '',
-								favorite: false,
-								available: roleIsActive,
-								roleCategoryId: role_category
-							}),
-							userId: user_id,
-						}],
-						recents: [],
-						suggestions: []
-					});
-				} else {
-					this.setState({
-						numOfRecordsFromSearchAPI: response.numOfRecordsFromSearchAPI
-					});
-				}
+                        /**
+                         * Create a Directory member with data collected for role/user/service/.. directories from api response
+                         * based on directory search context.
+                         */
+                        user = new DirectoryMember({
+                            user_id: user_id,
+                            display_name: display_name,
+                            avatar_url: '',
+                            available: value.roleIsActive ?? null,
+                            roleCategoryId: role_category ?? null,
+                            longName: long_name ?? null,
+                            shortName: short_name ?? null,
+                            favorite: memberIsFavorite ?? false,
+                            personIsLoggedIn: (personIsLoggedIn !== undefined) ? value.loggedIn : false,
+                            personIsActive: (personIsActive !== undefined) ? value.active : false,
+                        });
 
-				// if filter by favorite is selected, and user tries to search favorite only
-				if (response.results.length > 0 && this.state.favoriteFilterIsSelected) {
-					const serverResults = this.state.serverResultsMixin;
-					let filteredByFavoriteResults = [];
-					for (let fav in this.state.favorites) {
-						filteredByFavoriteResults = serverResults.filter(m => m.user.name.indexOf(fav) !== -1);
-					}
-					this.setState({
-						serverResultsMixin: filteredByFavoriteResults,
-						recents: [],
-						suggestions: []
-					});
-				}
-			} else {
-				this.setState({
-					serverResultsMixin: [],
-					errorText: response.errorText
-				}); // clear results because it's moderately fatal
-			}
-		})
+                        /**
+                         * ServerResultMixin in state expects object to be of type (user, user_id) so this approach is going to
+                         * update nested object of directoryMember as user, and user_id as user_id and make a collection of
+                         * user data in state
+                         */
+                        mappedServerSearchResults.push(new Object({ user, user_id: user_id }));
+                    });
+
+                    // update server result mixin(search result) in state
+                    if (response.results.length > 0) {
+                        this.setState({
+                            numOfRecordsFromSearchAPI: response.numOfRecordsFromSearchAPI,
+                            serverResultsMixin: mappedServerSearchResults,
+                            recents: [],
+                            suggestions: []
+                        });
+                    } else {
+                        this.setState({
+                            numOfRecordsFromSearchAPI: response.numOfRecordsFromSearchAPI
+                        });
+                    }
+
+                    // if filter by favorite is selected, and user tries to search favorite only
+                    if (response.results.length > 0 && this.state.favoriteFilterIsSelected) {
+                        const serverResults = this.state.serverResultsMixin;
+                        let filteredByFavoriteResults = [];
+                        for (let fav in this.state.favorites) {
+                            filteredByFavoriteResults = serverResults.filter(m => m.user.name.indexOf(fav) !== -1);
+                        }
+                        this.setState({
+                            serverResultsMixin: filteredByFavoriteResults,
+                            recents: [],
+                            suggestions: []
+                        });
+                    }
+                } else {
+                    this.setState({
+                        serverResultsMixin: [],
+                        errorText: response.errorText
+                    }); // clear results because it's moderately fatal
+                }
+            })
     };
 
     _updateSuggestions = async (term) => {
@@ -1298,6 +1468,16 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             sourceMembers = sourceMembers
                 .filter(m => m.user.name.toLowerCase().includes(filterBy) || m.userId.toLowerCase().includes(filterBy));
 
+            /**
+             * No matter if user was previously invited, seen, in people, service, role search we want to see every result
+             * that comes from API by overriding matrix default filtering mechanism which filters based on  priority member,
+             * and removes already seen (duplicate member)
+             */
+                if (directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) {
+                otherAdditionalMembers = [];
+                sourceMembers = this.state.serverResultsMixin;
+            }
+
             if (sourceMembers.length === 0 && !hasAdditionalMembers) {
                 return (
                     <div className='mx_InviteDialog_section'>
@@ -1311,6 +1491,17 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         // Now we mix in the additional members. Again, we presume these have already been filtered. We
         // also assume they are more relevant than our suggestions and prepend them to the list.
         sourceMembers = [...priorityAdditionalMembers, ...sourceMembers, ...otherAdditionalMembers];
+
+        if (this.state.favoriteFilterIsSelected) {
+            let filteredMembers = [];
+            sourceMembers = sourceMembers.filter(m => {
+                for (let fav in this.state.favorites) {
+                    let members = m.user.userId.indexOf(fav) !== -1;
+                    filteredMembers.push(members);
+                }
+                return filteredMembers;
+            })
+        }
 
 
         // sort sourceMembers before displaying in UI, sort alphabetically
@@ -1334,6 +1525,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         const toRender = sourceMembers.slice(0, showNum);
         const hasMore = toRender.length < sourceMembers.length;
 
+        // Update currently displayed directory members from rendered data
+        this.setState({
+            numOfRecordsDisplayed: toRender.length
+        })
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
         let showMore = null;
         if (hasMore) {
@@ -1352,11 +1547,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 onToggle={this._toggleMember}
                 highlightWord={this.state.filterText}
                 isSelected={this.state.targets.some(t => t.userId === r.userId)}
-                isFavorite={(this.state.favorites?.indexOf(r.user.name) !== -1) || false}
                 isAvailable={r.user.available || false}
                 roleCategoryId={r.user.roleCategoryId || null}
+                currentUserFavorite={this.state.favorites}
                 kind={this.props.kind}
-                error= {this.state.errorText}
+                error={this.state.errorText}
             />
         ));
         return (
@@ -1433,7 +1628,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     _renderClearSearchButton() {
         if(!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) return null;
         return <div className='mx_InvitedDialog_clearButton'>
-            <AccessibleButton onClick={this._onClearSearchResult} kind='primary'>
+            <AccessibleButton onClick={this._onClearSearchResult} kind='primary_sm' style={{backgroundColor: 'grey'}}>
                 <span>Clear All</span>
             </AccessibleButton>
         </div>
@@ -1462,21 +1657,27 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     _renderRecordCount() {
-    //if it is not role, service, people directory search don't display record count
+        /**
+         * if it is not role, service, people directory search wont display record count
+         *  as matrix currently does not have it switched on for InviteDialog
+         */
         if (!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) return null;
-        let totalMembersTiles = document.getElementsByClassName("mx_InviteDialog_roomTile");
-        let numOfTotalRecords;
-        let totalDisplayedResults;
-        if (totalMembersTiles.length > 0) {
-            totalDisplayedResults = totalMembersTiles ? totalMembersTiles.length  : null;
+        // number of records displayed
+        let displayedMemberTiles = document.getElementsByClassName("mx_InviteDialog_roomTile").length;
+        let numOfRecordsDisplayed;
+        if (displayedMemberTiles > 0) {
+            numOfRecordsDisplayed = this.state.numOfRecordsDisplayed || displayedMemberTiles;
         }
-        numOfTotalRecords = this.state.numOfRecordsFromSearchAPI;
-        if (totalDisplayedResults > numOfTotalRecords) return null;
-        if (totalDisplayedResults < 1 || this.state.numOfRecordsFromSearchAPI < 1) return null;
-        if (this.state.favoriteFilterIsSelected) return null;
+        let numOfTotalRecords = this.state.numOfRecordsFromSearchAPI;
+        if (numOfRecordsDisplayed > numOfTotalRecords) return null;
+        if (numOfRecordsDisplayed < 1 || this.state.numOfRecordsFromSearchAPI < 1) return null;
+        if (this.state.favoriteFilterIsSelected) {
+            numOfRecordsDisplayed = this.state.serverResultsMixin.length;
+        };
         return <div className="mx_InvitedDialog_totalRecords">
-        {/* TODO uncomment when working properly
-           totalDisplayedResults && <p>Showing {totalDisplayedResults} records of {numOfTotalRecords ? numOfTotalRecords: totalDisplayedResults}</p>*/}
+            {(numOfRecordsDisplayed > 1) && <p style={{ fontWeight: 600, fontSize: 12 + 'px' }}>
+                Showing {numOfRecordsDisplayed} records of total {numOfTotalRecords} records.
+                </p>}
         </div>
     }
 
@@ -1603,8 +1804,21 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             helpText = <React.Fragment>
                 {config.role_directory_description}
             </React.Fragment>
-        }
-        else {
+        } else if (this.props.kind === directoryService.KIND_PEOPLE_DIRECTORY_SEARCH) {
+            title = config.people_directory.name;
+            buttonText = "Start Discussion";
+            goButtonFn = this._startDm;
+            helpText = <React.Fragment>
+                {config.people_directory.feature_description}
+            </React.Fragment>
+        } else if (this.props.kind === directoryService.KIND_SERVICE_DIRECTORY_SEARCH) {
+            title = config.service_directory.name;
+            buttonText = "Start Discussion";
+            goButtonFn = this._startDm;
+            helpText = <React.Fragment>
+                {config.service_directory.feature_description}
+            </React.Fragment>
+        } else {
             console.error("Unknown kind of InviteDialog: " + this.props.kind);
         }
 
@@ -1641,9 +1855,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     </div>
 
                     <div className='mx_InviteDialog_userSections'>
+                        {this._renderRecordCount()}
                         {this._renderSection('recents')}
                         {this._renderSection('suggestions')}
-                        {this._renderRecordCount()}
                     </div>
                 </div>
             </BaseDialog>
