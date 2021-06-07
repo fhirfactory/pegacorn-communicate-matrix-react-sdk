@@ -205,11 +205,11 @@ export const getMatchingRecords = (term: string, kind) => {
         }
         console.log("totalRecords=" + totalRecords);
 
-        let identifiers;
+        let identifiers = [];
         let short_name;
         let long_name;
-        results.map(val =>  identifiers = val.identifiers);
-        identifiers.map(val => {
+        results?.map(val =>  identifiers = val.identifiers);
+        identifiers?.map(val => {
             if (val.type == "ShortName") {
                 short_name = val.leafValue;
             }
