@@ -305,9 +305,9 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
                                 <table className="mx_role_table">
                                     <tbody>
                                         {
-                                            membershipDetail.map((member) => {
+                                            membershipDetail.map((member, index) => {
                                                 return (
-                                                    <tr>
+                                                    <tr key={index}>
                                                         <th>Name</th>
                                                         <td>{member.name}</td>
                                                         <th>Description</th>
@@ -334,7 +334,7 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
         })
     }
 
-    // Shows what roles are currently being fulfilled by user ( role directory )
+    // Shows what roles are currently being fulfilled by user (only applies to role directory )
     _renderRoleDirectoryHeader = () => {
         if (!this.state.activeRoleEmails) return null;
         let users = this.state.activeRoleEmails;
@@ -352,7 +352,7 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
         </div>
     }
 
-    // Shows what roles a person is fulfilling at given point of time (person directory)
+    // Shows what roles a person is fulfilling at given point of time (only applies to person directory)
     _renderPersonDirectoryHeader = () => {
         let roleCategories = this.state.personDirectoryActiveRoles;
         if ((!Array.isArray(roleCategories) || roleCategories?.length < 1)) return null;

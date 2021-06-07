@@ -120,14 +120,14 @@ class DirectoryContactView extends React.Component<IDirectoryButtonProps, IState
                         style={directoryButtonBackgroundColor} />
                     <span>Start Discussion</span>
                 </div>
-            errorText = <span style={{ color: 'red' }}>Feature not implemented yet.</span> //mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary
+            errorText = <span style={{ color: 'red' }}>Feature not implemented yet.</span>
         }
 
         return <div className="mx_AuxButton_directoryContactMenu">
             {!this.searchIsOnServiceDirectory() && startChatButton}
             {!this.searchIsOnServiceDirectory() && videoCallButton}
             {voiceCallButton}
-            {this.state.error && <span style={{ color: 'red' }}>{this.state.error || ''}</span>}
+            {this.state.error && <span style={{ color: 'red'}}>{this.state.error || ''}</span>}
         </div>
     }
 }
