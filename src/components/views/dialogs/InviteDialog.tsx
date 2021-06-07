@@ -1017,7 +1017,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             let favorite = this.state.favorites;
             let filteredFavoriteResults = [];
             for (let fav in favorite) {
-             filteredFavoriteResults = this.state.serverResultsMixin.filter(m => m.user.name.indexOf(fav) !== -1);
+             filteredFavoriteResults = this.state.serverResultsMixin.filter(m => {
+                m.user.favorite === true || m.user.name.indexOf(fav) !== -1
+             } );
             }
             this.setState({
                 serverResultsMixin: filteredFavoriteResults,
@@ -1035,12 +1037,25 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         }
     }
 
+    /**
+     * Brings paginated records from backend
+     * @param {currentPageNumber} The current page number
+    */
+    onChangePage(currentPageNumber: number) {
+      //  console.log("Page of items", currentPageNumber);
+        if (!this.state.serverResultsMixin || !this.state.filterText) return;
+        const param = `&sortOrder=ascending&pageSize=${config.numberOfRecordsToShowInSearch}&page=${currentPageNumber-1}`;
+        const searchTerm = this.state.filterText + param;
+        return this._updateDirectorySearchFromAPI(searchTerm);
+    }
+
     _onClearSearchResult = () => {
         if(!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) return;
         this.setState({
             serverResultsMixin: [],
             numOfRecordsDisplayed: 0,
-            numOfRecordsFromSearchAPI: 0
+            numOfRecordsFromSearchAPI: 0,
+            filterText: ""
         });
     }
 
@@ -1525,14 +1540,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         const toRender = sourceMembers.slice(0, showNum);
         const hasMore = toRender.length < sourceMembers.length;
 
-        // Update currently displayed directory members from rendered data
-        this.setState({
-            numOfRecordsDisplayed: toRender.length
-        })
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
         let showMore = null;
         if (hasMore) {
             showMore = (
+                config.show_matrix_based_paginator &&
                 <AccessibleButton onClick={showMoreFn} kind="link">
                     {_t("Show more")}
                 </AccessibleButton>
@@ -1665,6 +1677,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         if (!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) return null;
         // number of records displayed
         let displayedMemberTiles = document.getElementsByClassName("mx_InviteDialog_roomTile").length;
+        this.setState({
+            numOfRecordsDisplayed: displayedMemberTiles
+        })
         let numOfRecordsDisplayed;
         if (displayedMemberTiles > 0) {
             numOfRecordsDisplayed = this.state.numOfRecordsDisplayed || displayedMemberTiles;
@@ -1676,10 +1691,22 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             numOfRecordsDisplayed = this.state.serverResultsMixin.length;
         };
         return <div className="mx_InvitedDialog_totalRecords">
-            {(numOfRecordsDisplayed > 1) && <p style={{ fontWeight: 600, fontSize: 12 + 'px' }}>
-                Showing {numOfRecordsDisplayed} records of total {numOfTotalRecords} records.
+            {(numOfRecordsDisplayed > 1) &&
+                <p>
+                    Showing {numOfRecordsDisplayed} records of total {numOfTotalRecords} records.
                 </p>}
         </div>
+    }
+
+    _renderDirectoryPaginator() {
+        if (this.state.favoriteFilterIsSelected || !this.state.filterText) return null;
+        const Pagination = sdk.getComponent("views.elements.Pagination");
+        return <>
+            <Pagination items={this.state.serverResultsMixin}
+                onChangePage={this.onChangePage.bind(this)}
+                numOfTotalRecords={this.state.numOfRecordsFromSearchAPI}
+                pageSize={config.numberOfRecordsToShowInSearch} />
+        </>
     }
 
     render() {
@@ -1856,7 +1883,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     </div>
 
                     <div className='mx_InviteDialog_userSections'>
-                        {this._renderRecordCount()}
+                        {this._renderDirectoryPaginator()}
+                        {/* {this._renderRecordCount()} */}
                         {this._renderSection('recents')}
                         {this._renderSection('suggestions')}
                     </div>

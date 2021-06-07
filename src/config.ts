@@ -181,3 +181,9 @@ export const showUserPresenceIndicator = directory.showUserPresenceIndicator ?? 
  */
 export const filter_by_displayName_in_directory = directory.filter_by_displayName_in_directory ?? false;
 
+/**
+ * Matrix default paginator "Show more (enabled or disabled)" according to need.
+ * Directory will not use it , instead uses <Paginator> view. Not providing 'true' value
+ * for this config in config.json defaults to matrix current behavior.
+ */
+export const show_matrix_based_paginator = directory.show_matrix_based_paginator ?? true;

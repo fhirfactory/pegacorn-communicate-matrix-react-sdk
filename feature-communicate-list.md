@@ -405,7 +405,7 @@ Web: As an Authenticated Practitioner, I should be able to Search the Person Dir
 - `showUserPresenceIndicator` flag has been used to render user presence status (online, offline) status. `UserPresence` view renders user status on UI according to context which may switch from people to role depending upon if on client side search is on People or Role.
 - `showPeopleDirectory` flag has been used to add tile on landing page , not setting value to true on config file for this flag would return app defaulting to matrix.
 - `filter_by_displayName_in_directory` flag has been used to hide filter by name option in directory search. This user story required filter by name be implemented but seeing Android does not currently have this option, temporarily its been parked and hidden. Also, by default backend searches matching records/results by display name originally but that implementation has changed now which means backend does all searches based on long name, short name and so on so there is good chance that this filter will become practical and essential which is not priority for first release of communicate web.
-
+- `show_matrix_based_paginator` flag has been added in order to hide matrix default paginator which does not do api call to backend and only displays "show more". `Pagination` view has been added to react-sdk which will provide page based pagination by reconstructing API path and sending request to backend.
 
 194734
 Web: Web: As an Authenticated Practitioner, I should be able to Search the Service Directory, so that I can locate a Service and view their details
