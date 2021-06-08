@@ -2000,18 +2000,32 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                  * as using something like redux to avoid having a billion bits of state kicking around.
                  */
                 const LoggedInView = sdk.getComponent('structures.LoggedInView');
-                view = (
-                    <LoggedInView
-                        {...this.props}
-                        {...this.state}
-                        ref={this.loggedInView}
-                        matrixClient={MatrixClientPeg.get()}
-                        onRoomCreated={this.onRoomCreated}
-                        onCloseAllSettings={this.onCloseAllSettings}
-                        onRegistered={this.onRegistered}
-                        currentRoomId={this.state.currentRoomId}
-                    />
-                );
+
+                const roleSelector = SdkConfig.get()["role_selector"];//"role-selection"
+                const roleSelectorText = roleSelector?.text;// SdkConfig.get()["role_selector_name"];//"role-selection"
+                const roleSelectorUrl = roleSelector?.url;//SdkConfig.get()["role_selector_url"];//'/role-selection/#'
+
+                let ref = document.referrer;
+                
+                if((!roleSelectorText) || ref?.toLowerCase()?.includes(roleSelectorText))
+                {
+                    view = (
+                        <LoggedInView
+                            {...this.props}
+                            {...this.state}
+                            ref={this.loggedInView}
+                            matrixClient={MatrixClientPeg.get()}
+                            onRoomCreated={this.onRoomCreated}
+                            onCloseAllSettings={this.onCloseAllSettings}
+                            onRegistered={this.onRegistered}
+                            currentRoomId={this.state.currentRoomId}
+                        />
+                        );
+                }
+                else
+                {
+                    window.location.href = roleSelectorUrl;
+                }
             } else {
                 // we think we are logged in, but are still waiting for the /sync to complete
                 const Spinner = sdk.getComponent('elements.Spinner');
