@@ -214,11 +214,11 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
 
     _renderDetailCaption(kind) {
         let headerText;
-        if (this.props.directorySearchContext === directoryService.KIND_ROLE_DIRECTORY_SEARCH) {
+        if (kind === directoryService.KIND_ROLE_DIRECTORY_SEARCH) {
             headerText = <h2>Practitioner Registered Role Detail</h2>
-        } else if (this.props.directorySearchContext === directoryService.KIND_PEOPLE_DIRECTORY_SEARCH) {
+        } else if (kind === directoryService.KIND_PEOPLE_DIRECTORY_SEARCH) {
             headerText = <h2>Practitioner Registered Detail</h2>
-        } else if (this.props.directorySearchContext === directoryService.KIND_SERVICE_DIRECTORY_SEARCH) {
+        } else if (kind === directoryService.KIND_SERVICE_DIRECTORY_SEARCH) {
             headerText = <h2>Registered Service Detail</h2>
         }
         return headerText;
@@ -269,14 +269,14 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
                                     if (role.length <= 1) {
                                         return 'Member is not actively fulfilling any role at the moment.';
                                     }
-                                    return <p key={index}>{role["role"]}</p>
+                                    return <p key={index} style={{display: 'table-cell', padding: '2px'}}>{role["role"]}</p>
                                 }))}
                             </td>
                         </tr>
                     </tbody> : null
                 }
                 {dateTimeLastRoleSelected &&
-                    <tbody><tr><th>Last Role Selected Date</th><td>{formatFullDate(new Date(dateTimeLastRoleSelected))}</td></tr></tbody>}
+                    <tbody><tr><th>Last Active On Role</th><td>{formatFullDate(new Date(dateTimeLastRoleSelected))}</td></tr></tbody>}
                 {containedLocationIDs ?
                     <tbody>
                         <tr>
