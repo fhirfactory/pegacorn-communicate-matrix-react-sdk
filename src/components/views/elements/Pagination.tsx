@@ -120,7 +120,7 @@ class Pagination extends React.Component<typeof defaultProps, IState> {
         return (
             <span className="mx_Paginator">
                 <li style={{ marginRight: '20px' }}>
-                    Displaying records {pager.startIndex + 1} - {pager.endIndex + 1} of {this.props.numOfTotalRecords}
+                    Displaying records {pager.startIndex + 1} - {pager.endIndex + 1} of {this.props.numOfTotalRecords}.
                 </li>
                 <li className={pager.currentPage === 1 ? 'disabled' : ''}>
                     <a onClick={() => this.setPage(1)}>First</a>
