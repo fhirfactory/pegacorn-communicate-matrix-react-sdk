@@ -330,7 +330,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
     onClickView(ev: React.MouseEvent<HTMLElement>) {
         ev.preventDefault();
         ev.stopPropagation();
-        this.onToggleIsEnabled = !this.onToggleIsEnabled;
+        this.onToggleIsEnabled = true;
 
         const detailView = ev.currentTarget.parentNode.querySelector<HTMLElement>('#mx_table_role_detail');  // selects current detailed view
       //  let viewDetailBtn = ev.currentTarget.parentNode.querySelector<HTMLElement>("#mx_viewDetailBtn");  // selects current button clicked
@@ -455,7 +455,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                 caption = this.props.member.jobTitle ? this.props.member.jobTitle : this.props.member.name;
             } else if (this.props.kind === directoryService.KIND_SERVICE_DIRECTORY_SEARCH) {
                 title = this.props.member.longName ? this.props.member.longName : this.props.member.shortName;
-                caption = this.props.member.contactEmail || this.props.member.shortName || this.props.member.name;
+                caption = this.props.member.userId || this.props.member.shortName || this.props.member.name;
             } else {
                 title = this.props.member.name;
                 caption = null;
@@ -1014,12 +1014,15 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         let filterByNameEvent = eventTarget.parentNode.textContent.includes("Name");
         let filterByFavoriteEvent = eventTarget.parentNode.textContent.includes("Favorite");
         if (filterByFavoriteEvent) {
+            this.setState({
+                favoriteFilterIsSelected: !this.state.favoriteFilterIsSelected
+            });
+        }
+        if (!this.state.favoriteFilterIsSelected) {
             let favorite = this.state.favorites;
             let filteredFavoriteResults = [];
             for (let fav in favorite) {
-             filteredFavoriteResults = this.state.serverResultsMixin.filter(m => {
-                m.user.favorite === true || m.user.name.indexOf(fav) !== -1
-             } );
+                filteredFavoriteResults = this.state.serverResultsMixin.filter(m => m.user.favorite);
             }
             this.setState({
                 serverResultsMixin: filteredFavoriteResults,
@@ -1050,7 +1053,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     _onClearSearchResult = () => {
-        if(!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) return;
+        if (!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) return null;
         this.setState({
             serverResultsMixin: [],
             numOfRecordsDisplayed: 0,
@@ -1060,7 +1063,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     /**
-     * This will be used by service, role and people search by switching api based on search context
+     * Used by directory search functionality in service, role and people search by switching api based on search context
     */
     _updateFavoritesForCurrentUser() {
         // Find favorites from relevant api (roles / services)
@@ -1078,6 +1081,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     };
 
     _updateDirectorySearchFromAPI = async (term: string) => {
+
+        /**
+         * Search for matching records with keyword
+         */
         directoryService.getMatchingRecords(term, this.props.kind)
             .then(response => {
                 if (!response) {
@@ -1593,10 +1600,22 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 autoComplete="off"
             />
         );
+
+        let clearButton = (
+            config.directory ?
+            <AccessibleButton
+                tabIndex={0}
+                title={_t("Clear filter")}
+                className="mx_directorySearch_clearButton"
+                onClick={this._onClearSearchResult.bind(this)}
+            />: null
+        );
+
         return (
             <div className='mx_InviteDialog_editor' onClick={this._onClickInputArea}>
                 {targets}
                 {input}
+                {this.state.filterText && clearButton}
             </div>
         );
     }
@@ -1699,7 +1718,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     _renderDirectoryPaginator() {
-        if (this.state.favoriteFilterIsSelected || !this.state.filterText) return null;
+        if (this.state.favoriteFilterIsSelected || !this.state.filterText
+            || this.state.numOfRecordsFromSearchAPI <= this.state.serverResultsMixin.length) return null;
         const Pagination = sdk.getComponent("views.elements.Pagination");
         return <>
             <Pagination items={this.state.serverResultsMixin}
