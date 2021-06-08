@@ -919,4 +919,3 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         );
     }
 }
-45
