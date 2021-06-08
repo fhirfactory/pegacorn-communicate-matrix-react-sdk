@@ -177,16 +177,8 @@ export const getMatchingRecords = (term: string, kind) => {
     if (!searchIsOnRoleOrPeopleOrServiceDirectory(kind)) {
         return null;
     }
+     // form an api path based on context
     let search_api_path = getDirectorySearchAPIInContext(term, kind);
-    // form an api path based on context
-
-    // if (kind === KIND_ROLE_DIRECTORY_SEARCH) {
-    //     if (!term) {
-    //         search_api_path = config.search_all_roles
-    //     } else {
-    //         search_api_path = config.search_role_by_displayName + term;
-    //     }
-    // }
 
     // Find roles, services, and people
     return fetch(search_api_path, {
@@ -337,7 +329,11 @@ export const getPractionerDisplayName = (id: string) => {
             };
         });
 }
-
+/**
+ * @param roleName The role that needs to be passed in as a string.
+ * @returns The role name and role category id passed in.
+ * @type The type must be a string.
+ */
 export const getRoleCategoryName = (roleName: string) => {
     const api = config.search_all_roles + encodeURIComponent(roleName);
     let roleCategory;
