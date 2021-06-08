@@ -90,6 +90,8 @@ export const role_directory = directory?.role;
 
 export const showRoleDirectory = role_directory.showRoleDirectory ?? false;
 
+export const showRoomCount =  config['showRoomCount'] ?? false;
+
 export const role_directory_feature_name = role_directory?.name;
 
 export const role_directory_description = role_directory?.feature_description;

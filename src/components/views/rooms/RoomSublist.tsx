@@ -753,7 +753,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                                 >
                                     <span className={collapseClasses} />
                                     <span>{this.props.label}</span>
-                                    { visibleRooms.length > 0 &&  `(${visibleRooms.length})`}
+                                    {config.showRoomCount && visibleRooms.length > 0 &&  `(${visibleRooms.length})`}
                                 </Button>
                                 {this.renderMenu()}
                                 {this.props.isMinimized ? null : badgeContainer}
