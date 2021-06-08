@@ -1021,9 +1021,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         if (!this.state.favoriteFilterIsSelected) {
             let favorite = this.state.favorites;
             let filteredFavoriteResults = [];
-            for (let fav in favorite) {
                 filteredFavoriteResults = this.state.serverResultsMixin.filter(m => m.user.favorite);
-            }
             this.setState({
                 serverResultsMixin: filteredFavoriteResults,
                 favoriteFilterIsSelected: true,
@@ -1515,14 +1513,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         sourceMembers = [...priorityAdditionalMembers, ...sourceMembers, ...otherAdditionalMembers];
 
         if (this.state.favoriteFilterIsSelected) {
-            let filteredMembers = [];
-            sourceMembers = sourceMembers.filter(m => {
-                for (let fav in this.state.favorites) {
-                    let members = m.user.userId.indexOf(fav) !== -1;
-                    filteredMembers.push(members);
-                }
-                return filteredMembers;
-            })
+            sourceMembers = sourceMembers.filter(m => m.user.favorite);
         }
 
 
