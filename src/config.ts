@@ -30,6 +30,15 @@ export const updateDocumentForSelector = (selector) => {
 	}
 }
 
+export const getReplacement = (selector) =>{
+	switch(selector){
+		case "Room": return "Discussion";
+		case "room": return "discussion";
+		case "Chat": return "Discussion"; 
+		case "chat": return "discussion";
+	}
+}
+
 export const updateTerminologyInDocument = () => {
     console.log('change sign in text', changeSigninToLoginTextLabel);
     if (changeSigninToLoginTextLabel) {
