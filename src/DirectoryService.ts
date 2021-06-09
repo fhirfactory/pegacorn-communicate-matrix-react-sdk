@@ -213,11 +213,13 @@ export const getMatchingRecords = (term: string, kind) => {
 
         // maps person's loggedin status, and active/inactive status
         let practitionerStatus;
+        let job_title;
         results.map(val => {
             if (!val.practitionerStatus) {
                 return;
             }
             practitionerStatus = val.practitionerStatus;
+            job_title = val.mainJobTitle;
         });
         let loggedIn = (practitionerStatus !== undefined) ? practitionerStatus['loggedIn'] : false; // on service and role directory this wont apply so just return false and skip
         let active =  (practitionerStatus !== undefined) ? practitionerStatus['active'] : false; // on service and role directory this wont apply so just return false and skip
@@ -231,8 +233,8 @@ export const getMatchingRecords = (term: string, kind) => {
             active: practitionerStatus ? active: false,
             // filled or not filled status
             // if activePractitionerSet array is non-empty someone is fulfilling that role
-            roleIsActive: (value.activePractitionerSet?.length >= 1) ?? false
-
+            roleIsActive: (value.activePractitionerSet?.length >= 1) ?? false,
+            job_title: job_title
         }));
         console.log("mappedResults.length=" + mappedResults.length + ", mappedResults=" + JSON.stringify(mappedResults));
         console.log("Mapped identifier results are", JSON.stringify(mappedResults.identifiers));

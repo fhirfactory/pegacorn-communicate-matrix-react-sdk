@@ -110,7 +110,7 @@ class Member {
         throw new Error("Member class not implemented");
     }
 
-    get jobTitle(): boolean {  // used by person directory
+    get jobTitle(): string {  // used by person directory
         throw new Error("Member class not implemented");
     }
 
@@ -186,8 +186,8 @@ class DirectoryMember extends Member {
         return this._shortName;
     }
 
-    get jobTitle(): boolean {  // used by person directory
-        return this._isAvailable;
+    get jobTitle(): string {  // used by person directory
+        return this._jobTitle;
     }
 
     get favorite(): boolean { // used by person, role, service directories
@@ -444,7 +444,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             ? _t("Invite by email")
             : this._highlightName(this.props.member.userId);
 
-        const getDirectoryMemberTitleAndCaption = (textType: string) => {
+        const getDirectoryMemberTitleAndCaption = (textType) => {
             let title;
             let caption;
             if (this.props.kind === directoryService.KIND_ROLE_DIRECTORY_SEARCH) {
@@ -458,7 +458,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                 caption = this.props.member.userId || this.props.member.shortName || this.props.member.name;
             } else {
                 title = this.props.member.name;
-                caption = null;
+                caption = this.props.member.userId;
             }
             switch (textType) {
                 case 'title':
@@ -1112,6 +1112,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     let personIsActive;
                     let roleIsActive = false;
                     let user;
+                    let job_title;
                     let mappedServerSearchResults = [];
                     let memberIsFavorite = false;
                     response.results.map((value) => {
@@ -1119,6 +1120,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         user_id = value.user_id;
                         role_category = value.role_category;
                         roleIsActive = value.roleIsActive;
+                        job_title = value.job_title;
                         memberIsFavorite = (this.state.favorites.indexOf(value.user_id) !== -1) ?? false;
                         long_name = value.long_name;
                         short_name = value.short_name;
@@ -1137,6 +1139,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                             roleCategoryId: role_category ?? null,
                             longName: long_name ?? null,
                             shortName: short_name ?? null,
+                            jobTitle: job_title ?? null,
                             favorite: memberIsFavorite ?? false,
                             personIsLoggedIn: (personIsLoggedIn !== undefined) ? value.loggedIn : false,
                             personIsActive: (personIsActive !== undefined) ? value.active : false,
