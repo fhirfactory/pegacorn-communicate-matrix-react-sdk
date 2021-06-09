@@ -46,6 +46,7 @@ import * as config from '../../../config';
 import * as directoryService from '../../../DirectoryService';
 import AccessibleButton from '../elements/AccessibleButton';
 import { StyledMenuItemCheckbox } from '../../structures/ContextMenu';
+import { keywordContainsSpecialCharacter } from '../../../utils/strings';
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -1057,7 +1058,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             serverResultsMixin: [],
             numOfRecordsDisplayed: 0,
             numOfRecordsFromSearchAPI: 0,
-            filterText: ""
+            filterText: "",
+            errorText: null
         });
     }
 
@@ -1102,7 +1104,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     return;
                 }
                 if (!response.errorText) {
-                    //Note these are set to collections by the map function
+                    // Note these are set to collections by map function
                     let display_name;
                     let user_id;
                     let role_category;
@@ -1725,7 +1727,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     _renderDirectoryPaginator() {
-        if (this.state.favoriteFilterIsSelected || !this.state.filterText
+        if (this.state.favoriteFilterIsSelected || !this.state.filterText || this.state.errorText
             || this.state.numOfRecordsFromSearchAPI <= this.state.serverResultsMixin.length) return null;
         const Pagination = sdk.getComponent("views.elements.Pagination");
         return <>
@@ -1738,6 +1740,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
     _renderNoResultsText() {
         let informationText;
+        if (this.state.errorText) return null;
         if (this.state.favoriteFilterIsSelected && this.state.serverResultsMixin.length < 1) {
             informationText = <h4>{_t("You do not have any favorites at the moment. No results found while conducting favorite search with your credentials.")}</h4>
         } else if (this.state.serverResultsMixin.length < 1 && this.state.filterText) {

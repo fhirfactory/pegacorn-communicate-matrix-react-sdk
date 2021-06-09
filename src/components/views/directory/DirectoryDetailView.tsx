@@ -117,6 +117,8 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
         containedLocationIDs: PropTypes.array
     };
 
+    _isMounted = false;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -134,7 +136,14 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
     }
 
     componentDidMount() {
-        this.getRoleDetail();
+        this._isMounted = true;
+        if (this._isMounted) {
+            return this.getRoleDetail();
+        }
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     getRoleDetail() {
