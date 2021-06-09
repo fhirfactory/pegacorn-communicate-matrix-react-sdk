@@ -2893,5 +2893,6 @@
     "Roles": "Roles",
     "Search Roles and Start Discussion": "Search Roles and Start Discussion",
     "Search Services and Start Discussion": "Search Services and Start Discussion",
-    "Chat": "Start Discussion"
+    "Chat": "Start Discussion",
+    "Search keyword needs to be at least of two characters.": "Search keyword needs to be at least of two characters."
 }
