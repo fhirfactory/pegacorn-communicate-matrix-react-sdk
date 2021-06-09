@@ -451,7 +451,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                 title = this.props.member.longName ? this.props.member.longName : this.props.member.shortName;
                 caption = this.props.member.shortName ? this.props.member.shortName : this.props.member.name;
             } else if (this.props.kind === directoryService.KIND_PEOPLE_DIRECTORY_SEARCH) {
-                title = this.props.member.longName ? this.props.member.longName : this.props.member.shortName;
+                title = this.props.member.name;
                 caption = this.props.member.jobTitle ? this.props.member.jobTitle : this.props.member.name;
             } else if (this.props.kind === directoryService.KIND_SERVICE_DIRECTORY_SEARCH) {
                 title = this.props.member.longName ? this.props.member.longName : this.props.member.shortName;
@@ -1120,7 +1120,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         user_id = value.user_id;
                         role_category = value.role_category;
                         roleIsActive = value.roleIsActive;
-                        job_title = value.job_title;
+                        job_title = value.job_title ?? null;
                         memberIsFavorite = (this.state.favorites.indexOf(value.user_id) !== -1) ?? false;
                         long_name = value.long_name;
                         short_name = value.short_name;
