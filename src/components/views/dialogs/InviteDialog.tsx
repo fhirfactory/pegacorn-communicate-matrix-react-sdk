@@ -1079,6 +1079,18 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     };
 
     _updateDirectorySearchFromAPI = async (term: string) => {
+        // If search keyword is less than 2 string then display error below searchbox and do not call api
+        if (term.length <= 1) {
+            this.setState({
+                errorText: _t("Search keyword needs to be at least of two characters."),
+                serverResultsMixin: []
+            })
+            return null;
+        } else {
+            this.setState({
+                errorText: null
+            })
+        };
 
         /**
          * Search for matching records with keyword
@@ -1896,7 +1908,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     <div className='mx_InviteDialog_userSections'>
                         {this._renderDirectoryPaginator()}
                         {/* {this._renderRecordCount()} */}
-                        {this._renderSection('recents')}
+                        {!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind) ?
+                        this._renderSection('recents')
+                        : null}
                         {this._renderSection('suggestions')}
                     </div>
                 </div>
