@@ -135,6 +135,9 @@ export const search_role_by_displayName = communicate_api_base_path + directory.
 // api to filter by favorites;
 export const search_by_favorite = directory.api.favourites;
 
+// api to fetch selected roles
+export const search_by_role_selection =directory.api.role_selection;
+
 
 /**
  * Avatar

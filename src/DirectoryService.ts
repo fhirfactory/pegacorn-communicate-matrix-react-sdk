@@ -24,6 +24,7 @@ import * as config from './config';
 export const KIND_ROLE_DIRECTORY_SEARCH = "search_role_directory";
 export const KIND_SERVICE_DIRECTORY_SEARCH = "search_service_directory";
 export const KIND_PEOPLE_DIRECTORY_SEARCH = "search_people_directory";
+export const KIND_SELECTED_ROLE = "selected_roles";
 
 export const searchIsOnRoleOrPeopleOrServiceDirectory = (kind) => {
 	if (kind === KIND_ROLE_DIRECTORY_SEARCH) {
@@ -32,9 +33,36 @@ export const searchIsOnRoleOrPeopleOrServiceDirectory = (kind) => {
 		return true;
 	} else if (kind === KIND_SERVICE_DIRECTORY_SEARCH) {
 		return true;
+	} else if(kind === KIND_SELECTED_ROLE){
+		return true;	
 	} else {
 		return false;
 	}
+}
+
+/**
+ * This will be used to display selected roles
+ */
+ export const getSelectedRolesForCurrentUser = (kind) => {
+	// get email id
+	const user_id_encoded = encodeURI(MatrixClientPeg.get().getUserId());//TODO:Sam remove this line as we need email id instead of userid	
+	const user_emailid = "Samridhi.Shukla@test.act.gov.au";	//TODO:sam get email id of current user 	//"selected_roles": "https://lingo-server.site-a/pegacorn/operations/directory/r1/Practitioner/Samridhi.Shukla@test.act.gov.au/PractitionerRoles",//"base_path" : "http://localhost:12121/pegacorn/operations/directory/r1/"//"base_path" + "Practitioner/" + emailid +  "/PractitionerRoles"	//Samridhi.Shukla@test.act.gov.au
+	let role__selection__api = config.communicate_api_base_path +config.search_by_role_selection.prefix + user_emailid + config.search_by_role_selection.suffix;
+	return fetch(role__selection__api, {
+		method: "GET",
+		headers: {
+			'Content-Type': 'application/json',
+		}
+	}).then(res => res.json())
+	  .then(response => {
+		return {
+			favorites: response.practitionerRoles
+		};
+	}).catch((err) => {
+		return {
+			errorText: err
+		};
+	});
 }
 
 /**
