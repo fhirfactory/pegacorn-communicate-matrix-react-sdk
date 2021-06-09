@@ -73,7 +73,6 @@ class DirectoryContactView extends React.Component<IDirectoryButtonProps, IState
     // Used not to display voice and video call functionality on service directory
     searchIsOnServiceDirectory = () => {
         if (this.props.directorySearchContext === directoryService.KIND_SERVICE_DIRECTORY_SEARCH) {
-            console.log("Show service directory is turned off", this.props.directorySearchContext);
             return true;
         } else {
             return false;
