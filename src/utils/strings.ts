@@ -71,6 +71,16 @@ export function capitaliseFirstCharacter(target: String) {
 }
 
 /**
+ * Checks if keyword contains special characters
+*/
+export function keywordContainsSpecialCharacter(target: string): boolean {
+    if (!target) {
+        return false;
+    }
+    return (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\?]/g).test(target);
+}
+
+/**
  * Copy rich text to user's clipboard
  * It will overwrite user's selection range
  * In certain browsers it may only work if triggered by a user action or may ask user for permissions
