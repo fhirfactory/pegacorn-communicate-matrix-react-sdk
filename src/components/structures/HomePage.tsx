@@ -61,13 +61,13 @@ const onClickRoleDirectory = () => {
 
 const onClickPeopleDirectory = () => {
     Analytics.trackEvent('home_page', 'button', 'search_people_directory');
-    CountlyAnalytics.instance.track("home_page_button", { button: "search_role_directory" });
+    CountlyAnalytics.instance.track("home_page_button", { button: "search_people_directory" });
     dis.dispatch({action: 'search_people_directory'});
 }
 
 const onClickServiceDirectory = () => {
     Analytics.trackEvent('home_page', 'button', 'search_service_directory');
-    CountlyAnalytics.instance.track("home_page_button", { button: "search_role_directory" });
+    CountlyAnalytics.instance.track("home_page_button", { button: "search_service_directory" });
     dis.dispatch({action: 'search_service_directory'});
 }
 

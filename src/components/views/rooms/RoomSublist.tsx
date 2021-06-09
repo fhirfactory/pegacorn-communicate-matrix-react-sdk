@@ -692,7 +692,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                                 isExpanded={!!this.state.addRoomContextMenuPosition}
                             />
                         );
-                    } else if (config.showRoleDirectory) {
+                    } else if (config.directory) {
                         addRoomButton = (
                             <ContextMenuTooltipButton
                                 tabIndex={tabIndex}
