@@ -1608,7 +1608,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             config.directory ?
             <AccessibleButton
                 tabIndex={0}
-                title={_t("Clear filter")}
+                title={_t("Clear search")}
                 className="mx_directorySearch_clearButton"
                 onClick={this._onClearSearchResult.bind(this)}
             />: null
@@ -1730,6 +1730,18 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 numOfTotalRecords={this.state.numOfRecordsFromSearchAPI}
                 pageSize={config.numberOfRecordsToShowInSearch} />
         </>
+    }
+
+    _renderNoResultsText() {
+        let informationText;
+        if (this.state.favoriteFilterIsSelected && this.state.serverResultsMixin.length < 1) {
+            informationText = <h4>{_t("You do not have any favorites at the moment. No results found while conducting favorite search with your credentials.")}</h4>
+        } else if (this.state.serverResultsMixin.length < 1 && this.state.filterText) {
+            informationText = <h4>{_t("Directory search did not retrieve any results at the moment. Please enter a valid keyword and try again.")}</h4>
+        } else {
+            informationText = '';
+        }
+        return informationText;
     }
 
     render() {
@@ -1908,6 +1920,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     <div className='mx_InviteDialog_userSections'>
                         {this._renderDirectoryPaginator()}
                         {/* {this._renderRecordCount()} */}
+                        {this._renderNoResultsText()}
                         {!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind) ?
                         this._renderSection('recents')
                         : null}

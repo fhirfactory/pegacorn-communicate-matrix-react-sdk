@@ -2894,5 +2894,8 @@
     "Search Roles and Start Discussion": "Search Roles and Start Discussion",
     "Search Services and Start Discussion": "Search Services and Start Discussion",
     "Chat": "Start Discussion",
-    "Search keyword needs to be at least of two characters.": "Search keyword needs to be at least of two characters."
+    "Search keyword needs to be at least of two characters.": "Search keyword needs to be at least of two characters.",
+    "Clear search": "Clear search",
+    "You do not have any favorites at the moment. No results found while conducting favorite search with your credentials.":  "You do not have any favorites at the moment. No results found while conducting favorite search with your credentials.",
+    "Directory search did not retrieve any results at the moment. Please enter a valid keyword and try again.": "Directory search did not retrieve any results at the moment. Please enter a valid keyword and try again."
 }
