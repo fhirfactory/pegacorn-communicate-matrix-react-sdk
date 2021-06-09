@@ -333,14 +333,14 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         this.onToggleIsEnabled = true;
 
         const detailView = ev.currentTarget.parentNode.querySelector<HTMLElement>('#mx_table_role_detail');  // selects current detailed view
-      //  let viewDetailBtn = ev.currentTarget.parentNode.querySelector<HTMLElement>("#mx_viewDetailBtn");  // selects current button clicked
+        let viewDetailBtn = ev.currentTarget.parentNode.querySelector<HTMLElement>("#mx_viewDetailBtn");  // selects current button clicked
         if (detailView.style.display === "none") {
             detailView.style.display = "block";
-            // viewDetailBtn.innerHTML = "Hide Detail";
+            viewDetailBtn.classList.add('mx_RoomSublist_collapseBtn_collapsed');
             detailView.scrollIntoView({ behavior: 'smooth' });
         } else {
             detailView.style.display = "none";
-            //   viewDetailBtn.innerHTML = "View";
+            viewDetailBtn.classList.remove('mx_RoomSublist_collapseBtn_collapsed');
         }
     }
 
@@ -493,13 +493,14 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             active={this.props.member.personIsActive}
             directorySearchContext={this.props.kind} />
 
-        // const viewDetailBtn = <AccessibleButton id="mx_viewDetailBtn" kind="primary" onClick={ev => this.onClickView(ev)}>
-        //    View
-        //     </AccessibleButton>
-        const viewDetailedInfoIcon = <span id="mx_viewDetailBtn" className=" mx_RightPanel_headerButton mx_AccessibleButton mx_RightPanel_headerButton
-        mx_RightPanel_headerButton_highlight mx_RightPanel_roomSummaryButton"
-            onClick={ev => this.onClickView(ev)}
-            style={{ float: 'right' }} />
+        const viewDetailedInfoIcon = <AccessibleButton id="mx_viewDetailBtn"
+            className="mx_RoomSublist_collapseBtn" onClick={ev => this.onClickView(ev)}
+            style={{ float: 'right' }}>
+        </AccessibleButton>
+        // const viewDetailedInfoIcon = <span id="mx_viewDetailBtn" className=" mx_RightPanel_headerButton mx_AccessibleButton mx_RightPanel_headerButton
+        // mx_RightPanel_headerButton_highlight mx_RightPanel_roomSummaryButton"
+        //     onClick={ev => this.onClickView(ev)}
+        //     style={{ float: 'right' }} />
 
         const viewMemberDetail = <div id="mx_table_role_detail" style={{ display: 'none' }}>
             <DirectoryDetailView queryId={this.props.member.userId}
