@@ -8,7 +8,7 @@ import { getNameFromEmail } from "../../../utils/formatEmailUtil";
 import { getTextLabelFromEnum } from "../../../utils/directory-enums";
 import * as directoryService from '../../../DirectoryService';
 import { formatFullDate } from "../../../DateUtils";
-import { getKeyPairFromComplexObject } from "../../../utils/ObjectTranslationUtils";
+import { getKeyPairFromComplexObject } from "../../../utils/objectToArrayUtils";
 import { isEmpty } from "lodash";
 
 /*

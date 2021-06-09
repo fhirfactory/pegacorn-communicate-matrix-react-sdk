@@ -1,5 +1,4 @@
 /**
- * Returns an array of key-value pairs from outer key and inner key name
  * - obj({key1: value3}) assuming you are passing in value3 as key
  * A utility function of object type which iterates through and gets inner value that
  * matches with inner key and makes
@@ -22,6 +21,7 @@
     }
 * @param obj An object that contains nested key-pair values as specified in above example object
 * @param queryKey The key that needs to be either of {k2,k3,k4 in param}
+* @returns a simplified array of key-value pairs inside object from outer key and inner key name
 *
 **/
 
