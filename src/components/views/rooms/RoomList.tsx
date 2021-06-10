@@ -74,6 +74,7 @@ interface IState {
 const TAG_ORDER: TagID[] = [
     DefaultTagID.Invite,
     DefaultTagID.Favourite,
+    DefaultTagID.Role,//tag for role-selection list display 
     DefaultTagID.DM,
     DefaultTagID.Untagged,
 
@@ -154,6 +155,11 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
         isInvite: false,
         defaultHidden: false,
     },
+    [DefaultTagID.Role]: {
+        sectionLabel: "Role",
+        isInvite: false,
+        defaultHidden: false,
+    },   
     [DefaultTagID.DM]: {
         sectionLabel: _td("People"),
         isInvite: false,
@@ -387,7 +393,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         const newLists = RoomListStore.instance.orderedLists;
         if (SettingsStore.getValue("advancedRoomListLogging")) {
             // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
-            console.log("new lists", newLists);
+            console.log("new lists +++", newLists);
         }
 
         const previousListIds = Object.keys(this.state.sublists);
@@ -426,7 +432,13 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             });
         }
     };
-
+private getRoles= () => {
+    return [
+        "CCU CNC",
+        "Snr Cardiac Physiologist",
+        "FAMSAC On Call Nurse"
+    ];
+};
     private onStartChat = () => {
         const initialText = RoomListStore.instance.getFirstNameFilterCondition()?.search;
         dis.dispatch({ action: "view_create_chat", initialText });

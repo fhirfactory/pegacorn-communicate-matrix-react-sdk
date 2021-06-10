@@ -25,7 +25,8 @@ export enum DefaultTagID {
     DM = "im.vector.fake.direct",
     ServerNotice = "m.server_notice",
     Suggested = "im.vector.fake.suggested",
-    RoleDirectory = "im.vector.fake.roleDirectory" // extra drop down for displaying role dropdown
+    RoleDirectory = "im.vector.fake.roleDirectory", // extra drop down for displaying role dropdown
+    Role = "m.role",//extra tag for displaying already selected roles through role selection app
 }
 
 export const OrderedDefaultTagIDs = [
@@ -37,7 +38,8 @@ export const OrderedDefaultTagIDs = [
     DefaultTagID.ServerNotice,
     DefaultTagID.Suggested,
     DefaultTagID.Archived,
-    DefaultTagID.RoleDirectory
+    DefaultTagID.RoleDirectory,
+    DefaultTagID.Role,
 ];
 
 export type TagID = string | DefaultTagID;
