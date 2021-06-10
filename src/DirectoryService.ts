@@ -43,7 +43,7 @@ export const searchIsOnRoleOrPeopleOrServiceDirectory = (kind) => {
 /**
  * This will be used to display selected roles
  */
- export const getSelectedRolesForCurrentUser = (kind) => {
+ export const getSelectedRolesForCurrentUser = () => {
 	// get email id
 	const user_id_encoded = encodeURI(MatrixClientPeg.get().getUserId());//TODO:Sam remove this line as we need email id instead of userid	
 	const user_emailid = "Samridhi.Shukla@test.act.gov.au";	//TODO:sam get email id of current user 	//"selected_roles": "https://lingo-server.site-a/pegacorn/operations/directory/r1/Practitioner/Samridhi.Shukla@test.act.gov.au/PractitionerRoles",//"base_path" : "http://localhost:12121/pegacorn/operations/directory/r1/"//"base_path" + "Practitioner/" + emailid +  "/PractitionerRoles"	//Samridhi.Shukla@test.act.gov.au
@@ -64,7 +64,16 @@ export const searchIsOnRoleOrPeopleOrServiceDirectory = (kind) => {
 		};
 	});
 }
-
+/**
+ * This will be used to display selected roles
+ */
+ export const getSelectedRolesForCurrentUser_dummy = () => {
+  return [
+		"CCU CNC",
+		"Snr Cardiac Physiologist",
+		"FAMSAC On Call Nurse"
+	];
+}
 /**
  * This will be used by service, role and people search by switching api based on search context
  * RETURN a fetch Promise, so calling code can either

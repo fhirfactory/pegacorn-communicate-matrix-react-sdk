@@ -45,6 +45,7 @@ import * as config from "../../config";
 import {replaceableComponent} from "../../utils/replaceableComponent";
 import SpaceStore, {UPDATE_SELECTED_SPACE} from "../../stores/SpaceStore";
 import { Resizable } from "re-resizable";
+import * as directoryService from '../../DirectoryService';
 interface IProps {
     isMinimized: boolean;
     resizeNotifier: ResizeNotifier;
@@ -371,12 +372,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         }
     }
     private getRoles= () => {
-        //Todo API call instead of hard coded array
-       return [
-            "CCU CNC",
-            "Snr Cardiac Physiologist",
-            "FAMSAC On Call Nurse"
-        ];
+        
+       return directoryService.getSelectedRolesForCurrentUser_dummy();//Todo API call instead of hard coded array
     };
     private renderSearchExplore(): React.ReactNode {
         return (
@@ -406,19 +403,18 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         this.setState({isRolesSelectedExpanded : !this.state.isRolesSelectedExpanded});
         this.handleStickyHeaders(this.listContainerRef.current);
 	}
-
-	private rolesList = () => {
-        const roles = this.getRoles();
+/*
+	private rolesList = (roles) => {        
         
         if(this.state.isRolesSelectedExpanded){
 			return (
 			<React.Fragment>
-                {/* <Resizable
+                {<Resizable
                 	size={{height: this.state.rolesHeight} as any}
                 	className="mx_RoomSublist_resizeBox"
                 	minHeight={this.state.rolesHeight}
                 	maxHeight={this.state.rolesHeight}
-                > */}
+                > }
 					<div className="mx_RoomSublist_tiles">
                             {roles.map((ele) => (
                                 <div className="mx_AccessibleButton mx_RoomTile">
@@ -426,15 +422,14 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                                 </div>
                             ))}
 					</div>
-				{/* </Resizable> */}
+				{ </Resizable> }
 			</React.Fragment>
 			)
 		}else{
 			return <></>
-		}
-		
-	}
-
+		}		
+	}*/
+    
     private onRolesHeaderClick = () => {
 		this.setState({rolesHeight: 48});
         this.setState({isRolesSelectedExpanded : !this.state.isRolesSelectedExpanded});
@@ -449,10 +444,9 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         });
 
     }
-	private rolesList = () => {
-        const practitionerRoles = this.getRoles();
-        const listItems = practitionerRoles.map((d) => <li key={d}>{d}</li>);
-		if(this.state.isRolesSelectedExpanded){
+	private rolesList = (roles) => {
+		if((roles != null && roles?.length !== 0)  && this.state.isRolesSelectedExpanded){
+            const listItems = roles.map((d) => <li key={d}>{d}</li>);
 			return (
 			<React.Fragment>
                 <Resizable
@@ -477,7 +471,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
 	private renderRolesSelected(): React.ReactNode {
-
+        let roles = this.getRoles();
 		const collapseClasses = classNames({
             'mx_RoomSublist_collapseBtn': true,
             'mx_RoomSublist_collapseBtn_collapsed': !this.state.isRolesSelectedExpanded,
@@ -489,11 +483,14 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 					<div className="mx_RoomSublist_stickable">
 						<div class="mx_AccessibleButton mx_RoomSublist_headerText" role="treeitem" aria-expanded="false" aria-level="1">
 							<span className={collapseClasses}></span>
-							<span>Roles Selected</span>
+							<span> {roles == null || roles?.length === 0 ? "No Roles selected": "Roles Selected" } </span>
 						</div>
 					</div>
-				</div>
-				{this.rolesList()}
+				</div>				
+                { 
+                    this.rolesList(roles)
+                    
+                }
 			</div>
 		);
 	}
