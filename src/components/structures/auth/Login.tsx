@@ -116,6 +116,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
             canTryLogin: true,
 
             flows: null,
+			ssoFlowOnly: false,
 
             username: "",
             phoneCountry: null,
@@ -485,6 +486,23 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         return errorText;
     }
 
+    renderHeader() {
+        if (!this.state.flows) return null;
+
+        const hasPasswordFlow = this.state.flows?.find(flow => flow.type === "m.login.password");
+        const ssoFlow = this.state.flows?.find(flow => flow.type === "m.login.sso" || flow.type === "m.login.cas");
+        this.state.ssoFlowOnly = (ssoFlow && !hasPasswordFlow);
+        // If has no password flow but an SSO flow, don't show the header, but just show the SSO button
+        if (this.state.ssoFlowOnly) {
+            return null;
+        }
+        return (
+                <h2>
+                    {_t('Sign in')}
+                </h2>
+        );
+    }
+
     renderLoginComponentForFlows() {
         if (!this.state.flows) return null;
 
@@ -533,6 +551,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                 loginType={loginType}
                 fragmentAfterLogin={this.props.fragmentAfterLogin}
                 primary={!this.state.flows.find(flow => flow.type === "m.login.password")}
+				ssoFlowOnly={this.state.ssoFlowOnly}
             />
         );
     };
@@ -593,10 +612,8 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
             <AuthPage>
                 <AuthHeader disableLanguageSelector={this.props.isSyncing || this.state.busyLoggingIn} />
                 <AuthBody>
-                    <h2>
-                        {_t('Sign in')}
-                        {loader}
-                    </h2>
+                    {loader}
+                    { this.renderHeader() }
                     { errorTextSection }
                     { serverDeadSection }
                     <ServerPicker

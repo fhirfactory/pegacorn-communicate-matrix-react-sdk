@@ -40,7 +40,7 @@ import Notifier from '../../Notifier';
 import Modal from "../../Modal";
 import Tinter from "../../Tinter";
 import * as sdk from '../../index';
-import { showRoomInviteDialog, showStartChatInviteDialog } from '../../RoomInvite';
+import { showRoomInviteDialog, showStartChatInviteDialog, showRoleDirectorySearchDialog  } from '../../RoomInvite';
 import * as Rooms from '../../Rooms';
 import linkifyMatrix from "../../linkify-matrix";
 import * as Lifecycle from '../../Lifecycle';
@@ -84,6 +84,7 @@ import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from '../../toasts/MobileGuideToast';
 import SpaceStore from "../../stores/SpaceStore";
 import SpaceRoomDirectory from "./SpaceRoomDirectory";
+import { isE2EEEnabledInWellKnown } from '../../utils/WellKnownUtils';
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -116,6 +117,8 @@ export enum Views {
     // We are logged out (invalid token) but have our local state again. The user
     // should log back in to rehydrate the client.
     SOFT_LOGOUT,
+    // Show role directory page to search
+    Role_Directory
 }
 
 const AUTH_SCREENS = ["register", "login", "forgot_password", "start_sso", "start_cas"];
@@ -394,9 +397,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         const crossSigningIsSetUp = cli.getStoredCrossSigningForUser(cli.getUserId());
-        if (crossSigningIsSetUp) {
+
+		const encrptionIsEnabled = isE2EEEnabledInWellKnown();
+		// Only need cross signing for encryption, so only prompt if encrpytion is enabled in the wellKnownConfig
+        if (encrptionIsEnabled && crossSigningIsSetUp) {
             this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
-        } else if (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
+        } else if (encrptionIsEnabled && await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
             this.setStateForNewView({ view: Views.E2E_SETUP });
         } else {
             this.onLoggedIn();
@@ -730,6 +736,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case 'view_invite':
                 showRoomInviteDialog(payload.roomId);
+                break;
+            // Directory search (role)
+            case 'search_role_directory':
+               showRoleDirectorySearchDialog(payload.initialText || "");
                 break;
             case 'view_last_screen':
                 // This function does what we want, despite the name. The idea is that it shows
@@ -1939,10 +1949,20 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         return fragmentAfterLogin;
     }
 
+    showWelcomeScreenBeforeLoginScreen(): boolean {
+        const auto_redirect_from_welcome_screen_to_login = SdkConfig.get()['auto_redirect_from_welcome_screen_to_login'];
+        let showWelcomeScreen = true;
+        const hideWelcomeScreen = auto_redirect_from_welcome_screen_to_login === true;
+       if( this.state.view === Views.WELCOME) {
+        showWelcomeScreen = !hideWelcomeScreen;
+       }
+       console.log("show welcome screen value:", showWelcomeScreen);
+       return showWelcomeScreen;
+    }
+
     render() {
         const fragmentAfterLogin = this.getFragmentAfterLogin();
         let view = null;
-
         if (this.state.view === Views.LOADING) {
             const Spinner = sdk.getComponent('elements.Spinner');
             view = (
@@ -1980,18 +2000,32 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                  * as using something like redux to avoid having a billion bits of state kicking around.
                  */
                 const LoggedInView = sdk.getComponent('structures.LoggedInView');
-                view = (
-                    <LoggedInView
-                        {...this.props}
-                        {...this.state}
-                        ref={this.loggedInView}
-                        matrixClient={MatrixClientPeg.get()}
-                        onRoomCreated={this.onRoomCreated}
-                        onCloseAllSettings={this.onCloseAllSettings}
-                        onRegistered={this.onRegistered}
-                        currentRoomId={this.state.currentRoomId}
-                    />
-                );
+
+                const roleSelector = SdkConfig.get()["role_selector"];//"role-selection"
+                const roleSelectorText = roleSelector?.text;// SdkConfig.get()["role_selector_name"];//"role-selection"
+                const roleSelectorUrl = roleSelector?.url;//SdkConfig.get()["role_selector_url"];//'/role-selection/#'
+
+                let ref = document.referrer;
+                
+                if((!roleSelectorText) || ref?.toLowerCase()?.includes(roleSelectorText))
+                {
+                    view = (
+                        <LoggedInView
+                            {...this.props}
+                            {...this.state}
+                            ref={this.loggedInView}
+                            matrixClient={MatrixClientPeg.get()}
+                            onRoomCreated={this.onRoomCreated}
+                            onCloseAllSettings={this.onCloseAllSettings}
+                            onRegistered={this.onRegistered}
+                            currentRoomId={this.state.currentRoomId}
+                        />
+                        );
+                }
+                else
+                {
+                    window.location.href = roleSelectorUrl;
+                }
             } else {
                 // we think we are logged in, but are still waiting for the /sync to complete
                 const Spinner = sdk.getComponent('elements.Spinner');
@@ -2011,7 +2045,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     </div>
                 );
             }
-        } else if (this.state.view === Views.WELCOME) {
+        } else if (this.state.view === Views.WELCOME && this.showWelcomeScreenBeforeLoginScreen()) {
             const Welcome = sdk.getComponent('auth.Welcome');
             view = <Welcome />;
         } else if (this.state.view === Views.REGISTER && SettingsStore.getValue(UIFeature.Registration)) {
@@ -2043,7 +2077,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     {...this.getServerProperties()}
                 />
             );
-        } else if (this.state.view === Views.LOGIN) {
+        } else if (this.state.view === Views.LOGIN || !this.showWelcomeScreenBeforeLoginScreen()) {
             const showPasswordReset = SettingsStore.getValue(UIFeature.PasswordReset);
             const Login = sdk.getComponent('structures.auth.Login');
             view = (

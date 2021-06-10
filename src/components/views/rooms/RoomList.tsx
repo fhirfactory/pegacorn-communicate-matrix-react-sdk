@@ -53,6 +53,7 @@ import { showAddExistingRooms, showCreateNewRoom } from "../../../utils/space";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { ISpaceSummaryRoom } from "../../structures/SpaceRoomDirectory";
 import RoomAvatar from "../avatars/RoomAvatar";
+import * as config from "../../../config";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -82,11 +83,17 @@ const TAG_ORDER: TagID[] = [
     DefaultTagID.ServerNotice,
     DefaultTagID.Suggested,
     DefaultTagID.Archived,
+
+    // -- Custom Tags Directory --
+
+    DefaultTagID.RoleDirectory
 ];
 const CUSTOM_TAGS_BEFORE_TAG = DefaultTagID.LowPriority;
 const ALWAYS_VISIBLE_TAGS: TagID[] = [
     DefaultTagID.DM,
     DefaultTagID.Untagged,
+    // -- Custom Directory Tags --
+    (config.showRoleDirectory ? DefaultTagID.RoleDirectory : '')
 ];
 
 interface ITagAesthetics {
@@ -155,6 +162,12 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
         // Either onAddRoom or addRoomContextMenu are set depending on whether we
         // have dialer support.
     },
+    [DefaultTagID.RoleDirectory]: {
+        sectionLabel: _td("Roles"),
+        isInvite: false,
+        defaultHidden: !config.showRoleDirectory,
+        addRoomLabel: _td("Search Roles and Start Discussion"),
+    },
     [DefaultTagID.Untagged]: {
         sectionLabel: _td("Rooms"),
         isInvite: false,
@@ -216,6 +229,7 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
                         defaultDispatcher.dispatch({action: "view_create_room"});
                     }}
                 />
+                { config.showPublicRoomServerSelectionDropdown &&
                 <IconizedContextMenuOption
                     label={CommunityPrototypeStore.instance.getSelectedCommunityId()
                         ? _t("Explore community rooms")
@@ -228,6 +242,7 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
                         defaultDispatcher.fire(Action.ViewRoomDirectory);
                     }}
                 />
+                }
             </IconizedContextMenuOptionList>;
         },
     },
@@ -551,6 +566,11 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
     public render() {
         let explorePrompt: JSX.Element;
+        if (config.left_hand_nav_help_text) {
+            explorePrompt = <div className="mx_RoomList_explorePrompt">
+                <div>{config.left_hand_nav_help_text}</div>
+            </div>
+        } else
         if (!this.props.isMinimized) {
             if (this.state.isNameFiltering) {
                 explorePrompt = <div className="mx_RoomList_explorePrompt">
