@@ -371,7 +371,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         }
     }
     private getRoles= () => {
-        return [
+        //Todo API call instead of hard coded array
+       return [
             "CCU CNC",
             "Snr Cardiac Physiologist",
             "FAMSAC On Call Nurse"
@@ -449,6 +450,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
     }
 	private rolesList = () => {
+        const practitionerRoles = this.getRoles();
+        const listItems = practitionerRoles.map((d) => <li key={d}>{d}</li>);
 		if(this.state.isRolesSelectedExpanded){
 			return (
 			<React.Fragment>
@@ -460,7 +463,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 >
 					<div className="mx_RoomSublist_tiles">
 						<div className="mx_AccessibleButton mx_RoomTile">
-							<p><span>Role1</span><br/>
+							<p><span>{listItems }</span><br/>
                             <span>Role 2</span><br/>                          
                             </p>
 						</div>
