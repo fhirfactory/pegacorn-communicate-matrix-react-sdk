@@ -314,6 +314,7 @@ interface IDMRoomTileProps {
     roleCategoryId: string;
     kind: string;
     error: any;
+    onToggleFavorite;
 }
 
 class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
@@ -324,11 +325,12 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         e.preventDefault();
         e.stopPropagation();
 
-     if(!this.onToggleIsEnabled)
+        if (!this.onToggleIsEnabled) {
         this.props.onToggle(this.props.member);
+        }
     };
 
-    onClickView(ev: React.MouseEvent<HTMLElement>) {
+    onToggleView(ev: React.MouseEvent<HTMLElement>) {
         ev.preventDefault();
         ev.stopPropagation();
         this.onToggleIsEnabled = true;
@@ -381,19 +383,25 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         return result;
     }
 
-    handleFavoriteToggle(ev: React.MouseEvent) {
-        this.onToggleIsEnabled = false;
-        let newFavoriteSet: string[] = this.props.currentUserFavorite;
-        if (newFavoriteSet.length > 0) {
-            for (let favorite in this.props.currentUserFavorite) {
-                if (favorite.indexOf(this.props.member.name)) {
-                    newFavoriteSet = newFavoriteSet?.filter(val => val.indexOf(this.props.member.name) !== -1)
-                }
-            }
+    handleFavoriteToggle = (ev: React.MouseEvent<HTMLElement>) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.onToggleIsEnabled = true;
+        let currentUserFavorites: string[] = this.props.currentUserFavorite;
+        let index = currentUserFavorites.indexOf(this.props.member.userId);
+        if (index > -1) {
+            currentUserFavorites = currentUserFavorites.splice(index, 1);
         } else {
-            newFavoriteSet.push(this.props.member.userId);
+            currentUserFavorites.push(this.props.member.userId);
         }
-        directoryService.updateFavoritesForCurrentUser(this.props.kind, newFavoriteSet);
+        return directoryService.updateFavoritesForCurrentUser(this.props.kind, currentUserFavorites)
+            .then((response) => {
+                if (response === 200) {
+                    this.props.onToggleFavorite();
+                } else {
+                    return;
+                }
+            });
     }
 
     render() {
@@ -478,9 +486,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
 
         const favorite = <Favorites isFavorite={this.props.member.favorite}
             displayTooltipOnHover={true}
-            onMouseHover
             kind={this.props.kind}
-            onClick={(ev) => this.handleFavoriteToggle(ev)}
             onToggle={(ev) => this.handleFavoriteToggle(ev)}
         />
 
@@ -495,12 +501,12 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             directorySearchContext={this.props.kind} />
 
         const viewDetailedInfoIcon = <AccessibleButton id="mx_viewDetailBtn"
-            className="mx_RoomSublist_collapseBtn" onClick={ev => this.onClickView(ev)}
+            className="mx_RoomSublist_collapseBtn" onClick={ev => this.onToggleView(ev)}
             style={{ float: 'right' }}>
         </AccessibleButton>
         // const viewDetailedInfoIcon = <span id="mx_viewDetailBtn" className=" mx_RightPanel_headerButton mx_AccessibleButton mx_RightPanel_headerButton
         // mx_RightPanel_headerButton_highlight mx_RightPanel_roomSummaryButton"
-        //     onClick={ev => this.onClickView(ev)}
+        //     onClick={ev => this.onToggleView(ev)}
         //     style={{ float: 'right' }} />
 
         const viewMemberDetail = <div id="mx_table_role_detail" style={{ display: 'none' }}>
@@ -1341,6 +1347,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         }
     };
 
+    _toggleMemberFavorite = () => {
+        this._updateDirectorySearchFromAPI(this.state.filterText);
+    }
+
     _removeMember = (member: Member) => {
         const targets = this.state.targets.map(t => t); // cheap clone for mutation
         const idx = targets.indexOf(member);
@@ -1580,6 +1590,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 currentUserFavorite={this.state.favorites}
                 kind={this.props.kind}
                 error={this.state.errorText}
+                onToggleFavorite={this._toggleMemberFavorite}
             />
         ));
         return (

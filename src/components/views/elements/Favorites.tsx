@@ -15,8 +15,7 @@ interface IProps {
     height: number;
     width: number;
     onHover: boolean;
-    onToggle(): boolean;
-    //   onClick?: React.MouseEventHandler;
+    onToggle;
 }
 
 const Favorite = (props: IProps) => {
@@ -50,7 +49,7 @@ const Favorite = (props: IProps) => {
     // render favorite or unfavorite given search list.
     favoriteIcon = (
         <span className='mx_InviteDialog_roomTile_favorite'
-            onClick={onClickFavorite}
+            onClick={props.onToggle}
             style={{
                 float: 'right',
                 marginLeft: '10px',
@@ -61,6 +60,7 @@ const Favorite = (props: IProps) => {
             {isFavorite ?
                 <img src={require("../../../../res/img/element-icons/roomlist/favorite.svg")} title="Favorite" alt="favorite icon" />
                 : <img src={require("../../../../res/img/element-icons/roomlist/unfavorite.svg")} title="not favorite" alt="favorite icon" />}
+
             {onHover ? <p className="mx_InviteDialog_favorite_hovor_effect" style={{ display: 'none' }}>Make it favorite</p>
                 :
                 <p className="mx_InviteDialog_favorite_hovor_effect" style={{ display: 'none' }}>Favorite</p>

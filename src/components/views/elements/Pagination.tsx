@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes, { number } from 'prop-types';
 
 const defaultProps = {
-    initialPage: 0,
+    initialPage: 1,
     pageSize: 20,
     onChangePage: (pageNumber) =>  number,
     numOfTotalRecords: 1,

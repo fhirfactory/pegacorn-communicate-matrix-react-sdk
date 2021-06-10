@@ -144,11 +144,9 @@ export const updateFavoritesForCurrentUser = (kind, favourites) => {
             'Content-Type': 'application/json',
         },
         body: currentFavoritePayload
-    }).then(res => res.json())
-        .then(response => {
-            return {
-                favorites: response.favourites
-            };
+    }).then(res => {
+        console.log(`Favorite update reponse status code was ${res.status}`);
+            return res.status;
         }).catch((err) => {
             return {
                 errorText: err
