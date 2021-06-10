@@ -434,6 +434,12 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 		
 	}
 
+    private onRolesHeaderClick = () => {
+		this.setState({rolesHeight: 48});
+        this.setState({isRolesSelectedExpanded : !this.state.isRolesSelectedExpanded});
+        this.handleStickyHeaders(this.listContainerRef.current);
+	}
+
 	private renderRolesSelected(): React.ReactNode {
 
 		const collapseClasses = classNames({
@@ -441,12 +447,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             'mx_RoomSublist_collapseBtn_collapsed': !this.state.isRolesSelectedExpanded,
         });
 
-	private onRolesHeaderClick = () => {
-		this.setState({rolesHeight: 48});
-        this.setState({isRolesSelectedExpanded : !this.state.isRolesSelectedExpanded});
-        this.handleStickyHeaders(this.listContainerRef.current);
-	}
-
+    }
 	private rolesList = () => {
 		if(this.state.isRolesSelectedExpanded){
 			return (
@@ -470,7 +471,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 		}else{
 			return <></>
 		}
-	}
+    }
 
 	private renderRolesSelected(): React.ReactNode {
 
