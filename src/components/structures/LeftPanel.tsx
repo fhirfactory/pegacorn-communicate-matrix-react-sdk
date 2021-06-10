@@ -370,7 +370,13 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             );
         }
     }
-
+    private getRoles= () => {
+        return [
+            "CCU CNC",
+            "Snr Cardiac Physiologist",
+            "FAMSAC On Call Nurse"
+        ];
+    };
     private renderSearchExplore(): React.ReactNode {
         return (
             <div
@@ -394,6 +400,46 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             </div>
         );
     }
+	private onRolesHeaderClick = () => {
+		this.setState({rolesHeight: 48});
+        this.setState({isRolesSelectedExpanded : !this.state.isRolesSelectedExpanded});
+        this.handleStickyHeaders(this.listContainerRef.current);
+	}
+
+	private rolesList = () => {
+        const roles = this.getRoles();
+        
+        if(this.state.isRolesSelectedExpanded){
+			return (
+			<React.Fragment>
+                {/* <Resizable
+                	size={{height: this.state.rolesHeight} as any}
+                	className="mx_RoomSublist_resizeBox"
+                	minHeight={this.state.rolesHeight}
+                	maxHeight={this.state.rolesHeight}
+                > */}
+					<div className="mx_RoomSublist_tiles">
+                            {roles.map((ele) => (
+                                <div className="mx_AccessibleButton mx_RoomTile">
+                                <p><span>{ele}</span><br/></p>
+                                </div>
+                            ))}
+					</div>
+				{/* </Resizable> */}
+			</React.Fragment>
+			)
+		}else{
+			return <></>
+		}
+		
+	}
+
+	private renderRolesSelected(): React.ReactNode {
+
+		const collapseClasses = classNames({
+            'mx_RoomSublist_collapseBtn': true,
+            'mx_RoomSublist_collapseBtn_collapsed': !this.state.isRolesSelectedExpanded,
+        });
 
 	private onRolesHeaderClick = () => {
 		this.setState({rolesHeight: 48});
