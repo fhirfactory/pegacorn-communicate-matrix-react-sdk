@@ -1935,7 +1935,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         </div>}
                     </div>
                     {this._renderIdentityServerWarning()}
-                    <div className='error'>{this.state.errorText}</div>
+                    <div className='error' style={{margin: '10px auto'}}>{this.state.errorText}</div>
                     <div className="mx_InvitedDialog_buttonAndFilter">
                     {this._renderClearSearchButton()}
                     {this._renderFilterOptions()}
