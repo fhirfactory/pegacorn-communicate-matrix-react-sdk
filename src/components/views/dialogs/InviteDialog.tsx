@@ -543,8 +543,8 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                 {directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind) && viewDetailedInfoIcon}
                 {config.show_favorite_icon_in_directory_search && favorite}
                 {config.showUserPresenceIndicator && userPresenceIndicator}
-                {directoryService.searchIsOnRoleOrPeopleOrServiceDirectory ? directoryContactView : null}
-                {directoryService.searchIsOnRoleOrPeopleOrServiceDirectory ? viewMemberDetail : null}
+                {directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind) ? directoryContactView : null}
+                {directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind) ? viewMemberDetail : null}
                 {errorText}
             </div>
         );
@@ -1618,11 +1618,12 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 autoFocus={true}
                 disabled={this.state.busy}
                 autoComplete="off"
+                placeholder={config.directory ? _t("Please enter a keyword to search in directory."): null}
             />
         );
 
         let clearButton = (
-            config.directory ?
+            (config.directory && this.state.filterText) ?
             <AccessibleButton
                 tabIndex={0}
                 title={_t("Clear search")}
@@ -1641,7 +1642,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 {searchIcon}
                 {targets}
                 {input}
-                {this.state.filterText && clearButton}
+                {clearButton}
             </div>
         );
     }
