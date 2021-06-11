@@ -481,12 +481,12 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 			<div className="mx_RoomSublist">
 				<div className="mx_RoomSublist_headerContainer mx_RoomSublist_headerContainer_withAux" onClick={this.onRolesHeaderClick}>
 					<div className="mx_RoomSublist_stickable">
-						<div class="mx_AccessibleButton mx_RoomSublist_headerText" role="treeitem" aria-expanded="false" aria-level="1">
+						<div className="mx_AccessibleButton mx_RoomSublist_headerText" role="treeitem" aria-expanded="false" aria-level="1">
 							<span className={collapseClasses}></span>
 							<span> {roles == null || roles?.length === 0 ? "No Roles selected": "Roles Selected" } </span>
 						</div>
 					</div>
-				</div>				
+				</div>	
                 { 
                     this.rolesList(roles)
                     
@@ -527,7 +527,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             "mx_LeftPanel_actualRoomListContainer",
             "mx_AutoHideScrollbar",
         );
-
+        const imgurl =require("../../../res/img/RoleSelectorRedirect.png")
         return (
             <div className={containerClasses}>
                 {leftLeftPanel}
@@ -549,6 +549,15 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             {roomList}
                         </div>
                     </div>
+                    <div className="mx_LeftPanel_roomListWrapper">
+                            <div className="mx_RoomSublist" role="group" aria-label="Rooms">
+                            <div className="mx_LeftPanel_roomListWrapper">
+                                </div><div className="mx_RoomSublist_headerContainer mx_RoomSublist_headerContainer_withAux" aria-label="Rooms"><div className="mx_RoomSublist_stickable"><div tabindex="0" role="treeitem" aria-expanded="true" aria-level="1" class="mx_AccessibleButton mx_RoomSublist_headerText">
+                                            <div className="mx_DecoratedRoomAvatar mx_DecoratedRoomAvatar_cutout mx_RoomTile_role_selection mx_RoomTile_role_selection"> 
+                                            <img src={imgurl} alt="Role Selection Icon"></img>
+                                            </div>
+                        </div></div></div></div>
+                        </div>
                     { !this.props.isMinimized && <LeftPanelWidget onResize={this.onResize} /> }
                 </aside>
             </div>
