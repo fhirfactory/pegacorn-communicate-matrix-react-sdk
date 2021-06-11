@@ -1757,16 +1757,16 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     _renderNoResultsText() {
-        let informationText;
+        let noResultInformationText;
         if (this.state.errorText) return null;
         if (this.state.favoriteFilterIsSelected && this.state.serverResultsMixin.length < 1) {
-            informationText = <h4>{_t("You do not have any favorites at the moment. No results found while conducting favorite search with your credentials.")}</h4>
+            noResultInformationText = <h4>{_t("You do not have any favorites at the moment. No results found while conducting favorite search with your credentials.")}</h4>
         } else if (this.state.serverResultsMixin.length < 1 && this.state.filterText) {
-            informationText = <h4>{_t("Directory search did not retrieve any results at the moment. Please enter a valid keyword and try again.")}</h4>
+            noResultInformationText = <h4>{_t("Directory search did not retrieve any results at the moment. Please enter a valid keyword and try again.")}</h4>
         } else {
-            informationText = '';
+            noResultInformationText = '';
         }
-        return informationText;
+        return noResultInformationText;
     }
 
     render() {
