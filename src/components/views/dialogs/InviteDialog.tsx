@@ -1631,8 +1631,14 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             />: null
         );
 
+        let searchIcon = (
+            config.directory ?
+                <div className='mx_RoomSearch_icon' /> : null
+        );
+
         return (
             <div className='mx_InviteDialog_editor' onClick={this._onClickInputArea}>
+                {searchIcon}
                 {targets}
                 {input}
                 {this.state.filterText && clearButton}
@@ -1688,7 +1694,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     _renderFilterOptions() {
         if(!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) return null;
         return <div className="mx_InvitedDialog_filterOptions">
-            <p>Filter By:</p>
+            <p>Filter by:</p>
             {config.filter_by_displayName_in_directory &&
             <StyledMenuItemCheckbox
                 onClose={null}
@@ -1702,7 +1708,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 onChange={this.onChangeFilter.bind(this)}
                 checked={null}
                 className="filter-search-by-favorite">
-                Favorite Only
+                Favorites Only
            </StyledMenuItemCheckbox>
         </div>
 
@@ -1894,8 +1900,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             </React.Fragment>
         } else if (this.props.kind === directoryService.KIND_SERVICE_DIRECTORY_SEARCH) {
             title = config.service_directory.name;
-            buttonText = "Start Discussion";
-            goButtonFn = this._startDm;
             helpText = <React.Fragment>
                 {config.service_directory.feature_description}
             </React.Fragment>
@@ -1916,6 +1920,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     <p className='mx_InviteDialog_helpText'>{helpText}</p>
                     <div className='mx_InviteDialog_addressBar'>
                         {this._renderEditor()}
+                        {(this.props.kind !== directoryService.KIND_SERVICE_DIRECTORY_SEARCH) &&
                         <div className='mx_InviteDialog_buttonAndSpinner'>
                             <AccessibleButton
                                 kind="primary"
@@ -1926,7 +1931,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                                 {buttonText}
                             </AccessibleButton>
                             {spinner}
-                        </div>
+                        </div>}
                     </div>
                     {this._renderIdentityServerWarning()}
                     <div className='error'>{this.state.errorText}</div>
