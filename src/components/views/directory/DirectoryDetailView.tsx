@@ -250,7 +250,7 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
             // console.log("membershipDetail are", membershipDetail);
             }
 
-            return <table key={index} className="mx_role_table">
+            return <table key={index} className="mx_DirectoryDetailView_table">
                 <caption>
                     {this._renderDetailCaption(this.props.directorySearchContext)}
                 </caption>
@@ -311,7 +311,7 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
                         <tr>
                             <th>Organization Membership(s)</th>
                             <td>
-                                <table className="mx_role_table">
+                                <table className="mx_DirectoryDetailView_table">
                                     <tbody>
                                         {
                                             membershipDetail.map((member, index) => {
@@ -348,7 +348,7 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
         if (!this.state.activeRoleEmails) return null;
         let users = this.state.activeRoleEmails;
         if ((users?.length < 1) || !Array.isArray(users)) return null;
-        return <div className="mx_role_fulfilledBy">
+        return <div className="mx_DirectoryDetailView_fulfilledBy">
             <h3>Role Fulfilled By</h3>
             {users.map((value, index) => {
                 let name: string;
@@ -365,7 +365,7 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
     _renderPersonDirectoryHeader = () => {
         let roleCategories = this.state.personDirectoryActiveRoles;
         if ((!Array.isArray(roleCategories) || roleCategories?.length < 1)) return null;
-        return <div className="mx_role_fulfilledBy">
+        return <div className="mx_DirectoryDetailView_fulfilledBy">
             <h3>Practitioner is fulfilling following role(s)</h3>
             {roleCategories.map((roles, index) => {
                 return roles && <span className="mx_role_fulfilledBy_user" key={index}>
