@@ -350,7 +350,8 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
         if ((users?.length < 1) || !Array.isArray(users)) return null;
         return <div className="mx_DirectoryDetailView_fulfilledBy">
             <h3>Role Fulfilled By</h3>
-            {users.map((name, index) => {
+            {users.map((value, index) => {
+                let name = value.indexOf('@') !== -1 ? getNameFromEmail(value): value;
                 return name && <span className="mx_DirectoryDetailView_fulfilledBy_user" key={index}>
                     <li>{this._renderAvatar(name)}</li>
                     <li>{name}</li>
