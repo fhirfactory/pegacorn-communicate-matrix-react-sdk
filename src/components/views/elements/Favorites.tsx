@@ -54,8 +54,8 @@ const Favorite = (props: IProps) => {
             }}
         >
             {isFavorite ?
-                <img src={require("../../../../res/img/element-icons/roomlist/favorite.svg")} title="Favorite" alt="favorite icon" />
-                : <img src={require("../../../../res/img/element-icons/roomlist/unfavorite.svg")} title="not favorite" alt="favorite icon" />}
+                <img src={require("../../../../res/img/element-icons/roomlist/favorite.svg")} title="Favorite" alt="favorite icon" width={20} height={20}/>
+                : <img src={require("../../../../res/img/element-icons/roomlist/unfavorite.svg")} title="not favorite" alt="favorite icon" width={20} height={20}/>}
 
             {onHover ? <p className="mx_InviteDialog_favorite_hovor_effect" style={{ display: 'none' }}>Make it favorite</p>
                 :
