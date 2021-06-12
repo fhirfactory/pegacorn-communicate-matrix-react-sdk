@@ -138,10 +138,4 @@ export enum Action {
      * Fired when an upload is cancelled by the user. Should be used with UploadCanceledPayload.
      */
     UploadCanceled = "upload_canceled",
-
-    /**
-     * View a role directory search
-     */
-    ViewRoles = "view_roles",
-
 }
