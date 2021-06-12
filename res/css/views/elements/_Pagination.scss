@@ -1,0 +1,26 @@
+
+// directory pagination
+.mx_Pagination {
+    display: flex;
+    float: right;
+    list-style: none;
+    padding: 8px;
+    li {
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color .3s;
+        &:first-child, &:last-child {
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+          }
+        a {
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+        &:hover:not(:active) {background-color: #ddd;}
+        &:visited {
+            background-color: black !important;
+            color: white !important;
+        }
+    }
+    }
+}
