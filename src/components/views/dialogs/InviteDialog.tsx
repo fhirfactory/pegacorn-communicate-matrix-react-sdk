@@ -1885,7 +1885,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             buttonText = _t("Transfer");
             goButtonFn = this._transferCall;
         } else if (this.props.kind === directoryService.KIND_ROLE_DIRECTORY_SEARCH) {
-            title = "Role Directory Search";
+            title = config.role_directory.name;
             buttonText = "Start Discussion";
             goButtonFn = this._startDm;
             helpText = <React.Fragment>
