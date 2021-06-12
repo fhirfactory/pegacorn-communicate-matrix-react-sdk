@@ -291,7 +291,7 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
                         <tr>
                             <th>Service Location</th>
                             <td>
-                                {containedLocationIDs.map((location, index) => {
+                                {containedLocationIDs?.map((location, index) => {
                                     return <span key={index}>{isEmpty(location) ? location : 'Not Available'}</span>
                                 })
                                 }
@@ -367,9 +367,10 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
         return <div className="mx_DirectoryDetailView_fulfilledBy">
             <h3>Practitioner is fulfilling following role(s)</h3>
             {roleCategories.map((roles, index) => {
-                return roles && <span className="mx_role_fulfilledBy_user" key={index}>
-                    <li>{this._renderAvatar(roles["roleCategory"])}</li>
-                    <li>{roles['role']}</li>
+                console.log("Found data was", roles["primaryRoleCategoryID"]);
+                return roles && <span className="mx_DirectoryDetailView_fulfilledBy_user" key={index}>
+                    <li>{this._renderAvatar(roles["primaryRoleCategoryID"])}</li>
+                    <li>{roles["displayName"]}</li>
                 </span>
             })}
         </div>

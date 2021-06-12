@@ -282,7 +282,7 @@ export const getRolePersonServiceDetail = (searchContext: string, searchIdInCont
             if (entries) {
                 arrayResponse.push(entries);
                 arrayResponse.map(val => activePractitionerSet = val.activePractitionerSet)
-                activePractitionerSet.map(val =>  activeRoleNames.push(val["displayName"]) || activeRoleNames.push(val["simplifiedID"]));  // used to find active practitioner by role directory
+                activePractitionerSet?.map(val =>  activeRoleNames.push(val["displayName"]) || activeRoleNames.push(val["simplifiedID"]));  // used to find active practitioner by role directory
                 arrayResponse.map(val => currentUserActiveRoles = val.currentPractitionerRoles)  // used to find active roles for particular practitioner at given time ()
             }
             return {
