@@ -78,7 +78,7 @@ interface IState {
     showUserRoleTable: boolean;
     entries: IProps[];
     error: any;
-    activeRoleEmails: string[];
+    activeRoleDisplayNames: string[];
     personDirectoryActiveRoles: [];
     loading: boolean;
     isFavorite: boolean;
@@ -124,7 +124,7 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
         this.state = {
             showUserRoleTable: false,
             entries: [],
-            activeRoleEmails: [],
+            activeRoleDisplayNames: [],
             personDirectoryActiveRoles: [],
             primaryRoleCategoryID: null,
             error: null,
@@ -159,7 +159,7 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
                     entries: response.entries,
                     showUserRoleTable: true,
                     loading: false,
-                    activeRoleEmails: response.activeRoleEmails,
+                    activeRoleDisplayNames: response.activeRoleDisplayNames,
                     personDirectoryActiveRoles: response['currentPractitionerRoles']
                 });
             } else {
@@ -345,15 +345,13 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
 
     // Shows what roles are currently being fulfilled by user (only applies to role directory )
     _renderRoleDirectoryHeader = () => {
-        if (!this.state.activeRoleEmails) return null;
-        let users = this.state.activeRoleEmails;
+        if (!this.state.activeRoleDisplayNames) return null;
+        let users = this.state.activeRoleDisplayNames;
         if ((users?.length < 1) || !Array.isArray(users)) return null;
         return <div className="mx_DirectoryDetailView_fulfilledBy">
             <h3>Role Fulfilled By</h3>
-            {users.map((value, index) => {
-                let name: string;
-                name = getNameFromEmail(value) || this.getDisplayNameFromAPI(value);
-                return name && <span className="mx_role_fulfilledBy_user" key={index}>
+            {users.map((name, index) => {
+                return name && <span className="mx_DirectoryDetailView_fulfilledBy_user" key={index}>
                     <li>{this._renderAvatar(name)}</li>
                     <li>{name}</li>
                 </span>

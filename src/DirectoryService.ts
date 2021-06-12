@@ -274,18 +274,20 @@ export const getRolePersonServiceDetail = (searchContext: string, searchIdInCont
         method: "GET"
     }).then(res => res.json())
         .then(response => {
-            let emails = [];
-            let roleArrayResponse = [];
+            let activePractitionerSet = [];
+            let  activeRoleNames = [];
+            let arrayResponse = [];
             let currentUserActiveRoles = [];
             let entries = response.entry;
             if (entries) {
-                roleArrayResponse.push(entries);
-                roleArrayResponse.map(val => emails = val.activePractitionerSet);  // used to find active practitioner by role directory
-                roleArrayResponse.map(val => currentUserActiveRoles = val.currentPractitionerRoles)  // used to find active roles for particular practitioner at given time ()
+                arrayResponse.push(entries);
+                arrayResponse.map(val => activePractitionerSet = val.activePractitionerSet)
+                activePractitionerSet.map(val =>  activeRoleNames.push(val["displayName"]) || activeRoleNames.push(val["simplifiedID"]));  // used to find active practitioner by role directory
+                arrayResponse.map(val => currentUserActiveRoles = val.currentPractitionerRoles)  // used to find active roles for particular practitioner at given time ()
             }
             return {
-                entries: roleArrayResponse,
-                activeRoleEmails: emails,
+                entries: arrayResponse,
+                activeRoleDisplayNames:  activeRoleNames,
                 currentPractitionerRoles: currentUserActiveRoles
             };
         }).catch(err => {
