@@ -46,7 +46,6 @@ import * as config from '../../../config';
 import * as directoryService from '../../../DirectoryService';
 import AccessibleButton from '../elements/AccessibleButton';
 import { StyledMenuItemCheckbox } from '../../structures/ContextMenu';
-import { keywordContainsSpecialCharacter } from '../../../utils/strings';
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -335,8 +334,8 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         ev.stopPropagation();
         this.onToggleIsEnabled = true;
 
-        const detailView = ev.currentTarget.parentNode.querySelector<HTMLElement>('#mx_table_role_detail');  // selects current detailed view
-        let viewDetailBtn = ev.currentTarget.parentNode.querySelector<HTMLElement>("#mx_viewDetailBtn");  // selects current button clicked
+        const detailView = ev.currentTarget.parentNode.querySelector<HTMLElement>('#mx_DirectoryDetailView_table');  // selects current detailed view
+        let viewDetailBtn = ev.currentTarget.parentNode.querySelector<HTMLElement>("#mx_DirectoryDetailView_btn");  // selects current button clicked
         if (detailView.style.display === "none") {
             detailView.style.display = "block";
             viewDetailBtn.classList.add('mx_RoomSublist_collapseBtn_collapsed');
@@ -500,16 +499,16 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             active={this.props.member.personIsActive}
             directorySearchContext={this.props.kind} />
 
-        const viewDetailedInfoIcon = <AccessibleButton id="mx_viewDetailBtn"
+        const viewDetailedInfoIcon = <AccessibleButton id="mx_DirectoryDetailView_btn"
             className="mx_RoomSublist_collapseBtn" onClick={ev => this.onToggleView(ev)}
             style={{ float: 'right' }}>
         </AccessibleButton>
-        // const viewDetailedInfoIcon = <span id="mx_viewDetailBtn" className=" mx_RightPanel_headerButton mx_AccessibleButton mx_RightPanel_headerButton
+        // const viewDetailedInfoIcon = <span id="mx_DirectoryDetailView_btn" className=" mx_RightPanel_headerButton mx_AccessibleButton mx_RightPanel_headerButton
         // mx_RightPanel_headerButton_highlight mx_RightPanel_roomSummaryButton"
         //     onClick={ev => this.onToggleView(ev)}
         //     style={{ float: 'right' }} />
 
-        const viewMemberDetail = <div id="mx_table_role_detail" style={{ display: 'none' }}>
+        const viewMemberDetail = <div id="mx_DirectoryDetailView_table" style={{ display: 'none' }}>
             <DirectoryDetailView queryId={this.props.member.userId}
                 favorite={this.props.member.favorite}
                 directorySearchContext={this.props.kind} />

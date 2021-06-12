@@ -118,7 +118,7 @@ class Pagination extends React.Component<typeof defaultProps, IState> {
         }
 
         return (
-            <span className="mx_Paginator">
+            <span className="mx_Pagination">
                 <li style={{ marginRight: '20px' }}>
                     Displaying records {pager.startIndex + 1} - {pager.endIndex + 1} of {this.props.numOfTotalRecords}.
                 </li>

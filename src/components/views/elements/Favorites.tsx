@@ -41,10 +41,6 @@ const Favorite = (props: IProps) => {
         }
     }, [props.isFavorite])
 
-    function onClickFavorite() {
-        props.onToggle;
-        console.log("Favorite is toggled...", props.onToggle);
-    }
 
     // render favorite or unfavorite given search list.
     favoriteIcon = (
