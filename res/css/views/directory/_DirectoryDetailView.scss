@@ -1,0 +1,55 @@
+
+//Role detail table style
+.mx_DirectoryDetailView_table {
+    height: 50% !important;
+    margin: 0;
+    width: 100%;
+    margin-top: 10px;
+th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    font-size: 1.3rem;
+  }
+
+  td,  th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+
+  tr:nth-child(even){background-color: #f2f2f2;}
+
+   td:hover {
+    background-color:rgba(0, 0, 0, 0.329);
+    color: rgb(1, 1, 19);
+    }
+
+   th {
+    padding: 5px;
+    text-align: middle;
+    background-color: darkslategrey; //$accent-color
+    color: white;
+ }
+ caption h2 {
+    font-weight: 600;
+    float: left;
+    margin: 15px 0;
+ }
+}
+
+/**
+* Role fullfilledBy avatar and names
+*/
+.mx_DirectoryDetailView_fulfilledBy {
+    padding-bottom: 20px;
+    &_user {
+        display: inline-flex;
+        align-items: center;
+        &>span {
+         font-weight: 800;
+        }
+        li {
+            margin-left: 10px;
+            list-style: none;
+        }
+    }
+}
