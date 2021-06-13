@@ -1728,15 +1728,12 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         if (!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) return null;
         // number of records displayed
         let displayedMemberTiles = document.getElementsByClassName("mx_InviteDialog_roomTile").length;
-        this.setState({
-            numOfRecordsDisplayed: displayedMemberTiles
-        })
         let numOfRecordsDisplayed;
         if (displayedMemberTiles > 0) {
-            numOfRecordsDisplayed = this.state.numOfRecordsDisplayed || displayedMemberTiles;
+            numOfRecordsDisplayed = this.state.serverResultsMixin.length || displayedMemberTiles;
         }
         let numOfTotalRecords = this.state.numOfRecordsFromSearchAPI;
-        if (numOfRecordsDisplayed > numOfTotalRecords) return null;
+        if (this.state.numOfRecordsFromSearchAPI >= 25) return null;
         if (numOfRecordsDisplayed < 1 || this.state.numOfRecordsFromSearchAPI < 1) return null;
         if (this.state.favoriteFilterIsSelected) {
             numOfRecordsDisplayed = this.state.serverResultsMixin.length;
@@ -1744,7 +1741,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         return <div className="mx_InvitedDialog_totalRecords">
             {(numOfRecordsDisplayed > 1) &&
                 <p>
-                    Showing {numOfRecordsDisplayed} records of total {numOfTotalRecords} records.
+                    Displaying {numOfRecordsDisplayed} of {numOfTotalRecords} total records.
                 </p>}
         </div>
     }
