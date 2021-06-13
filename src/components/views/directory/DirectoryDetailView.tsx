@@ -278,7 +278,7 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
                                     if (role.length <= 1) {
                                         return 'Member is not actively fulfilling any role at the moment.';
                                     }
-                                    return <p key={index} style={{display: 'table-cell', padding: '2px'}}>{role["simplifiedID"] }</p>
+                                    return <p key={index} style={{display: 'table-cell', padding: '2px'}}>{(index ? ', ': '') + role["displayName"] || role["simplifiedID"] }</p>
                                 }))}
                             </td>
                         </tr>
