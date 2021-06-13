@@ -317,22 +317,22 @@ interface IDMRoomTileProps {
 }
 
 class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
-   onToggleIsEnabled = false;
+   onToggleIsEnabled = true;
 
     _onClick = (e) => {
         // Stop the browser from highlighting text
         e.preventDefault();
         e.stopPropagation();
 
-        if (!this.onToggleIsEnabled) {
-        this.props.onToggle(this.props.member);
+        if (this.props.kind !== directoryService.KIND_SERVICE_DIRECTORY_SEARCH && this.onToggleIsEnabled) {
+            this.props.onToggle(this.props.member);
         }
     };
 
     onToggleView(ev: React.MouseEvent<HTMLElement>) {
         ev.preventDefault();
         ev.stopPropagation();
-        this.onToggleIsEnabled = true;
+        this.onToggleIsEnabled = false;
 
         const detailView = ev.currentTarget.parentNode.querySelector<HTMLElement>('#mx_DirectoryDetailView_table');  // selects current detailed view
         let viewDetailBtn = ev.currentTarget.parentNode.querySelector<HTMLElement>("#mx_DirectoryDetailView_btn");  // selects current button clicked
@@ -385,7 +385,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
     handleFavoriteToggle = (ev: React.MouseEvent<HTMLElement>) => {
         ev.preventDefault();
         ev.stopPropagation();
-        this.onToggleIsEnabled = true;
+        this.onToggleIsEnabled = false;
         let currentUserFavorites: string[] = this.props.currentUserFavorite;
         let index = currentUserFavorites.indexOf(this.props.member.userId);
         if (index > -1) {
@@ -583,6 +583,7 @@ interface IInviteDialogState {
     numOfRecordsDisplayed: number;
     favorites: string[];
     favoriteFilterIsSelected: boolean;
+    displayNoResultText: boolean;
 
     // These two flags are used for the 'Go' button to communicate what is going on.
     busy: boolean,
@@ -637,7 +638,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             numOfRecordsFromSearchAPI: null,
             numOfRecordsDisplayed: null,
             favorites: [],
-            favoriteFilterIsSelected: false
+            favoriteFilterIsSelected: false,
+            displayNoResultText: false
         };
 
         this._editorRef = createRef();
@@ -1106,6 +1108,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         directoryService.getMatchingRecords(term, this.props.kind)
             .then(response => {
                 if (!response) {
+                    this.setState({
+                        displayNoResultText: true
+                    })
                     return;
                 }
                 if (!response.errorText) {
@@ -1165,6 +1170,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         this.setState({
                             numOfRecordsFromSearchAPI: response.numOfRecordsFromSearchAPI,
                             serverResultsMixin: mappedServerSearchResults,
+                            displayNoResultText: false,
                             recents: [],
                             suggestions: []
                         });
@@ -1757,7 +1763,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
     _renderNoResultsText() {
         let noResultInformationText;
-        if (this.state.errorText) return null;
+        if (this.state.errorText || this.state.displayNoResultText || !this.state.filterText) return null;
         if (this.state.favoriteFilterIsSelected && this.state.serverResultsMixin.length < 1) {
             noResultInformationText = <h4>{_t("You do not have any favorites at the moment. No results found while conducting favorite search with your credentials.")}</h4>
         } else if (this.state.serverResultsMixin.length < 1 && this.state.filterText) {
