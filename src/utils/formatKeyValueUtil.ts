@@ -28,3 +28,18 @@ export function getFormattedRoleIds(key) {
     const finalFormattedValues = formattedValuesWithEnums || formattedValues();
     return finalFormattedValues;
 }
+
+/**
+ * Formats keys that contains special characters such as underscore (_)
+ * @returns The key without special character, and capitalizes keyname
+ * for both first and last part that is initially separated by special
+ * character
+ */
+
+export function replaceSpecialCharacter(target: any) {
+    if (!target) {
+        return null;
+    }
+    target = target.replace('_', "-").toLowerCase().split(',');
+    return (capitaliseFirstCharacter(target[0]));
+}

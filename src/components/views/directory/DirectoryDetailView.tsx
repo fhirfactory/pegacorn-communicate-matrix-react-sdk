@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import * as PropTypes from 'prop-types';
 import * as sdk from "../../../index";
-import {_t} from '../../../languageHandler';
-import { getFormattedRoleIds } from "../../../utils/formatKeyValueUtil";
+import { _t } from '../../../languageHandler';
+import { getFormattedRoleIds, replaceSpecialCharacter } from "../../../utils/formatKeyValueUtil";
 import { getFormattedPhoneNumberAndType } from "../../../utils/formatPhoneNumberUtil";
 import { getNameFromEmail } from "../../../utils/formatEmailUtil";
 import { getTextLabelFromEnum } from "../../../utils/directory-enums";
@@ -69,6 +69,7 @@ interface IProps {
         typeValue: string;
         typeDisplayValue: string;
     };
+    organisationStructure: [];
     parentOrganization?: string;
     containedOrganizations?: [];
     containedLocationIDs?: string[];
@@ -114,7 +115,8 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
         practitionerStatus: PropTypes.string,
         currentPractitionerRoles: PropTypes.array,
         favorite: PropTypes.bool,
-        containedLocationIDs: PropTypes.array
+        containedLocationIDs: PropTypes.array,
+        organisationStructure: PropTypes.array
     };
 
     _isMounted = false;
@@ -151,39 +153,39 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
         const searchContext = this.props.directorySearchContext;
 
         directoryService.getRolePersonServiceDetail(searchContext, uniqueId)
-	    .then(response => {
-            let activeRolesForUser = response["currentUserActiveRoles"];
-          //  console.log("Current practitioner roles are,", activeRolesForUser);
-            if (!response.errorText) {
-                this.setState({
-                    entries: response.entries,
-                    showUserRoleTable: true,
-                    loading: false,
-                    activeRoleDisplayNames: response.activeRoleDisplayNames,
-                    personDirectoryActiveRoles: response['currentPractitionerRoles']
-                });
-            } else {
-				this.setState({
-					error: response.errorText,
-					loading: false
-				});
-            }
-		});
+            .then(response => {
+                let activeRolesForUser = response["currentUserActiveRoles"];
+                //  console.log("Current practitioner roles are,", activeRolesForUser);
+                if (!response.errorText) {
+                    this.setState({
+                        entries: response.entries,
+                        showUserRoleTable: true,
+                        loading: false,
+                        activeRoleDisplayNames: response.activeRoleDisplayNames,
+                        personDirectoryActiveRoles: response['currentPractitionerRoles']
+                    });
+                } else {
+                    this.setState({
+                        error: response.errorText,
+                        loading: false
+                    });
+                }
+            });
     }
 
     getDisplayNameFromAPI(emailId: string): string {
         const promise = directoryService.getPractionerDisplayName(emailId);
         if (!promise) return null;
-		promise
-	    .then(response => {
-            if (!response.errorText) {
-                this.setState({
-                    displayName: response.displayName
-                });
-            } else {
-                this.setState(response);
-            }
-		});
+        promise
+            .then(response => {
+                if (!response.errorText) {
+                    this.setState({
+                        displayName: response.displayName
+                    });
+                } else {
+                    this.setState(response);
+                }
+            });
         let fullName = this.state.displayName;
         return fullName;
     }
@@ -241,105 +243,130 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
                 primaryOrganizationID, displayName, description, contactPoints,
                 dateTimeLastRoleSelected, currentPractitionerRoles,
                 organizationType, organizationMembership, containedOrganizations,
-                containedLocationIDs
+                containedLocationIDs, organisationStructure
             } = entry //destructuring the entry object/array
 
             let membershipDetail;
             if (organizationMembership) {
                 membershipDetail = getKeyPairFromComplexObject(organizationMembership, "leafValue");
-            // console.log("membershipDetail are", membershipDetail);
+                // console.log("membershipDetail are", membershipDetail);
             }
 
-            return <table key={index} className="mx_DirectoryDetailView_table">
-                <caption>
-                    {this._renderDetailCaption(this.props.directorySearchContext)}
-                </caption>
-                <tbody>
-                    {displayName && <tr><th>{this.getFormattedTextForIds("displayName", headerElement)}</th><td>{displayName}</td></tr>}
-                    {primaryRoleCategoryID && <tr><th>{this.getFormattedTextForIds("primaryRoleCategoryID", headerElement)}</th><td>{primaryRoleCategoryID}</td></tr>}
-                    {primaryRoleCategoryID && <tr><th>{this.getFormattedTextForIds("primaryOrganizationID", headerElement)}</th><td>{primaryOrganizationID}</td></tr>}
-                    {primaryRoleID && <tr><th>{this.getFormattedTextForIds("primaryRoleID", headerElement)}</th><td>{primaryRoleID}</td></tr>}
-                    {description && <tr><th>{this.getFormattedTextForIds("description", headerElement)}</th><td>{description}</td></tr>}
-                    {primaryLocationID && <tr><th>{this.getFormattedTextForIds("primaryLocationID", headerElement)}</th><td>{getFormattedRoleIds(primaryLocationID)}</td></tr>}
-                    {containedOrganizations && <tr>
-                        <th>{this.getFormattedTextForIds("containedOrganizations", headerElement)}</th>
-                        <td>{containedOrganizations.map((orgName: string) => {
-                            return <span key={index}>{orgName}</span>
-                        })}
-                        </td>
-                    </tr>}
-                </tbody>
-                {currentPractitionerRoles ?
+            return <>
+                <table key={index} className="mx_DirectoryDetailView_table">
+                    <caption>
+                        {this._renderDetailCaption(this.props.directorySearchContext)}
+                    </caption>
                     <tbody>
-                        <tr>
-                            <th>Currently Active Role(s)</th>
-                            <td>
-                                {(currentPractitionerRoles.map((role: string, index) => {
-                                    if (role.length <= 1) {
-                                        return 'Member is not actively fulfilling any role at the moment.';
-                                    }
-                                    return <p key={index} style={{display: 'table-cell', padding: '2px'}}>{(index ? ', ': '') + role["displayName"] || role["simplifiedID"] }</p>
-                                }))}
+                        {displayName && <tr><th>{this.getFormattedTextForIds("displayName", headerElement)}</th><td>{displayName}</td></tr>}
+                        {primaryRoleCategoryID && <tr><th>{this.getFormattedTextForIds("primaryRoleCategoryID", headerElement)}</th><td>{primaryRoleCategoryID}</td></tr>}
+                        {primaryRoleCategoryID && <tr><th>{this.getFormattedTextForIds("primaryOrganizationID", headerElement)}</th><td>{primaryOrganizationID}</td></tr>}
+                        {primaryRoleID && <tr><th>{this.getFormattedTextForIds("primaryRoleID", headerElement)}</th><td>{primaryRoleID}</td></tr>}
+                        {description && <tr><th>{this.getFormattedTextForIds("description", headerElement)}</th><td>{description}</td></tr>}
+                        {primaryLocationID && <tr><th>{this.getFormattedTextForIds("primaryLocationID", headerElement)}</th><td>{getFormattedRoleIds(primaryLocationID)}</td></tr>}
+                        {containedOrganizations && <tr>
+                            <th>{this.getFormattedTextForIds("containedOrganizations", headerElement)}</th>
+                            <td>{containedOrganizations.map((orgName: string) => {
+                                return <span key={index}>{orgName}</span>
+                            })}
                             </td>
-                        </tr>
-                    </tbody> : null
-                }
-                {dateTimeLastRoleSelected &&
-                    <tbody><tr><th>Last Active On Role</th><td>{formatFullDate(new Date(dateTimeLastRoleSelected))}</td></tr></tbody>}
-                {containedLocationIDs ?
-                    <tbody>
-                        <tr>
-                            <th>Service Location</th>
-                            <td>
-                                {containedLocationIDs?.map((location, index) => {
-                                    return <span key={index}>{isEmpty(location) ? location : 'Not Available'}</span>
-                                })
-                                }
-                            </td>
-                        </tr>
-                    </tbody> : null
-                }
-                {organizationType &&
-                    <tbody>
-                        <tr>
-                            <th>Organization Type</th><td>{organizationType.typeDisplayValue}</td>
-                        </tr>
+                        </tr>}
                     </tbody>
-                }
-                {(!!membershipDetail) ?
-                    <tbody>
-                        <tr>
-                            <th>Organization Membership(s)</th>
-                            <td>
-                                <table className="mx_DirectoryDetailView_table">
-                                    <tbody>
-                                        {
-                                            membershipDetail.map((member, index) => {
-                                                return (
-                                                    <tr key={index}>
-                                                        <th>Name</th>
-                                                        <td>{member.name}</td>
-                                                        <th>Description</th>
-                                                        <td>{member.description}</td>
-                                                    </tr>
-                                                )
-                                            })
+                    {currentPractitionerRoles ?
+                        <tbody>
+                            <tr>
+                                <th>Currently Active Role(s)</th>
+                                <td>
+                                    {(currentPractitionerRoles.map((role: string, index) => {
+                                        if (role.length <= 1) {
+                                            return 'Member is not actively fulfilling any role at the moment.';
                                         }
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                    </tbody> : null
-                }
-                {contactPoints &&
-                    <tbody>
-                        <tr>
-                            <th>{this.getFormattedTextForIds("contactPoints", headerElement)}</th>
-                            <td>{this._renderPhoneNumbers(contactPoints)}</td>
-                        </tr>
-                    </tbody>
-                }
-            </table>
+                                        return <p key={index} style={{ display: 'table-cell', padding: '2px' }}>{(index ? ', ' : '') + role["displayName"] || role["simplifiedID"]}</p>
+                                    }))}
+                                </td>
+                            </tr>
+                        </tbody> : null
+                    }
+                    {dateTimeLastRoleSelected &&
+                        <tbody><tr><th>Last Active On Role</th><td>{formatFullDate(new Date(dateTimeLastRoleSelected))}</td></tr></tbody>}
+                    {containedLocationIDs ?
+                        <tbody>
+                            <tr>
+                                <th>Service Location</th>
+                                <td>
+                                    {containedLocationIDs?.map((location, index) => {
+                                        return <span key={index}>{isEmpty(location) ? location : 'Not Available'}</span>
+                                    })
+                                    }
+                                </td>
+                            </tr>
+                        </tbody> : null
+                    }
+                    {organizationType &&
+                        <tbody>
+                            <tr>
+                                <th>Organization Type</th><td>{organizationType.typeDisplayValue}</td>
+                            </tr>
+                        </tbody>
+                    }
+                    {(!!membershipDetail) ?
+                        <tbody>
+                            <tr>
+                                <th>Organization Membership(s)</th>
+                                <td>
+                                    <table className="mx_DirectoryDetailView_table">
+                                        <tbody>
+                                            {
+                                                membershipDetail.map((member, index) => {
+                                                    return (
+                                                        <tr key={index}>
+                                                            <th>Name</th>
+                                                            <td>{member.name}</td>
+                                                            <th>Description</th>
+                                                            <td>{member.description}</td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            }
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody> : null
+                    }
+                    {organisationStructure &&
+                        <tbody>
+                            <tr>
+                                <th>Organisation Unit</th>
+                                <td>
+                                    <table className="mx_DirectoryDetailView_table">
+                                        <tbody>
+                                            {
+                                                organisationStructure.map((hierarchy, index) => {
+                                                    return (
+                                                        <tr key={index}>
+                                                            <th>{replaceSpecialCharacter(hierarchy["type"])}</th>
+                                                            <td>{hierarchy["value"]}</td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            }
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    }
+                    {contactPoints &&
+                        <tbody>
+                            <tr>
+                                <th>{this.getFormattedTextForIds("contactPoints", headerElement)}</th>
+                                <td>{this._renderPhoneNumbers(contactPoints)}</td>
+                            </tr>
+                        </tbody>
+                    }
+                </table>
+            </>
         })
     }
 
@@ -351,7 +378,7 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
         return <div className="mx_DirectoryDetailView_fulfilledBy">
             <h3>Role Fulfilled By</h3>
             {users.map((value, index) => {
-                let name = value.indexOf('@') !== -1 ? getNameFromEmail(value): value;
+                let name = value.indexOf('@') !== -1 ? getNameFromEmail(value) : value;
                 return name && <span className="mx_DirectoryDetailView_fulfilledBy_user" key={index}>
                     <li>{this._renderAvatar(name)}</li>
                     <li>{name}</li>
