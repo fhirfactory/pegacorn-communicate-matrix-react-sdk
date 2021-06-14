@@ -16,7 +16,7 @@ export function getFormattedPhoneNumberAndType(contactPoints) {
         // if not already formatted
         let phoneNumber = contactPoint.value;
         if (phoneNumber.startsWith('04') && !phoneNumber.includes(' ')) {
-            phoneNumber = phoneNumber.slice(0,4) + " " + phoneNumber.slice(4, 6) + " " + phoneNumber.slice(6);
+            phoneNumber = phoneNumber.slice(0,4) + " " + phoneNumber.slice(4, 7) + " " + phoneNumber.slice(7);
         } else if (phoneNumber.charAt(1).includes('2')) {
             phoneNumber = "(" + phoneNumber.slice(0, 2) + ") " + phoneNumber.slice(2);
         }
