@@ -195,29 +195,13 @@ export const getMatchingRecords = (term: string, kind) => {
         }
         console.log("totalRecords=" + totalRecords);
 
-        let identifiers = [];
-        let short_name;
-        let long_name;
-        results?.map(val =>  identifiers = val.identifiers);
-        identifiers?.map(val => {
-            if (val.type == "ShortName") {
-                short_name = val.leafValue;
-            }
-            if (val.type == "LongName") {
-                long_name = val.leafValue;
-            }
-        });
-
-
         // maps person's loggedin status, and active/inactive status
         let practitionerStatus;
-        let job_title;
         results.map(val => {
             if (!val.practitionerStatus) {
                 return;
             }
             practitionerStatus = val.practitionerStatus;
-            job_title = val.mainJobTitle;
         });
         let loggedIn = (practitionerStatus !== undefined) ? practitionerStatus['loggedIn'] : false; // on service and role directory this wont apply so just return false and skip
         let active =  (practitionerStatus !== undefined) ? practitionerStatus['active'] : false; // on service and role directory this wont apply so just return false and skip
@@ -225,14 +209,12 @@ export const getMatchingRecords = (term: string, kind) => {
             display_name: value["displayName"],
             user_id: value["simplifiedID"],
             role_category: value["primaryRoleCategoryID"],
-            long_name: long_name,
-            short_name: short_name,
-            loggedIn: practitionerStatus ? loggedIn: false,
-            active: practitionerStatus ? active: false,
+            identifiers: value["identifiers"] ?? null, // used to derive longName and shortName
+            practitionerStatus: value["practitionerStatus"] ?? null,
             // filled or not filled status
             // if activePractitionerSet array is non-empty someone is fulfilling that role
             roleIsActive: (value.activePractitionerSet?.length >= 1) ?? false,
-            job_title: job_title
+            job_title: value["mainJobTitle"] ?? null
         }));
         console.log("mappedResults.length=" + mappedResults.length + ", mappedResults=" + JSON.stringify(mappedResults));
         console.log("Mapped identifier results are", JSON.stringify(mappedResults.identifiers));
