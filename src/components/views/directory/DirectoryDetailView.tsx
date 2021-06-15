@@ -253,7 +253,7 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
             }
 
             return <>
-                <table key={index} className="mx_DirectoryDetailView_table">
+                <table key={index} className="mx_DirectoryDetailView_table" tabIndex={0}>
                     <caption>
                         {this._renderDetailCaption(this.props.directorySearchContext)}
                     </caption>
