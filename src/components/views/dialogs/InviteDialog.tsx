@@ -1699,15 +1699,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         }
     }
 
-    _renderClearSearchButton() {
-        if(!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) return null;
-        return <div className='mx_InvitedDialog_clearButton'>
-            <AccessibleButton onClick={this._onClearSearchResult} kind='primary_sm' style={{backgroundColor: 'grey'}}>
-                <span>Clear All</span>
-            </AccessibleButton>
-        </div>
-    }
-
     _renderFilterOptions() {
         if(!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) return null;
         return <div className="mx_InvitedDialog_filterOptions">
@@ -1948,7 +1939,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     {this._renderIdentityServerWarning()}
                     <div className='mx_InviteDialog_Warning' style={{margin: '10px auto', color: 'rgb(243 108 35)'}}>{this.state.errorText}</div>
                     <div className="mx_InvitedDialog_buttonAndFilter">
-                    {this._renderClearSearchButton()}
                     {this._renderFilterOptions()}
                     </div>
 
