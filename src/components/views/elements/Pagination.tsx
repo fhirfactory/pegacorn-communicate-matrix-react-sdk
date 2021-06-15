@@ -122,22 +122,22 @@ class Pagination extends React.Component<typeof defaultProps, IState> {
                 <li style={{ marginRight: '20px' }}>
                     Displaying records {pager.startIndex + 1} - {pager.endIndex + 1} of {this.props.numOfTotalRecords}.
                 </li>
-                <li className={pager.currentPage === 1 ? 'disabled' : ''}>
-                    <a onClick={() => this.setPage(1)}>First</a>
+                <li className={pager.currentPage === 1 ? 'disabled' : ''} title="First">
+                    <a onClick={() => this.setPage(1)}>&#171;</a>
                 </li>
-                <li className={pager.currentPage === 1 ? 'disabled' : ''}>
-                    <a onClick={() => this.setPage(pager.currentPage - 1)}>Previous</a>
+                <li className={pager.currentPage === 1 ? 'disabled' : ''} title="Previous">
+                    <a onClick={() => this.setPage(pager.currentPage - 1)}>&#8249;</a>
                 </li>
                 {pager.pages.map((page, index) =>
                     <li key={index} className={pager.currentPage === page ? 'active' : ''}>
                         <a onClick={() => this.setPage(page)}>{page}</a>
                     </li>
                 )}
-                <li className={pager.currentPage === pager.totalPages ? 'disabled' : ''}>
-                    <a onClick={() => this.setPage(pager.currentPage + 1)}>Next</a>
+                <li className={pager.currentPage === pager.totalPages ? 'disabled' : ''} title="Next">
+                    <a onClick={() => this.setPage(pager.currentPage + 1)}>&#8250;</a>
                 </li>
-                <li className={pager.currentPage === pager.totalPages ? 'disabled' : ''}>
-                    <a onClick={() => this.setPage(pager.totalPages)}>Last</a>
+                <li className={pager.currentPage === pager.totalPages ? 'disabled' : ''} title="Last">
+                    <a onClick={() => this.setPage(pager.totalPages)}>&#187;</a>
                 </li>
             </span>
         );
