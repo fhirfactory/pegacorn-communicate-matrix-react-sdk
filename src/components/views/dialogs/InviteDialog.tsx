@@ -490,7 +490,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             active={this.props.member.personIsActive}
             directorySearchContext={this.props.kind} />
 
-        const viewDetailedInfoIcon = <AccessibleButton id="mx_DirectoryDetailView_btn"
+        const accordionIcon = <AccessibleButton id="mx_DirectoryDetailView_btn"
             className="mx_RoomSublist_collapseBtn" onClick={ev => this.onToggleView(ev)}
             style={{ float: 'right' }}>
         </AccessibleButton>
@@ -526,10 +526,10 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                     </div>
                 </span>
                 {timestamp}
-                {directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind) && viewDetailedInfoIcon}
+                {directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind) && accordionIcon}
                 {config.show_favorite_icon_in_directory_search && favorite}
-                {config.showUserPresenceIndicator && userPresenceIndicator}
                 {directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind) ? directoryContactView : null}
+                {config.showUserPresenceIndicator && userPresenceIndicator}
                 {directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind) ? viewMemberDetail : null}
                 {errorText}
             </div>
