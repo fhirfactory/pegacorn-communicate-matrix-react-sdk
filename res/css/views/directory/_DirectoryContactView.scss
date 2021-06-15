@@ -1,0 +1,12 @@
+.mx_AuxButton_directoryContactMenu {
+    display: inline-flex;
+    float: right;
+    align-items: center;
+    justify-content: space-evenly;
+    .mx_AccessibleButton {
+        margin: 5px;
+        &.mx_RoomList_explorePrompt_startChat::before {
+            mask-image: url("$(res)/img/element-icons/feedback.svg");
+        }
+    }
+}

@@ -1,6 +1,4 @@
 import React from 'react';
-import classNames from 'classnames';
-import Analytics from '../../../Analytics';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { render } from 'react-dom';
 import { video } from 'modernizr';
@@ -97,7 +95,6 @@ class DirectoryContactView extends React.Component<IDirectoryButtonProps, IState
                         onClick={() => this.props.onCallPlaced(PlaceCallType.Voice)}
                         title={_t("Voice call")}
                         style={directoryButtonBackgroundColor} />
-                    <span>Voice Call</span>
                 </div>
 
             videoCallButton =
@@ -108,7 +105,7 @@ class DirectoryContactView extends React.Component<IDirectoryButtonProps, IState
                             ev.shiftKey ? PlaceCallType.ScreenSharing : PlaceCallType.Video)}
                         title={_t("Video call")}
                         style={directoryButtonBackgroundColor} />
-                    <span>Video Call</span>
+
                 </div>
             startChatButton =
                 <div className="mx_RoomHeader_contact_wrapper">
@@ -117,7 +114,6 @@ class DirectoryContactView extends React.Component<IDirectoryButtonProps, IState
                         onClick={(ev) => this.onChatOptionSelected()}
                         title={_t("Chat")}
                         style={directoryButtonBackgroundColor} />
-                    <span>Start Discussion</span>
                 </div>
             errorText = <span style={{ color: 'red' }}>Feature not implemented yet.</span>
         }
