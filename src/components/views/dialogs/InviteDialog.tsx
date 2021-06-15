@@ -46,6 +46,7 @@ import * as config from '../../../config';
 import * as directoryService from '../../../DirectoryService';
 import AccessibleButton from '../elements/AccessibleButton';
 import { StyledMenuItemCheckbox } from '../../structures/ContextMenu';
+import { keywordContainsSpecialCharacter } from '../../../utils/strings';
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -1091,15 +1092,17 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     _updateDirectorySearchFromAPI = async (term: string) => {
         // If search keyword is less than 2 string then display error below searchbox and do not call api
         if (term.length <= 1) {
+                this.setState({
+                    errorText: _t("Search keyword needs to be at least two characters."),
+                    serverResultsMixin: []
+                })
+            return null;
+        } else if (keywordContainsSpecialCharacter(term)) {
             this.setState({
-                errorText: _t("Search keyword needs to be at least of two characters."),
+                errorText: _t("Search keyword can not contain any special characters."),
                 serverResultsMixin: []
             })
             return null;
-        } else {
-            this.setState({
-                errorText: null
-            })
         };
 
         /**
@@ -1114,6 +1117,12 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     return;
                 }
                 if (!response.errorText) {
+                    this.setState({
+                        errorText: null,
+                        serverResultsMixin: [],
+                        recents: [],
+                        suggestions: []
+                    })
                     // Note these are set to collections by map function
                     let display_name;
                     let user_id;
@@ -1134,10 +1143,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         roleIsActive = value.roleIsActive;
                         job_title = value.job_title ?? null;
                         memberIsFavorite = (this.state.favorites.indexOf(value.user_id) !== -1) ?? false;
-                        long_name = value.long_name;
-                        short_name = value.short_name;
-                        personIsLoggedIn = value.loggedIn ?? false;
-                        personIsActive = value.active ?? false;
+                        long_name = value.identifiers.map(val => val.type === "LongName" ? val.leafValue: null);
+                        short_name = value.identifiers.map(val => val.type === "ShortName" ? val.leafValue: null);
+                        personIsLoggedIn = value.practitionerStatus ? value.practitionerStatus["loggedIn"] : false;
+                        personIsActive = value.practitionerStatus ? value.practitionerStatus["active"] : false;
 
                         /**
                          * Create a Directory member with data collected for role/user/service/.. directories from api response
@@ -1153,8 +1162,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                             shortName: short_name ?? null,
                             jobTitle: job_title ?? null,
                             favorite: memberIsFavorite ?? false,
-                            personIsLoggedIn: (personIsLoggedIn !== undefined) ? value.loggedIn : false,
-                            personIsActive: (personIsActive !== undefined) ? value.active : false,
+                            personIsLoggedIn: personIsLoggedIn,
+                            personIsActive: personIsActive,
                         });
 
                         /**
@@ -1171,6 +1180,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                             numOfRecordsFromSearchAPI: response.numOfRecordsFromSearchAPI,
                             serverResultsMixin: mappedServerSearchResults,
                             displayNoResultText: false,
+                            errorText: null,
                             recents: [],
                             suggestions: []
                         });
@@ -1521,15 +1531,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             sourceMembers = sourceMembers
                 .filter(m => m.user.name.toLowerCase().includes(filterBy) || m.userId.toLowerCase().includes(filterBy));
 
-            /**
-             * No matter if user was previously invited, seen, in people, service, role search we want to see every result
-             * that comes from API by overriding matrix default filtering mechanism which filters based on  priority member,
-             * and removes already seen (duplicate member)
-             */
-                if (directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) {
-                otherAdditionalMembers = [];
-                sourceMembers = this.state.serverResultsMixin;
-            }
 
             if (sourceMembers.length === 0 && !hasAdditionalMembers) {
                 return (
@@ -1544,6 +1545,16 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         // Now we mix in the additional members. Again, we presume these have already been filtered. We
         // also assume they are more relevant than our suggestions and prepend them to the list.
         sourceMembers = [...priorityAdditionalMembers, ...sourceMembers, ...otherAdditionalMembers];
+
+        /**
+             * No matter if user was previously invited, seen, in people, service, role search we want to see every result
+             * that comes from API by overriding matrix default filtering mechanism which filters based on  priority member,
+             * and removes already seen (duplicate member)
+             */
+         if (directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) {
+            sourceMembers = [];
+            sourceMembers = this.state.serverResultsMixin;
+        }
 
         if (this.state.favoriteFilterIsSelected) {
             sourceMembers = sourceMembers.filter(m => m.user.favorite);
@@ -1759,16 +1770,14 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     _renderNoResultsText() {
-        let noResultInformationText;
+        let noResultsDefaultText = _t("Sorry, no matches were found. Please try again.");
         if (this.state.errorText || this.state.displayNoResultText || !this.state.filterText) return null;
-        if (this.state.favoriteFilterIsSelected && this.state.serverResultsMixin.length < 1) {
-            noResultInformationText = <h4>{_t("You do not have any favorites at the moment. No results found while conducting favorite search with your credentials.")}</h4>
-        } else if (this.state.serverResultsMixin.length < 1 && this.state.filterText) {
-            noResultInformationText = <h4>{_t("Directory search did not retrieve any results at the moment. Please enter a valid keyword and try again.")}</h4>
-        } else {
-            noResultInformationText = '';
+        if (this.state.serverResultsMixin.length < 1 && this.state.filterText) {
+            return <h4>{noResultsDefaultText}</h4>
+        }  else {
+            noResultsDefaultText = null;
         }
-        return noResultInformationText;
+        return noResultsDefaultText;
     }
 
     render() {
@@ -1937,20 +1946,20 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         </div>}
                     </div>
                     {this._renderIdentityServerWarning()}
-                    <div className='error' style={{margin: '10px auto'}}>{this.state.errorText}</div>
+                    <div className='mx_InviteDialog_Warning' style={{margin: '10px auto', color: 'rgb(243 108 35)'}}>{this.state.errorText}</div>
                     <div className="mx_InvitedDialog_buttonAndFilter">
                     {this._renderClearSearchButton()}
                     {this._renderFilterOptions()}
                     </div>
 
                     <div className='mx_InviteDialog_userSections'>
-                        {this._renderDirectoryPaginator()}
                         {/* {this._renderRecordCount()} */}
                         {this._renderNoResultsText()}
                         {!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind) ?
                         this._renderSection('recents')
                         : null}
                         {this._renderSection('suggestions')}
+                        {this._renderDirectoryPaginator()}
                     </div>
                 </div>
             </BaseDialog>

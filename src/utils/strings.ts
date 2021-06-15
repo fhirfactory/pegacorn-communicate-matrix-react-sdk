@@ -72,12 +72,19 @@ export function capitaliseFirstCharacter(target: String) {
 
 /**
  * Checks if keyword contains special characters
+ * @param target must be a string which is converted to an array
+ * @returns true for character containing special characters
 */
 export function keywordContainsSpecialCharacter(target: string): boolean {
     if (!target) {
         return false;
     }
-    return (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\?]/g).test(target);
+    let index = 0;
+    let newTarget = Array(target);
+    for (index; index < newTarget.length; index++) {
+        const hasNoSpecialCharacters = !(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\?]/g).test(target[index]);
+        return !hasNoSpecialCharacters;
+    }
 }
 
 /**
