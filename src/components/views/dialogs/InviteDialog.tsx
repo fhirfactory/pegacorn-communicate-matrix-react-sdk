@@ -479,21 +479,11 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             }
         }
 
-        // const favorite = this.props.isFavorite ?
-        //     <span className='mx_InviteDialog_roomTile_favorite'>
-        //         <img src={require("../../../../res/img/element-icons/roomlist/favorite.svg")} title="Your favorite" alt="favorite icon" />
-        //     </span> : null;
-
         const favorite = <Favorites isFavorite={this.props.member.favorite}
             displayTooltipOnHover={true}
             kind={this.props.kind}
             onToggle={(ev) => this.handleFavoriteToggle(ev)}
         />
-
-        // const userPresenceIndicator = this.props.isAvailable ? <span className="mx_InviteDialog_roomTile_available">
-        //     Filled
-        // </span>
-        // :<span className="mx_InviteDialog_roomTile_unavailable">Not Filled</span>;
 
         const userPresenceIndicator = <UserPresence online={this.props.member.personIsLoggedIn}
             available={this.props.isAvailable}
@@ -504,10 +494,6 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             className="mx_RoomSublist_collapseBtn" onClick={ev => this.onToggleView(ev)}
             style={{ float: 'right' }}>
         </AccessibleButton>
-        // const viewDetailedInfoIcon = <span id="mx_DirectoryDetailView_btn" className=" mx_RightPanel_headerButton mx_AccessibleButton mx_RightPanel_headerButton
-        // mx_RightPanel_headerButton_highlight mx_RightPanel_roomSummaryButton"
-        //     onClick={ev => this.onToggleView(ev)}
-        //     style={{ float: 'right' }} />
 
         const viewMemberDetail = <div id="mx_DirectoryDetailView_table" style={{ display: 'none' }}>
             <DirectoryDetailView queryId={this.props.member.userId}
@@ -1117,12 +1103,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     return;
                 }
                 if (!response.errorText) {
-                    this.setState({
-                        errorText: null,
-                        serverResultsMixin: [],
-                        recents: [],
-                        suggestions: []
-                    })
                     // Note these are set to collections by map function
                     let display_name;
                     let user_id;
