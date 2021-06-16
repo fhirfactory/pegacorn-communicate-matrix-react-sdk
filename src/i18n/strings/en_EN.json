@@ -2897,7 +2897,7 @@
     "Search keyword needs to be at least two characters.": "Search keyword needs to be at least two characters.",
     "Search keyword can not contain any special characters.": "Search keyword can not contain any special characters.",
     "Clear search": "Clear search",
-    "Sorry, no matches were found. Please try again.":  "Sorry, no matches were found. Please try again.",
+    "No matches were found. Please try again with a different keyword.":  "No matches were found. Please try again with a different keyword.",
     "Directory search did not retrieve any results at the moment. Please enter a valid keyword and try again.": "Directory search did not retrieve any results at the moment. Please enter a valid keyword and try again.",
     "Please enter a keyword to search in directory.": "Please enter a keyword to search in directory."
 }

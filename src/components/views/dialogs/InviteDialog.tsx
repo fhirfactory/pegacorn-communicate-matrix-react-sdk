@@ -1760,9 +1760,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     _renderNoResultsText() {
-        let noResultsDefaultText = _t("Sorry, no matches were found. Please try again.");
-        if (this.state.errorText || !this.state.displayNoResultText || !this.state.filterText) return null;
-        if (this.state.serverResultsMixin.length < 1 && this.state.filterText && !this.state.isLoading) {
+        let noResultsDefaultText = _t("No matches were found. Please try again with a different keyword.");
+        if (this.state.errorText || this.state.isLoading || !this.state.filterText) return null;
+        if (this.state.serverResultsMixin.length < 1 && this.state.displayNoResultText
+            || this.state.favoriteFilterIsSelected && this.state.serverResultsMixin.length < 1) {
             return <h4>{noResultsDefaultText}</h4>
         }  else {
             noResultsDefaultText = null;
