@@ -315,6 +315,7 @@ interface IDMRoomTileProps {
     kind: string;
     error: any;
     onToggleFavorite;
+    isLoading: boolean;
 }
 
 class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
@@ -405,7 +406,6 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
     }
 
     render() {
-        console.log("Member is available", this.props.isAvailable);
         const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
         const DirectoryDetailView = sdk.getComponent("directory.DirectoryDetailView");
@@ -512,6 +512,8 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             <p>{_t("There was a problem communicating with the server. Please try again.")}</p>
         </div>) : null;
 
+         if (this.props.isLoading) return null;
+
         return (
             <div className='mx_InviteDialog_roomTile' onClick={this._onClick}>
                 {stackedAvatar}
@@ -571,6 +573,7 @@ interface IInviteDialogState {
     favorites: string[];
     favoriteFilterIsSelected: boolean;
     displayNoResultText: boolean;
+    isLoading: boolean,
 
     // These two flags are used for the 'Go' button to communicate what is going on.
     busy: boolean,
@@ -626,7 +629,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             numOfRecordsDisplayed: null,
             favorites: [],
             favoriteFilterIsSelected: false,
-            displayNoResultText: false
+            displayNoResultText: false,
+            isLoading: false,
         };
 
         this._editorRef = createRef();
@@ -1015,7 +1019,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             });
         }
         if (!this.state.favoriteFilterIsSelected) {
-            let favorite = this.state.favorites;
             let filteredFavoriteResults = [];
                 filteredFavoriteResults = this.state.serverResultsMixin.filter(m => m.user.favorite);
             this.setState({
@@ -1039,9 +1042,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
      * @param {currentPageNumber} The current page number
     */
     onChangePage(currentPageNumber: number) {
-      //  console.log("Page of items", currentPageNumber);
         if (!this.state.serverResultsMixin || !this.state.filterText) return;
-        const param = `&sortOrder=ascending&pageSize=${config.numberOfRecordsToShowInSearch}&page=${currentPageNumber-1}`;
+        this.setState({
+            isLoading: true
+        });
+        const param = `&sortOrder=ascending&pageSize=${config.numberOfRecordsToShowInSearch}&page=${currentPageNumber - 1}`;
         const searchTerm = this.state.filterText + param;
         return this._updateDirectorySearchFromAPI(searchTerm);
     }
@@ -1090,6 +1095,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             })
             return null;
         };
+
+        this.setState({
+            errorText: null,
+            isLoading: true
+        })
 
         /**
          * Search for matching records with keyword
@@ -1160,6 +1170,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                             numOfRecordsFromSearchAPI: response.numOfRecordsFromSearchAPI,
                             serverResultsMixin: mappedServerSearchResults,
                             displayNoResultText: false,
+                            isLoading: false,
                             errorText: null,
                             recents: [],
                             suggestions: []
@@ -1180,13 +1191,15 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         this.setState({
                             serverResultsMixin: filteredByFavoriteResults,
                             recents: [],
+                            isLoading: false,
                             suggestions: []
                         });
                     }
                 } else {
                     this.setState({
                         serverResultsMixin: [],
-                        errorText: response.errorText
+                        errorText: response.errorText,
+                        isLoading: false
                     }); // clear results because it's moderately fatal
                 }
             })
@@ -1482,6 +1495,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             }
         }
 
+        // Do not put search result text if page is loading
+        if (this.state.isLoading) {
+            sectionName = null;
+        };
+
         // Mix in the server results if we have any, but only if we're searching. We track the additional
         // members separately because we want to filter sourceMembers but trust the mixin arrays to have
         // the right members in them.
@@ -1587,6 +1605,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 kind={this.props.kind}
                 error={this.state.errorText}
                 onToggleFavorite={this._toggleMemberFavorite}
+                isLoading={this.state.isLoading}
             />
         ));
         return (
@@ -1732,18 +1751,17 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         if (this.state.favoriteFilterIsSelected || !this.state.filterText || this.state.errorText
             || this.state.numOfRecordsFromSearchAPI <= this.state.serverResultsMixin.length) return null;
         const Pagination = sdk.getComponent("views.elements.Pagination");
-        return <>
-            <Pagination items={this.state.serverResultsMixin}
+        return <Pagination items={this.state.serverResultsMixin}
                 onChangePage={this.onChangePage.bind(this)}
                 numOfTotalRecords={this.state.numOfRecordsFromSearchAPI}
-                pageSize={config.numberOfRecordsToShowInSearch} />
-        </>
+                pageSize={config.numberOfRecordsToShowInSearch}
+                isLoading={this.state.isLoading}/>
     }
 
     _renderNoResultsText() {
         let noResultsDefaultText = _t("Sorry, no matches were found. Please try again.");
         if (this.state.errorText || this.state.displayNoResultText || !this.state.filterText) return null;
-        if (this.state.serverResultsMixin.length < 1 && this.state.filterText) {
+        if (this.state.serverResultsMixin.length < 1 && this.state.filterText && !this.state.isLoading) {
             return <h4>{noResultsDefaultText}</h4>
         }  else {
             noResultsDefaultText = null;
@@ -1761,6 +1779,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             spinner = <Spinner w={20} h={20} />;
         }
 
+        let loadingSpinner;
+        if (this.state.isLoading) {
+            loadingSpinner = <Spinner w={50} h={50} />
+        }
 
         let title;
         let helpText;
@@ -1923,6 +1945,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     </div>
 
                     <div className='mx_InviteDialog_userSections'>
+                        {loadingSpinner}
                         {/* {this._renderRecordCount()} */}
                         {this._renderNoResultsText()}
                         {!directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind) ?
