@@ -464,7 +464,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                 caption = this.props.member.jobTitle ? this.props.member.jobTitle : this.props.member.name;
             } else if (this.props.kind === directoryService.KIND_SERVICE_DIRECTORY_SEARCH) {
                 title = this.props.member.longName ? this.props.member.longName : this.props.member.shortName;
-                caption = this.props.member.userId || this.props.member.shortName || this.props.member.name;
+                caption = this.props.member.shortName || this.props.member.name || this.props.member.userId;
             } else {
                 title = this.props.member.name;
                 caption = this.props.member.userId;
@@ -1106,9 +1106,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
          */
         directoryService.getMatchingRecords(term, this.props.kind)
             .then(response => {
-                if (!response) {
+                if (!response || response.results.length < 1) {
                     this.setState({
-                        displayNoResultText: true
+                        displayNoResultText: true,
+                        isLoading: false
                     })
                     return;
                 }
@@ -1133,8 +1134,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         roleIsActive = value.roleIsActive;
                         job_title = value.job_title ?? null;
                         memberIsFavorite = (this.state.favorites.indexOf(value.user_id) !== -1) ?? false;
-                        long_name = value.identifiers.map(val => val.type === "LongName" ? val.leafValue: null);
-                        short_name = value.identifiers.map(val => val.type === "ShortName" ? val.leafValue: null);
+                        long_name = value.identifiers.map(val => val.type === "LongName" ? (val.value ? val.value: value.leafValue) : null);
+                        short_name = value.identifiers.map(val => val.type === "ShortName" ? (val.value ? val.value: val.leafValue) : null);
                         personIsLoggedIn = value.practitionerStatus ? value.practitionerStatus["loggedIn"] : false;
                         personIsActive = value.practitionerStatus ? value.practitionerStatus["active"] : false;
 
@@ -1760,7 +1761,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
     _renderNoResultsText() {
         let noResultsDefaultText = _t("Sorry, no matches were found. Please try again.");
-        if (this.state.errorText || this.state.displayNoResultText || !this.state.filterText) return null;
+        if (this.state.errorText || !this.state.displayNoResultText || !this.state.filterText) return null;
         if (this.state.serverResultsMixin.length < 1 && this.state.filterText && !this.state.isLoading) {
             return <h4>{noResultsDefaultText}</h4>
         }  else {
