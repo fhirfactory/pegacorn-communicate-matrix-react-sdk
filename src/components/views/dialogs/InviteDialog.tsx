@@ -1082,7 +1082,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
     _updateDirectorySearchFromAPI = async (term: string) => {
         // If search keyword is less than 2 string then display error below searchbox and do not call api
-        if (term.length <= 1) {
+        if (term.length <= 1 && this.state.filterText) {
                 this.setState({
                     errorText: _t("Search keyword needs to be at least two characters."),
                     serverResultsMixin: []
