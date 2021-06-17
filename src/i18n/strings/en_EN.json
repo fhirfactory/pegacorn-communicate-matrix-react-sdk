@@ -2894,10 +2894,10 @@
     "Search Roles and Start Discussion": "Search Roles and Start Discussion",
     "Search Services and Start Discussion": "Search Services and Start Discussion",
     "Chat": "Start Discussion",
-    "Search keyword needs to be at least two characters.": "Search keyword needs to be at least two characters.",
-    "Search keyword can not contain any special characters.": "Search keyword can not contain any special characters.",
+    "Search term needs to be at least two characters.": "Search term needs to be at least two characters.",
+    "Search term can not contain any special characters.": "Search term can not contain any special characters.",
     "Clear search": "Clear search",
-    "No matches were found. Please try again with a different keyword.":  "No matches were found. Please try again with a different keyword.",
+    "No matches were found. Please try again with a different term.":  "No matches were found. Please try again with a different term.",
     "Directory search did not retrieve any results at the moment. Please enter a valid keyword and try again.": "Directory search did not retrieve any results at the moment. Please enter a valid keyword and try again.",
     "Please enter a keyword to search in directory.": "Please enter a keyword to search in directory."
 }

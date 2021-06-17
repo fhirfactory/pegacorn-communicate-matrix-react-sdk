@@ -1084,13 +1084,13 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         // If search keyword is less than 2 string then display error below searchbox and do not call api
         if (term.length <= 1 && this.state.filterText) {
                 this.setState({
-                    errorText: _t("Search keyword needs to be at least two characters."),
+                    errorText: _t("Search term needs to be at least two characters."),
                     serverResultsMixin: []
                 })
             return null;
         } else if (keywordContainsSpecialCharacter(term)) {
             this.setState({
-                errorText: _t("Search keyword can not contain any special characters."),
+                errorText: _t("Search term can not contain any special characters."),
                 serverResultsMixin: []
             })
             return null;
@@ -1760,7 +1760,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     _renderNoResultsText() {
-        let noResultsDefaultText = _t("No matches were found. Please try again with a different keyword.");
+        let noResultsDefaultText = _t("No matches were found. Please try again with a different term.");
         if (this.state.errorText || this.state.isLoading || !this.state.filterText) return null;
         if (this.state.serverResultsMixin.length < 1 && this.state.displayNoResultText
             || this.state.favoriteFilterIsSelected && this.state.serverResultsMixin.length < 1) {
