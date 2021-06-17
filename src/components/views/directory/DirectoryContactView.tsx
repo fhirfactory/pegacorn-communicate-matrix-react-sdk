@@ -89,40 +89,34 @@ class DirectoryContactView extends React.Component<IDirectoryButtonProps, IState
 
         if (this.props.isDirectorySearch && config.showDirectoryContactViewOnDirectorySearch) {
             voiceCallButton =
-                <div className="mx_RoomHeader_contact_wrapper">
                     <AccessibleTooltipButton
-                        className="mx_RoomHeader_button mx_RoomHeader_voiceCallButton"
+                        className="mx_DirectoryContactView_button mx_DirectoryContactView_voiceCallButton"
                         onClick={() => this.props.onCallPlaced(PlaceCallType.Voice)}
                         title={_t("Voice call")}
                         style={directoryButtonBackgroundColor} />
-                </div>
 
             videoCallButton =
-                <div className="mx_RoomHeader_contact_wrapper">
                     <AccessibleTooltipButton
-                        className="mx_RoomHeader_button mx_RoomHeader_videoCallButton"
+                        className="mx_DirectoryContactView_button mx_DirectoryContactView_videoCallButton"
                         onClick={(ev) => this.props.onVideoCallPlaced(
                             ev.shiftKey ? PlaceCallType.ScreenSharing : PlaceCallType.Video)}
                         title={_t("Video call")}
                         style={directoryButtonBackgroundColor} />
 
-                </div>
             startChatButton =
-                <div className="mx_RoomHeader_contact_wrapper">
                     <AccessibleTooltipButton
-                        className="mx_RoomHeader_button mx_RoomList_explorePrompt_startChat"
+                        className="mx_DirectoryContactView_button mx_DirectoryContactView_explorePrompt_startChat"
                         onClick={(ev) => this.onChatOptionSelected()}
                         title={_t("Chat")}
                         style={directoryButtonBackgroundColor} />
-                </div>
-            errorText = <span style={{ color: 'red' }}>Feature not implemented yet.</span>
+            errorText = this.state.error ? <span style={{ color: 'red' }}>{this.state.error || 'Feature not implemented yet.'}</span>: null;
         }
 
-        return <div className="mx_AuxButton_directoryContactMenu">
+        return <div className="mx_DirectoryContactView_wrapper">
+            {errorText}
             {!this.searchIsOnServiceDirectory() && startChatButton}
             {!this.searchIsOnServiceDirectory() && videoCallButton}
             {voiceCallButton}
-            {this.state.error && <span style={{ color: 'red'}}>{this.state.error || ''}</span>}
         </div>
     }
 }
