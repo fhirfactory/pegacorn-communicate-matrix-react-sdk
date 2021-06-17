@@ -2899,5 +2899,5 @@
     "Clear search": "Clear search",
     "No matches were found. Please try again with a different term.":  "No matches were found. Please try again with a different term.",
     "Directory search did not retrieve any results at the moment. Please enter a valid keyword and try again.": "Directory search did not retrieve any results at the moment. Please enter a valid keyword and try again.",
-    "Please enter a keyword to search in directory.": "Please enter a keyword to search in directory."
+    "Please enter a term to search in directory.": "Please enter a term to search in directory."
 }

@@ -1634,7 +1634,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 autoFocus={true}
                 disabled={this.state.busy}
                 autoComplete="off"
-                placeholder={config.directory ? _t("Please enter a keyword to search in directory."): null}
+                placeholder={config.directory ? _t("Please enter a term to search in directory."): null}
             />
         );
 
@@ -1643,7 +1643,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             <AccessibleButton
                 tabIndex={0}
                 title={_t("Clear search")}
-                className="mx_directorySearch_clearButton"
+                className="mx_InviteDialog_clearButton"
                 onClick={this._onClearSearchResult.bind(this)}
             />: null
         );
