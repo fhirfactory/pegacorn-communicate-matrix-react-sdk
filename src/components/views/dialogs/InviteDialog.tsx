@@ -1551,7 +1551,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
              * and removes already seen (duplicate member)
              */
          if (directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) {
-            sourceMembers = [];
             sourceMembers = this.state.serverResultsMixin;
         }
 
@@ -1650,7 +1649,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
         let searchIcon = (
             config.directory ?
-                <div className='mx_RoomSearch_icon' /> : null
+                <div className='mx_InviteDialogSearch_icon' /> : null
         );
 
         return (

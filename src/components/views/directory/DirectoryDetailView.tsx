@@ -154,15 +154,14 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
 
         directoryService.getRolePersonServiceDetail(searchContext, uniqueId)
             .then(response => {
-                let activeRolesForUser = response["currentUserActiveRoles"];
-                //  console.log("Current practitioner roles are,", activeRolesForUser);
                 if (!response.errorText) {
+                    if (!this._isMounted) return null;
                     this.setState({
                         entries: response.entries,
                         showUserRoleTable: true,
                         loading: false,
                         activeRoleDisplayNames: response.activeRoleDisplayNames,
-                        personDirectoryActiveRoles: response['currentPractitionerRoles']
+                        personDirectoryActiveRoles: response.currentPractitionerRoles
                     });
                 } else {
                     this.setState({
@@ -249,11 +248,10 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
             let membershipDetail;
             if (organizationMembership) {
                 membershipDetail = getKeyPairFromComplexObject(organizationMembership, "leafValue");
-                // console.log("membershipDetail are", membershipDetail);
             }
 
-            return <>
-                <table key={index} className="mx_DirectoryDetailView_table" tabIndex={0}>
+            return <div key={index}>
+                <table className="mx_DirectoryDetailView_table" tabIndex={0}>
                     <caption>
                         {this._renderDetailCaption(this.props.directorySearchContext)}
                     </caption>
@@ -363,7 +361,7 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
                         </tbody>
                     }
                 </table>
-            </>
+            </div>
         })
     }
 
@@ -391,7 +389,6 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
         return <div className="mx_DirectoryDetailView_fulfilledBy">
             <h3>Practitioner is fulfilling following role(s)</h3>
             {roleCategories.map((roles, index) => {
-                console.log("Found data was", roles["primaryRoleCategoryID"]);
                 return roles && <span className="mx_DirectoryDetailView_fulfilledBy_user" key={index}>
                     <li>{this._renderAvatar(roles["primaryRoleCategoryID"])}</li>
                     <li>{roles["displayName"]}</li>
