@@ -6,7 +6,8 @@ const defaultProps = {
     pageSize: 20,
     onChangePage: (pageNumber) =>  number,
     numOfTotalRecords: 1,
-    isLoading: false
+    isLoading: false,
+    error: null
 }
 
 interface IState {
@@ -114,7 +115,7 @@ class Pagination extends React.Component<typeof defaultProps, IState> {
     render() {
         let pager = this.state.pager;
 
-        if (!pager.pages || pager.pages.length <= 1 || this.props.isLoading) {
+        if (!pager.pages || pager.pages.length <= 1 || this.props.isLoading || this.props.error) {
             // don't display pager if there is only 1 page or if page is loading
             return null;
         }

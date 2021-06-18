@@ -1755,7 +1755,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 onChangePage={this.onChangePage.bind(this)}
                 numOfTotalRecords={this.state.numOfRecordsFromSearchAPI}
                 pageSize={config.numberOfRecordsToShowInSearch}
-                isLoading={this.state.isLoading}/>
+                isLoading={this.state.isLoading}
+                error={this.state.errorText}/>
     }
 
     _renderNoResultsText() {
