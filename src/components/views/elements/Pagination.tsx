@@ -119,15 +119,20 @@ class Pagination extends React.Component<typeof defaultProps, IState> {
             return null;
         }
 
+        const paginatorIconStyle  = {
+            fontSize: "20px",
+            fontWeight : 700
+        }
+
         return (
             <span className="mx_Pagination">
-                <li style={{ marginRight: '20px' }}>
+                <li style={{ marginRight: '20px' }} >
                     Displaying records {pager.startIndex + 1} - {pager.endIndex + 1} of {this.props.numOfTotalRecords}.
                 </li>
-                <li className={pager.currentPage === 1 ? 'disabled' : ''} title="First">
+                <li className={pager.currentPage === 1 ? 'disabled' : ''} title="First" style={ paginatorIconStyle }>
                     <a onClick={() => this.setPage(1)}>&#171;</a>
                 </li>
-                <li className={pager.currentPage === 1 ? 'disabled' : ''} title="Previous">
+                <li className={pager.currentPage === 1 ? 'disabled' : ''} title="Previous" style={ paginatorIconStyle }>
                     <a onClick={() => this.setPage(pager.currentPage - 1)}>&#8249;</a>
                 </li>
                 {pager.pages.map((page, index) =>
@@ -135,11 +140,11 @@ class Pagination extends React.Component<typeof defaultProps, IState> {
                         <a onClick={() => this.setPage(page)}>{page}</a>
                     </li>
                 )}
-                <li className={pager.currentPage === pager.totalPages ? 'disabled' : ''} title="Next">
+                <li className={pager.currentPage === pager.totalPages ? 'disabled' : ''} title="Next" style={ paginatorIconStyle }>
                     <a onClick={() => this.setPage(pager.currentPage + 1)}>&#8250;</a>
                 </li>
-                <li className={pager.currentPage === pager.totalPages ? 'disabled' : ''} title="Last">
-                    <a onClick={() => this.setPage(pager.totalPages)}>&#187;</a>
+                <li className={pager.currentPage === pager.totalPages ? 'disabled' : ''} title="Last" style={ paginatorIconStyle }>
+                    <a onClick={() => this.setPage(pager.totalPages)} style={{}}>&#187;</a>
                 </li>
             </span>
         );
