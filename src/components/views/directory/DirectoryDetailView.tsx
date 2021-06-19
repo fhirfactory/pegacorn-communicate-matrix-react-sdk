@@ -247,7 +247,7 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
 
             let membershipDetail;
             if (organizationMembership) {
-                membershipDetail = getKeyPairFromComplexObject(organizationMembership, "leafValue");
+                membershipDetail = getKeyPairFromComplexObject(organizationMembership, "value") || getKeyPairFromComplexObject(organizationMembership, "leafValue");
             }
 
             return <div key={index}>
