@@ -491,7 +491,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             directorySearchContext={this.props.kind} />
 
         const accordionIcon = <AccessibleButton id="mx_DirectoryDetailView_btn"
-            className="mx_RoomSublist_collapseBtn" onClick={ev => this.onToggleView(ev)}
+            className="mx_InviteDialog_collapseBtn" onClick={ev => this.onToggleView(ev)}
             style={{ float: 'right' }}>
         </AccessibleButton>
 
