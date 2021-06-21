@@ -1187,6 +1187,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
                     // update server result mixin(search result) in state
                     if (response.results.length > 0) {
+                        if (this.state.favoriteFilterIsSelected) {
+                            mappedServerSearchResults = mappedServerSearchResults.filter(m => m.user.favorite);
+                        }
                         this.setState({
                             numOfRecordsFromSearchAPI: response.numOfRecordsFromSearchAPI,
                             serverResultsMixin: mappedServerSearchResults,
@@ -1199,21 +1202,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     } else {
                         this.setState({
                             numOfRecordsFromSearchAPI: response.numOfRecordsFromSearchAPI
-                        });
-                    }
-
-                    // if filter by favorite is selected, and user tries to search favorite only
-                    if (response.results.length > 0 && this.state.favoriteFilterIsSelected) {
-                        const serverResults = this.state.serverResultsMixin;
-                        let filteredByFavoriteResults = [];
-                        for (let fav in this.state.favorites) {
-                            filteredByFavoriteResults = serverResults.filter(m => m.user.name.indexOf(fav) !== -1);
-                        }
-                        this.setState({
-                            serverResultsMixin: filteredByFavoriteResults,
-                            recents: [],
-                            isLoading: false,
-                            suggestions: []
                         });
                     }
                 } else {
