@@ -221,7 +221,29 @@ export const getRoleDetail = (roleId: string) => {
 		};
 	});
 }
-
+/**
+ * RETURN - null if the id isn't an email
+ *        - otherwise a fetch Promise, so calling code can either
+ *          call this method asynchronously:
+ *              getPractionerDisplayName(id).then(response => { 
+ *                  <code to process response>
+ *              }) 
+ *          OR synchronously:
+ *              const response = await getPractionerDisplayName(id);
+ *              <code to process response> 
+ *          The response will be 
+ *          - an object with an errorText property if an error occurs
+ *          - otherwise an object with a displayName property
+ */
+ export const getCurrentUserEmailAddress = () => {
+    
+    const account3pids = await MatrixClientPeg.get().getThreePids();
+	var email =  account3pids.threepids.filter(b => b.medium === 'email').map(b => b.address);	
+	if (email.indexOf("@") === -1) 	
+		return null;
+	else
+	return email;
+}
 /**
  * RETURN - null if the id isn't an email
  *        - otherwise a fetch Promise, so calling code can either
