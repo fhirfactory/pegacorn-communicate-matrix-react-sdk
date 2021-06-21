@@ -16,7 +16,6 @@ limitations under the License.
 
 import * as React from "react";
 import { createRef } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
 import GroupFilterPanel from "./GroupFilterPanel";
 import CustomRoomTagPanel from "./CustomRoomTagPanel";
 import classNames from "classnames";
@@ -42,6 +41,7 @@ import RoomListNumResults from "../views/rooms/RoomListNumResults";
 import LeftPanelWidget from "./LeftPanelWidget";
 import SpacePanel from "../views/spaces/SpacePanel";
 import * as config from "../../config";
+
 import {replaceableComponent} from "../../utils/replaceableComponent";
 import SpaceStore, {UPDATE_SELECTED_SPACE} from "../../stores/SpaceStore";
 import { Resizable } from "re-resizable";
@@ -54,7 +54,6 @@ interface IProps {
 interface IState {
     showBreadcrumbs: boolean;
     showGroupFilterPanel: boolean;
-    activeSpace?: Room;
 }
 
 // List of CSS classes which should be included in keyboard navigation within the room list
@@ -371,10 +370,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             );
         }
     }
-    private getRoles= () => {
-        
-       return directoryService.getSelectedRolesForCurrentUser_dummy();//Todo API call instead of hard coded array
-    };
+
     private renderSearchExplore(): React.ReactNode {
         return (
             <div
@@ -398,102 +394,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             </div>
         );
     }
-	private onRolesHeaderClick = () => {
-		this.setState({rolesHeight: 48});
-        this.setState({isRolesSelectedExpanded : !this.state.isRolesSelectedExpanded});
-        this.handleStickyHeaders(this.listContainerRef.current);
-	}
-/*
-	private rolesList = (roles) => {        
-        
-        if(this.state.isRolesSelectedExpanded){
-			return (
-			<React.Fragment>
-                {<Resizable
-                	size={{height: this.state.rolesHeight} as any}
-                	className="mx_RoomSublist_resizeBox"
-                	minHeight={this.state.rolesHeight}
-                	maxHeight={this.state.rolesHeight}
-                > }
-					<div className="mx_RoomSublist_tiles">
-                            {roles.map((ele) => (
-                                <div className="mx_AccessibleButton mx_RoomTile">
-                                <p><span>{ele}</span><br/></p>
-                                </div>
-                            ))}
-					</div>
-				{ </Resizable> }
-			</React.Fragment>
-			)
-		}else{
-			return <></>
-		}		
-	}*/
-    
-    private onRolesHeaderClick = () => {
-		this.setState({rolesHeight: 48});
-        this.setState({isRolesSelectedExpanded : !this.state.isRolesSelectedExpanded});
-        this.handleStickyHeaders(this.listContainerRef.current);
-	}
 
-	private renderRolesSelected(): React.ReactNode {
-
-		const collapseClasses = classNames({
-            'mx_RoomSublist_collapseBtn': true,
-            'mx_RoomSublist_collapseBtn_collapsed': !this.state.isRolesSelectedExpanded,
-        });
-
-    }
-	private rolesList = (roles) => {
-		if((roles != null && roles?.length !== 0)  && this.state.isRolesSelectedExpanded){
-            const listItems = roles.map((d) => <li key={d}>{d}</li>);
-			return (
-			<React.Fragment>
-                <Resizable
-                	size={{height: this.state.rolesHeight} as any}
-                	className="mx_RoomSublist_resizeBox"
-                	minHeight={this.state.rolesHeight}
-                	maxHeight={this.state.rolesHeight}
-                >
-					<div className="mx_RoomSublist_tiles">
-						<div className="mx_AccessibleButton mx_RoomTile">
-							<p><span>{listItems }</span><br/>
-                            <span>Role 2</span><br/>                          
-                            </p>
-						</div>
-					</div>
-				</Resizable>
-			</React.Fragment>
-			)
-		}else{
-			return <></>
-		}
-    }
-
-	private renderRolesSelected(): React.ReactNode {
-        let roles = this.getRoles();
-		const collapseClasses = classNames({
-            'mx_RoomSublist_collapseBtn': true,
-            'mx_RoomSublist_collapseBtn_collapsed': !this.state.isRolesSelectedExpanded,
-        });
-
-		return (
-			<div className="mx_RoomSublist">
-				<div className="mx_RoomSublist_headerContainer mx_RoomSublist_headerContainer_withAux" onClick={this.onRolesHeaderClick}>
-					<div className="mx_RoomSublist_stickable">
-						<div className="mx_AccessibleButton mx_RoomSublist_headerText" role="treeitem" aria-expanded="false" aria-level="1">
-							<span className={collapseClasses}></span>
-							<span> {roles == null || roles?.length === 0 ? "No Roles selected": "Roles Selected" } </span>
-						</div>
-					</div>
-				</div>	
-                { 
-                    this.rolesList(roles)
-                    
-                }
-			</div>
-		);
-	}
     public render(): React.ReactNode {
         let leftLeftPanel;
         // Currently TagPanel.enableTagPanel is disabled when Legacy Communities are disabled so for now
@@ -527,7 +428,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             "mx_LeftPanel_actualRoomListContainer",
             "mx_AutoHideScrollbar",
         );
-        const imgurl =require("../../../res/img/RoleSelectorRedirect.png")
         return (
             <div className={containerClasses}>
                 {leftLeftPanel}
@@ -535,7 +435,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
                     {this.renderBreadcrumbs()}
-					{this.renderRolesSelected()}                    
                     <RoomListNumResults />
                     <div className="mx_LeftPanel_roomListWrapper">
                         <div
@@ -549,17 +448,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             {roomList}
                         </div>
                     </div>
-                    <div className="mx_LeftPanel_roomListWrapper">
-                            <div className="mx_RoomSublist" role="group" aria-label="Rooms">
-                            <div className="mx_LeftPanel_roomListWrapper">
-                                </div><div className="mx_RoomSublist_headerContainer mx_RoomSublist_headerContainer_withAux" aria-label="Rooms"><div className="mx_RoomSublist_stickable"><div tabIndex="0" role="treeitem" aria-expanded="true" aria-level="1" className="mx_AccessibleButton mx_RoomSublist_headerText">
-                                            <div className="mx_DecoratedRoomAvatar mx_DecoratedRoomAvatar_cutout mx_RoomTile_role_selection mx_RoomTile_role_selection"> 
-                                                <a href="role-selection"> 
-                                                    <img src={imgurl} alt="Role Selection Icon"></img>
-                                                </a>
-                                            </div>
-                        </div></div></div></div>
-                        </div>
                     { !this.props.isMinimized && <LeftPanelWidget onResize={this.onResize} /> }
                 </aside>
             </div>

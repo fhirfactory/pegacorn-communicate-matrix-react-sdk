@@ -25,11 +25,6 @@ $roomListCollapsedWidth: 68px;
     // Create a row-based flexbox for the GroupFilterPanel and the room list
     display: flex;
 
-    .mx_LeftPanel_RolesSelected{
-        margin-top: 20px;
-        min-height: 20px;
-    }
-
     .mx_LeftPanel_GroupFilterPanelContainer {
         flex-grow: 0;
         flex-shrink: 0;

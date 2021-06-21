@@ -237,7 +237,7 @@ export const getRoleDetail = (roleId: string) => {
  */
  export const getCurrentUserEmailAddress = () => {
     
-    const account3pids = await MatrixClientPeg.get().getThreePids();
+    const account3pids = MatrixClientPeg.get().getThreePids();
 	var email =  account3pids.threepids.filter(b => b.medium === 'email').map(b => b.address);	
 	if (email.indexOf("@") === -1) 	
 		return null;
