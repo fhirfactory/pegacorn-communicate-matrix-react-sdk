@@ -115,6 +115,10 @@ class Member {
         throw new Error("Member class not implemented");
     }
 
+    get organisatioonUnit(): string {  // used by person directory
+        throw new Error("Member class not implemented");
+    }
+
     get personIsActive(): boolean {  // used by person directory
         throw new Error("Member class not implemented");
     }
@@ -137,6 +141,7 @@ class DirectoryMember extends Member {
     _longName: string;
     _shortName: string;
     _jobTitle: string;
+    _organisationUnit: string;
     _personIsLoggedIn: boolean;
     _personIsBusy: boolean;
     _personIsOnCall: boolean;
@@ -145,7 +150,8 @@ class DirectoryMember extends Member {
         user_id: string, display_name: string, avatar_url: string,
         favorite?: boolean, available?: false, roleCategoryId?: string,
         longName?: string, shortName?: string, jobTitle?: string,
-        personIsOnCall?: boolean, personIsLoggedIn?: false, personIsActive?: boolean
+        personIsOnCall?: boolean, personIsLoggedIn?: false, personIsActive?: boolean,
+        organisationUnit?: string
     }) {
         super();
         this._userId = userDirResult.user_id;
@@ -155,10 +161,11 @@ class DirectoryMember extends Member {
         this._longName = userDirResult.longName;
         this._shortName = userDirResult.shortName;
         this._jobTitle = userDirResult.jobTitle;
+        this._organisationUnit = userDirResult.organisationUnit;
         this._isFavorite = userDirResult.favorite;
         this._isAvailable = userDirResult.available;
         this._personIsLoggedIn = userDirResult.personIsLoggedIn;
-        this._personIsBusy = userDirResult.personIsActive;;
+        this._personIsBusy = userDirResult.personIsActive;
     }
 
     // These next class members are for the Member interface
@@ -197,6 +204,10 @@ class DirectoryMember extends Member {
 
     get available(): boolean { // used by role directory
         return this._isAvailable;
+    }
+
+    get organisationUnit(): string {
+        return this._organisationUnit;
     }
 
     get personIsLoggedIn(): boolean {  // used by person directory
@@ -453,18 +464,24 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             ? _t("Invite by email")
             : this._highlightName(this.props.member.userId);
 
+        /**
+         * @param textType The textType takes 'caption' or 'title' as parameter
+         * @returns title or caption as string to display in UI and
+         * not finding any values would return matrix default which is name as
+         * primary text and userId as secondary text.
+         */
         const getDirectoryMemberTitleAndCaption = (textType) => {
             let title;
             let caption;
             if (this.props.kind === directoryService.KIND_ROLE_DIRECTORY_SEARCH) {
-                title = this.props.member.longName ? this.props.member.longName : this.props.member.shortName;
-                caption = this.props.member.shortName ? this.props.member.shortName : this.props.member.name;
+                title = this.props.member.longName ? this.props.member.longName : this.props.member.longName;
+                caption = this.props.member.organisationUnit || this.props.member.name;
             } else if (this.props.kind === directoryService.KIND_PEOPLE_DIRECTORY_SEARCH) {
                 title = this.props.member.name;
-                caption = this.props.member.jobTitle ? this.props.member.jobTitle : this.props.member.name;
+                caption = this.props.member.jobTitle ? this.props.member.jobTitle : this.props.member.userId;
             } else if (this.props.kind === directoryService.KIND_SERVICE_DIRECTORY_SEARCH) {
                 title = this.props.member.longName ? this.props.member.longName : this.props.member.shortName;
-                caption = this.props.member.shortName || this.props.member.name || this.props.member.userId;
+                caption = this.props.member.shortName ? this.props.member.shortName : this.props.member.name;
             } else {
                 title = this.props.member.name;
                 caption = this.props.member.userId;
@@ -1120,6 +1137,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     let role_category;
                     let long_name;
                     let short_name;
+                    let organisationStructure;
                     let personIsLoggedIn;
                     let personIsActive;
                     let roleIsActive = false;
@@ -1133,6 +1151,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         role_category = value.role_category;
                         roleIsActive = value.roleIsActive;
                         job_title = value.job_title ?? null;
+                        organisationStructure = value.organisationStructure;
                         memberIsFavorite = (this.state.favorites.indexOf(value.user_id) !== -1) ?? false;
                         long_name = value.identifiers.map(val => val.type === "LongName" ? (val.value ? val.value: val.leafValue) : null);
                         short_name = value.identifiers.map(val => val.type === "ShortName" ? (val.value ? val.value: val.leafValue) : null);
@@ -1152,6 +1171,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                             longName: long_name ?? null,
                             shortName: short_name ?? null,
                             jobTitle: job_title ?? null,
+                            organisationUnit: organisationStructure?.map(val => val.value + ", " + val.type) ?? null,
                             favorite: memberIsFavorite ?? false,
                             personIsLoggedIn: personIsLoggedIn,
                             personIsActive: personIsActive,

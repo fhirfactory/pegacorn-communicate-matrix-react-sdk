@@ -210,6 +210,7 @@ export const getMatchingRecords = (term: string, kind) => {
             user_id: value["simplifiedID"],
             role_category: value["primaryRoleCategoryID"],
             identifiers: value["identifiers"] ?? null, // used to derive longName and shortName
+            organisationStructure: value["organisationStructure"],
             practitionerStatus: value["practitionerStatus"] ?? null,
             // filled or not filled status
             // if activePractitionerSet array is non-empty someone is fulfilling that role
