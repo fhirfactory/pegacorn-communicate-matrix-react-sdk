@@ -432,13 +432,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             });
         }
     };
-private getRoles= () => {
-    return [
-        "CCU CNC",
-        "Snr Cardiac Physiologist",
-        "FAMSAC On Call Nurse"
-    ];
-};
+
     private onStartChat = () => {
         const initialText = RoomListStore.instance.getFirstNameFilterCondition()?.search;
         dis.dispatch({ action: "view_create_chat", initialText });

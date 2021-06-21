@@ -289,9 +289,11 @@ export default class UserMenu extends React.Component<IProps, IState> {
         showCommunityInviteDialog(CommunityPrototypeStore.instance.getSelectedCommunityId());
         this.setState({contextMenuPosition: null}); // also close the menu
     };
+    
     private getRoles= () => {        
-        return directoryService.getSelectedRolesForCurrentUser_dummy();//Todo API call instead of hard coded array
+        return directoryService.getSelectedRolesForCurrentUser();//Todo API call instead of hard coded array
      };
+
     private rolesList = (roles) => {
 		if(roles != null && roles?.length !== 0 ){
             const listItems = roles.map((d) =>                             

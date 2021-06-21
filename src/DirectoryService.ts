@@ -24,7 +24,6 @@ import * as config from './config';
 export const KIND_ROLE_DIRECTORY_SEARCH = "search_role_directory";
 export const KIND_SERVICE_DIRECTORY_SEARCH = "search_service_directory";
 export const KIND_PEOPLE_DIRECTORY_SEARCH = "search_people_directory";
-export const KIND_SELECTED_ROLE = "selected_roles";
 
 export const searchIsOnRoleOrPeopleOrServiceDirectory = (kind) => {
 	if (kind === KIND_ROLE_DIRECTORY_SEARCH) {
@@ -33,8 +32,6 @@ export const searchIsOnRoleOrPeopleOrServiceDirectory = (kind) => {
 		return true;
 	} else if (kind === KIND_SERVICE_DIRECTORY_SEARCH) {
 		return true;
-	} else if(kind === KIND_SELECTED_ROLE){
-		return true;	
 	} else {
 		return false;
 	}
@@ -63,16 +60,7 @@ export const searchIsOnRoleOrPeopleOrServiceDirectory = (kind) => {
 	});	
 }
 
-/**
- * This will be used to display selected roles
- */
- export const getSelectedRolesForCurrentUser_dummy = () => {
-  return [
-		"CCU CNC",
-		"Snr Cardiac Physiologist",
-		"FAMSAC On Call Nurse"
-	];
-}
+
 /**
  * This will be used by service, role and people search by switching api based on search context
  * RETURN a fetch Promise, so calling code can either
