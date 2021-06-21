@@ -552,7 +552,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     <div className="mx_LeftPanel_roomListWrapper">
                             <div className="mx_RoomSublist" role="group" aria-label="Rooms">
                             <div className="mx_LeftPanel_roomListWrapper">
-                                </div><div className="mx_RoomSublist_headerContainer mx_RoomSublist_headerContainer_withAux" aria-label="Rooms"><div className="mx_RoomSublist_stickable"><div tabindex="0" role="treeitem" aria-expanded="true" aria-level="1" class="mx_AccessibleButton mx_RoomSublist_headerText">
+                                </div><div className="mx_RoomSublist_headerContainer mx_RoomSublist_headerContainer_withAux" aria-label="Rooms"><div className="mx_RoomSublist_stickable"><div tabIndex="0" role="treeitem" aria-expanded="true" aria-level="1" className="mx_AccessibleButton mx_RoomSublist_headerText">
                                             <div className="mx_DecoratedRoomAvatar mx_DecoratedRoomAvatar_cutout mx_RoomTile_role_selection mx_RoomTile_role_selection"> 
                                                 <a href="role-selection"> 
                                                     <img src={imgurl} alt="Role Selection Icon"></img>

@@ -45,8 +45,9 @@ export const searchIsOnRoleOrPeopleOrServiceDirectory = (kind) => {
  */
  export const getSelectedRolesForCurrentUser = () => {
 	// get email id
-	const user_id_encoded = encodeURI(MatrixClientPeg.get().getUserId());//TODO:Sam remove this line as we need email id instead of userid	
+	const user_id_encoded = encodeURI(MatrixClientPeg.get().getUserId());//TODO:Sam remove this line as we need email id instead of userid	////http://localhost:12121/pegacorn/operations/directory/r1/Practitioner/Samridhi.Shukla@test.act.gov.au/PractitionerRoles
 	const user_emailid = "Samridhi.Shukla@test.act.gov.au";	//TODO:sam get email id of current user 	//"selected_roles": "https://lingo-server.site-a/pegacorn/operations/directory/r1/Practitioner/Samridhi.Shukla@test.act.gov.au/PractitionerRoles",//"base_path" : "http://localhost:12121/pegacorn/operations/directory/r1/"//"base_path" + "Practitioner/" + emailid +  "/PractitionerRoles"	//Samridhi.Shukla@test.act.gov.au
+	
 	let role__selection__api = config.communicate_api_base_path +config.search_by_role_selection.prefix + user_emailid + config.search_by_role_selection.suffix;
 	return fetch(role__selection__api, {
 		method: "GET",
@@ -92,6 +93,7 @@ export const getFavoritesForCurrentUser = (kind) => {
 	// Find favorites from relevant api (roles / services)
 	// get user id
 	const user_id_encoded = encodeURI(MatrixClientPeg.get().getUserId());
+	console.log('user_id_encoded' + user_id_encoded);
 	let favorite_api = config.communicate_api_base_path + config.prefix + user_id_encoded;
 	if (kind === KIND_ROLE_DIRECTORY_SEARCH) {
 		favorite_api += config.search_by_favorite.role_suffix;
@@ -238,7 +240,10 @@ export const getRoleDetail = (roleId: string) => {
  */
 export const getPractionerDisplayName = (id: string) => {
     if (id.indexOf("@") === -1) return null;
-    const queryId = encodeURIComponent(roleId);
+    const queryId = encodeURIComponent(id);
+	console.log("RoleId" + id);
+	//console.log("RoleId" + roleId);
+	console.log("queryId" + queryId);
     const view_role_detail = config.communicate_api_base_path + config.prefix + queryId;
     // api data
     return fetch(api, {

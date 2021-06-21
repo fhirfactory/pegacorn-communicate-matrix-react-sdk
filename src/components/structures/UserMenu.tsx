@@ -56,7 +56,7 @@ import HostSignupAction from "./HostSignupAction";
 import { IHostSignupConfig } from "../views/dialogs/HostSignupDialogTypes";
 import SpaceStore, { UPDATE_SELECTED_SPACE } from "../../stores/SpaceStore";
 import RoomName from "../views/elements/RoomName";
-
+import * as directoryService from '../../DirectoryService';
 interface IProps {
     isMinimized: boolean;
 }
@@ -224,6 +224,10 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         this.setState({contextMenuPosition: null}); // also close the menu
     };
+    ß
+    private onRoleChangeClick = async (ev: ButtonEvent) => {
+        window.location.replace('/role-selection');
+    };
 
     private onSignInClick = () => {
         dis.dispatch({ action: 'start_login' });
@@ -285,7 +289,33 @@ export default class UserMenu extends React.Component<IProps, IState> {
         showCommunityInviteDialog(CommunityPrototypeStore.instance.getSelectedCommunityId());
         this.setState({contextMenuPosition: null}); // also close the menu
     };
+    private getRoles= () => {        
+        return directoryService.getSelectedRolesForCurrentUser_dummy();//Todo API call instead of hard coded array
+     };
+    private rolesList = (roles) => {
+		if(roles != null && roles?.length !== 0 ){
+            const listItems = roles.map((d) =>                             
 
+    <li className="mx_UserMenu_iconRoleListItem">{d}</li>
+);
+
+
+
+			return (
+			<React.Fragment>    
+                <ul className="entry-content mx_UserMenu_iconRoleList" >
+                {listItems}
+                </ul>
+             </React.Fragment>
+			)
+		}else{
+            return (
+                <React.Fragment>    
+                    <div className="mx_IconizedContextMenu_optionList_red"><span className="mx_AccessibleButton"> No roles currently selected</span></div>
+                 </React.Fragment>
+                )
+		}
+    }
     private renderContextMenu = (): React.ReactNode => {
         if (!this.state.contextMenuPosition) return null;
 
@@ -326,7 +356,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 }
             }
         }
-
+        var v = MatrixClientPeg.get();
+        console.log(v);
         let homeButton = null;
         if (this.hasHomePage) {
             homeButton = (
@@ -346,19 +377,26 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 onClick={this.onProvideFeedback}
             />;
         }
-
+                
         let primaryHeader = (
-            <div className="mx_UserMenu_contextMenu_name">
-                <span className="mx_UserMenu_contextMenu_displayName">
-                    {OwnProfileStore.instance.displayName}
-                </span>
-                <span className="mx_UserMenu_contextMenu_userId">
-                    {MatrixClientPeg.get().getUserId()}
-                </span>
-            </div>
+            <div>
+                <div className="mx_UserMenu_contextMenu_name">
+                    <span className="mx_UserMenu_contextMenu_displayName">
+                        {OwnProfileStore.instance.displayName}
+                    </span>
+                </div> 
+                { this.rolesList(this.getRoles()) }                          
+           </div>
         );
         let primaryOptionList = (
             <React.Fragment>
+                <IconizedContextMenuOptionList>
+                <IconizedContextMenuOption
+                        iconClassName="mx_UserMenu_iconRoleChange"
+                        label={_t("Change roles")}
+                        onClick={this.onRoleChangeClick}
+                />
+                </IconizedContextMenuOptionList>
                 <IconizedContextMenuOptionList>
                     {homeButton}
                     <IconizedContextMenuOption
@@ -445,6 +483,9 @@ export default class UserMenu extends React.Component<IProps, IState> {
                             </span>
                             <span className="mx_UserMenu_contextMenu_userId">
                                 {MatrixClientPeg.get().getUserId()}
+                            </span>
+                            <span className="mx_UserMenu_contextMenu_userId">
+                                {MatrixClientPeg.get()}
                             </span>
                         </div>
                     </div>

@@ -1004,6 +1004,8 @@
     "Expand space panel": "Expand space panel",
     "Collapse space panel": "Collapse space panel",
     "Home": "Home",
+    "Change roles":"Change roles",
+    "Roles not selected":"No roles currently selected",    
     "Click to copy": "Click to copy",
     "Copied!": "Copied!",
     "Failed to copy": "Failed to copy",

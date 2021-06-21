@@ -59,7 +59,7 @@ limitations under the License.
             mask-size: contain;
             mask-repeat: no-repeat;
             background: $tertiary-fg-color;
-            mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+            mask-image: url('$(res)/img/feather-customised/ellipsis-vertical.svg');
         }
     }
 
@@ -176,8 +176,7 @@ limitations under the License.
         }
     }
 
-    .mx_UserMenu_contextMenu_header {
-        padding: 20px;
+    .mx_UserMenu_contextMenu_header {       
 
         // Create a flexbox to organize the header a bit easier
         display: flex;
@@ -187,7 +186,7 @@ limitations under the License.
             // Create another flexbox of columns to handle large user IDs
             display: flex;
             flex-direction: column;
-            width: calc(100% - 40px); // 40px = 32px theme button + 8px margin to theme button
+            width: calc(100% - 10px); // 40px = 32px theme button + 8px margin to theme button
 
             * {
                 // Automatically grow all subelements to fit the container
@@ -204,11 +203,14 @@ limitations under the License.
                 font-weight: bold;
                 font-size: $font-15px;
                 line-height: $font-20px;
+                padding-left: 22px;
+                padding-top: 10px;
             }
 
             .mx_UserMenu_contextMenu_userId {
                 font-size: $font-15px;
                 line-height: $font-24px;
+                padding-left: 20px;
             }
         }
 
@@ -269,6 +271,11 @@ limitations under the License.
             background: $primary-fg-color;
         }
     }
+    .mx_UserMenu_iconRoleList {
+        .mx_UserMenu_iconRoleListItem {
+            padding-left: 10px;
+        }    
+    }
 
     .mx_UserMenu_iconHome::before {
         mask-image: url('$(res)/img/element-icons/roomlist/home.svg');
@@ -308,4 +315,14 @@ limitations under the License.
     .mx_UserMenu_iconInvite::before {
         mask-image: url('$(res)/img/element-icons/room/invite.svg');
     }
+
+    .mx_UserMenu_iconRoleChange::before {
+        mask-image: url('$(res)/img/element-icons/role-change.svg');
+    }
+    .mx_UserMenu_iconSelectedRoles::before {
+        mask-image: url('$(res)/img/element-icons/briefcase.svg');
+    }
+
+  
+
 }
