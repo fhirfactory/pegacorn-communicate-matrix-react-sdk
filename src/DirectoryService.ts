@@ -79,7 +79,6 @@ export const getFavoritesForCurrentUser = (kind) => {
 	// Find favorites from relevant api (roles / services)
 	// get user id
 	const user_id_encoded = encodeURI(MatrixClientPeg.get().getUserId());
-	console.log('user_id_encoded' + user_id_encoded);
 	let favorite_api = config.communicate_api_base_path + config.prefix + user_id_encoded;
 	if (kind === KIND_ROLE_DIRECTORY_SEARCH) {
 		favorite_api += config.search_by_favorite.role_suffix;
@@ -209,24 +208,10 @@ export const getRoleDetail = (roleId: string) => {
 		};
 	});
 }
-/**
- * RETURN - null if the id isn't an email
- *        - otherwise a fetch Promise, so calling code can either
- *          call this method asynchronously:
- *              getPractionerDisplayName(id).then(response => { 
- *                  <code to process response>
- *              }) 
- *          OR synchronously:
- *              const response = await getPractionerDisplayName(id);
- *              <code to process response> 
- *          The response will be 
- *          - an object with an errorText property if an error occurs
- *          - otherwise an object with a displayName property
- */
+
  export const getCurrentUserEmailAddress = () => {
-    
     const account3pids = MatrixClientPeg.get().getThreePids();
-	var email =  account3pids.threepids.filter(b => b.medium === 'email').map(b => b.address);	
+	let email =  account3pids.threepids.filter(b => b.medium === 'email').map(b => b.address);	
 	if (email.indexOf("@") === -1) 	
 		return null;
 	else

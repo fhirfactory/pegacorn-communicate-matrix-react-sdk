@@ -42,10 +42,6 @@ import LeftPanelWidget from "./LeftPanelWidget";
 import SpacePanel from "../views/spaces/SpacePanel";
 import * as config from "../../config";
 
-import {replaceableComponent} from "../../utils/replaceableComponent";
-import SpaceStore, {UPDATE_SELECTED_SPACE} from "../../stores/SpaceStore";
-import { Resizable } from "re-resizable";
-import * as directoryService from '../../DirectoryService';
 interface IProps {
     isMinimized: boolean;
     resizeNotifier: ResizeNotifier;
@@ -428,6 +424,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             "mx_LeftPanel_actualRoomListContainer",
             "mx_AutoHideScrollbar",
         );
+        
         return (
             <div className={containerClasses}>
                 {leftLeftPanel}
