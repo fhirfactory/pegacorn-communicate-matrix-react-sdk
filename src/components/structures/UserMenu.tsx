@@ -358,8 +358,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 }
             }
         }
-        var v = MatrixClientPeg.get();
-        console.log(v);
+
+        
         let homeButton = null;
         if (this.hasHomePage) {
             homeButton = (
@@ -379,7 +379,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 onClick={this.onProvideFeedback}
             />;
         }
-                
+
         let primaryHeader = (
             <div>
                 <div className="mx_UserMenu_contextMenu_name">
