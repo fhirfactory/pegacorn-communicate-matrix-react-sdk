@@ -42,7 +42,8 @@ export const searchIsOnRoleOrPeopleOrServiceDirectory = (kind) => {
  */
  export const getSelectedRolesForCurrentUser = () => {
 	let user_emailid = getCurrentUserEmailAddress();	// get email id
-	let role__selection__api = config.communicate_api_base_path +config.search_by_role_selection.prefix + user_emailid + config.search_by_role_selection.suffix;
+	user_emailid = (user_emailid === undefined) ? "" : user_emailid;
+	let role__selection__api = config.communicate_api_base_path +config.search_by_role_selection?.prefix + user_emailid + config.search_by_role_selection?.suffix;
 	return fetch(role__selection__api, {
 		method: "GET",
 		headers: {
@@ -51,7 +52,7 @@ export const searchIsOnRoleOrPeopleOrServiceDirectory = (kind) => {
 	}).then(res => res.json())
 	  .then(response => {
 		return {
-			favorites: response.practitionerRoles
+			practitionerRoles: response.practitionerRoles
 		};
 	}).catch((err) => {
 		return {
@@ -211,8 +212,9 @@ export const getRoleDetail = (roleId: string) => {
 
  export const getCurrentUserEmailAddress = () => {
     const account3pids = MatrixClientPeg.get().getThreePids();
-	let email =  account3pids.threepids.filter(b => b.medium === 'email').map(b => b.address);	
-	if (email.indexOf("@") === -1) 	
+	console.log("account3pids" + account3pids);
+	let email =  account3pids?.threepids?.filter(b => b.medium === 'email').map(b => b.address);	
+	if (email?.indexOf("@") === -1) 	
 		return null;
 	else
 	return email;
