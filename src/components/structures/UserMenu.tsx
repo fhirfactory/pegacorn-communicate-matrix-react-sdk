@@ -224,7 +224,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         this.setState({contextMenuPosition: null}); // also close the menu
     };
-    ß
+    
     private onRoleChangeClick = async (ev: ButtonEvent) => {
         window.location.replace('/role-selection');
     };
@@ -291,7 +291,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
     };
     
     private getRoles= () => {        
-        return directoryService.getSelectedRolesForCurrentUser();//Todo API call instead of hard coded array
+        return directoryService.getSelectedRolesForCurrentUser();
      };
 
     private rolesList = (roles) => {
