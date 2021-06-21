@@ -44,10 +44,7 @@ export const searchIsOnRoleOrPeopleOrServiceDirectory = (kind) => {
  * This will be used to display selected roles
  */
  export const getSelectedRolesForCurrentUser = () => {
-	// get email id
-	const user_id_encoded = encodeURI(MatrixClientPeg.get().getUserId());//TODO:Sam remove this line as we need email id instead of userid	////http://localhost:12121/pegacorn/operations/directory/r1/Practitioner/Samridhi.Shukla@test.act.gov.au/PractitionerRoles
-	const user_emailid = "Samridhi.Shukla@test.act.gov.au";	//TODO:sam get email id of current user 	//"selected_roles": "https://lingo-server.site-a/pegacorn/operations/directory/r1/Practitioner/Samridhi.Shukla@test.act.gov.au/PractitionerRoles",//"base_path" : "http://localhost:12121/pegacorn/operations/directory/r1/"//"base_path" + "Practitioner/" + emailid +  "/PractitionerRoles"	//Samridhi.Shukla@test.act.gov.au
-	
+	let user_emailid = getCurrentUserEmailAddress();	// get email id
 	let role__selection__api = config.communicate_api_base_path +config.search_by_role_selection.prefix + user_emailid + config.search_by_role_selection.suffix;
 	return fetch(role__selection__api, {
 		method: "GET",
@@ -63,8 +60,9 @@ export const searchIsOnRoleOrPeopleOrServiceDirectory = (kind) => {
 		return {
 			errorText: err
 		};
-	});
+	});	
 }
+
 /**
  * This will be used to display selected roles
  */
