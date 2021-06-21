@@ -1511,9 +1511,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         }
 
         if (directoryService.searchIsOnRoleOrPeopleOrServiceDirectory(this.props.kind)) {
-            if(this.state.numOfRecordsFromSearchAPI > 0){
-                sectionName = 'Search Results';
-            }
+            sectionName = 'Search Results';
         }
 
         // Do not put search result text if page is loading
@@ -1604,10 +1602,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         let showMore = null;
         if (hasMore) {
             showMore = (
-                config.show_matrix_based_paginator &&
+                config.show_matrix_based_paginator ?
                 <AccessibleButton onClick={showMoreFn} kind="link">
                     {_t("Show more")}
                 </AccessibleButton>
+                : null
             );
         }
 
