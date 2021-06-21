@@ -295,7 +295,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
      };
 
     private rolesList = (roles) => {
-		if(roles != null && roles?.length !== 0 ){
+        console.log("roles" + roles);
+		if(roles != null && roles?.length > 0 ){
             const listItems = roles.map((d)=><li className="mx_UserMenu_iconRoleListItem">{d}</li>);
 			return (
 			<React.Fragment>    
