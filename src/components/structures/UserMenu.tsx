@@ -308,7 +308,11 @@ export default class UserMenu extends React.Component<IProps, IState> {
 		}else{
             return (
                 <React.Fragment>    
-                    <div className="mx_IconizedContextMenu_optionList_red"><span className="mx_AccessibleButton"> No roles currently selected</span></div>
+                    <div className="mx_IconizedContextMenu_optionList_red mx_UserMenu_contextMenu_name ">
+                        <span className="mx_AccessibleButton mx_UserMenu_contextMenu_displayName">
+                            No roles currently selected
+                        </span>
+                    </div>
                  </React.Fragment>
                 )
 		}
