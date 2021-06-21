@@ -424,7 +424,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             "mx_LeftPanel_actualRoomListContainer",
             "mx_AutoHideScrollbar",
         );
-        
+
         return (
             <div className={containerClasses}>
                 {leftLeftPanel}
