@@ -38,6 +38,31 @@ export const searchIsOnRoleOrPeopleOrServiceDirectory = (kind) => {
 }
 
 /**
+ * This will be used to display selected roles
+ */
+ export const getSelectedRolesForCurrentUser = () => {
+	let user_emailid = getCurrentUserEmailAddress();	// get email id
+	user_emailid = (user_emailid === undefined) ? "" : user_emailid;
+	let role__selection__api = config.communicate_api_base_path +config.search_by_role_selection?.prefix + user_emailid + config.search_by_role_selection?.suffix;
+	return fetch(role__selection__api, {
+		method: "GET",
+		headers: {
+			'Content-Type': 'application/json',
+		}
+	}).then(res => res.json())
+	  .then(response => {
+		return {
+			practitionerRoles: response.practitionerRoles
+		};
+	}).catch((err) => {
+		return {
+			errorText: err
+		};
+	});	
+}
+
+
+/**
  * This will be used by service, role and people search by switching api based on search context
  * RETURN a fetch Promise, so calling code can either
  *        call this method asynchronously:
@@ -185,6 +210,15 @@ export const getRoleDetail = (roleId: string) => {
 	});
 }
 
+ export const getCurrentUserEmailAddress = () => {
+    const account3pids = MatrixClientPeg.get().getThreePids();
+	console.log("account3pids" + account3pids);
+	let email =  account3pids?.threepids?.filter(b => b.medium === 'email').map(b => b.address);	
+	if (email?.indexOf("@") === -1) 	
+		return null;
+	else
+	return email;
+}
 /**
  * RETURN - null if the id isn't an email
  *        - otherwise a fetch Promise, so calling code can either
@@ -201,7 +235,10 @@ export const getRoleDetail = (roleId: string) => {
  */
 export const getPractionerDisplayName = (id: string) => {
     if (id.indexOf("@") === -1) return null;
-    const queryId = encodeURIComponent(roleId);
+    const queryId = encodeURIComponent(id);
+	console.log("RoleId" + id);
+	//console.log("RoleId" + roleId);
+	console.log("queryId" + queryId);
     const view_role_detail = config.communicate_api_base_path + config.prefix + queryId;
     // api data
     return fetch(api, {

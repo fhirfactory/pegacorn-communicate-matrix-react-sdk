@@ -387,7 +387,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         const newLists = RoomListStore.instance.orderedLists;
         if (SettingsStore.getValue("advancedRoomListLogging")) {
             // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
-            console.log("new lists", newLists);
+            console.log("new lists ", newLists);
         }
 
         const previousListIds = Object.keys(this.state.sublists);

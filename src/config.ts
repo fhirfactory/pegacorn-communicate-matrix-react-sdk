@@ -88,7 +88,7 @@ export const left_hand_nav_help_text: string = config.left_hand_nav_help_text;
  */
 export const role_directory = directory?.role;
 
-export const showRoleDirectory = role_directory.showRoleDirectory ?? false;
+export const showRoleDirectory = role_directory?.showRoleDirectory ?? false;
 
 export const role_directory_feature_name = role_directory?.name;
 
@@ -130,10 +130,13 @@ export const prefix = directory?.api.prefix;
 export const search_all_roles = communicate_api_base_path + directory?.api?.search_all_roles;
 
 // search roles by a short name
-export const search_role_by_displayName = communicate_api_base_path + directory.api.search_role_by_displayName;
+export const search_role_by_displayName = communicate_api_base_path + directory?.api?.search_role_by_displayName;
 
 // api to filter by favorites;
-export const search_by_favorite = directory.api.favourites;
+export const search_by_favorite = directory?.api?.favourites;
+
+// api to fetch selected roles
+export const search_by_role_selection =directory?.api?.role_selection;
 
 
 /**
