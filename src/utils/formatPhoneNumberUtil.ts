@@ -23,6 +23,7 @@ export function getFormattedPhoneNumberAndType(contactPoints) {
         const phoneFormat = contactPoint.type.toString().toLowerCase();
         let formattedPhoneNumberAndType = new Object({
             "phoneType": phoneFormat,
+            "displayName": contactPoint.displayName,
             "phoneNumber": phoneNumber
         })
         return formattedPhoneNumberAndType;

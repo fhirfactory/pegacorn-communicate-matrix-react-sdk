@@ -205,7 +205,10 @@ export default class DirectoryDetailView extends Component<IProps, IState> {
         }
         let contacts = getFormattedPhoneNumberAndType(contactPoints);
         return contacts.map((value, index) => {
-            let phoneType = getTextLabelFromEnum(value.phoneType);
+            // if phone display name comes from backend use that as display text for type of contact
+            // otherwise default to using phoneType and translate through enum to display multiple contact points
+            // in table cell
+            let phoneType = value.displayName || getTextLabelFromEnum(value.phoneType);
             return value ? (<div style={{ margin: '5px 0' }} key={index}>{phoneType} : {value.phoneNumber}</div>) : null;
         })
     }
