@@ -730,6 +730,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                     // If we're minimized, we want it below the header so it
                     // doesn't become sticky.
                     // The same applies to the notification badge.
+                    let visibleRooms = this.state.rooms?.slice(0,this.numVisibleTiles);
                     return (
                         <div
                             className={classes}
@@ -752,6 +753,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                                 >
                                     <span className={collapseClasses} />
                                     <span>{this.props.label}</span>
+                                    {config.showRoomCount && visibleRooms.length > 0 &&  `(${visibleRooms.length})`}
                                 </Button>
                                 {this.renderMenu()}
                                 {this.props.isMinimized ? null : badgeContainer}

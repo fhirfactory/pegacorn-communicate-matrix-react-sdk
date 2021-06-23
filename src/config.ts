@@ -30,6 +30,15 @@ export const updateDocumentForSelector = (selector) => {
 	}
 }
 
+export const getReplacement = (selector) =>{
+	switch(selector){
+		case "Room": return "Discussion";
+		case "room": return "discussion";
+		case "Chat": return "Discussion"; 
+		case "chat": return "discussion";
+	}
+}
+
 export const updateTerminologyInDocument = () => {
     console.log('change sign in text', changeSigninToLoginTextLabel);
     if (changeSigninToLoginTextLabel) {
@@ -89,6 +98,8 @@ export const left_hand_nav_help_text: string = config.left_hand_nav_help_text;
 export const role_directory = directory?.role;
 
 export const showRoleDirectory = role_directory.showRoleDirectory ?? false;
+
+export const showRoomCount =  config['showRoomCount'] ?? false;
 
 export const role_directory_feature_name = role_directory?.name;
 
