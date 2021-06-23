@@ -69,6 +69,76 @@ Web: As an Authenticated Practitioner, I should not be able to view certain Sett
 **config**
 Community feature controls Flair feature at the moment in Setting.ts and this switch is turned off via communicate-config.json by using `"UIFeature.communities": false`.
 
+Feature: 188497
+Web: As an Authenticated Practitioner, I should be able to personalise the Notification Settings, so that I can control certain system behaviours that will maximise my user experience
+=============================================================================================================================================================================
+
+Technical implementation and changes
+Push notifications specifications are described by matrix here for technical references : https://spec.matrix.org/unstable/push-gateway-api/
+
+(1) "on" means it will silently send push notification without buzz.
+(2) "off" means it will be completely turned off.
+(3) "Noisy" means it will buzz when notification is sent on phone.
+
+Note:
+How notifications switches has worked in front end is, some of these notifications can be turned on by using default flags available from setting.ts file from front end whereas some notifications were outside control of front end. After doing an observation on requirement on UI it has been found that there were only 2 values where user setting documents said leave it as default and also indicated leave it as something which was maybe default in past but not now so option was to either change the value through synapse configurable setting or adjust requirement document.
+Setting to be adjusted through synapse server
+
+For requirements:
+When rooms are upgraded (matrix default: noisy, expected default:  silent / on,  keyword: "m.rule.tombstone")
+Encrypted messages in group chats (matrix default: "on/silent", expected default: "off", " keyword: "m.rule.encrypted")
+Encrypted messages in one-to-one chats (matrix default: noisy, expected default: "off", rule keyword: "m.rule.encrypted_room_one_to_one)
+Settings adjusted through front end setting config values
+Enable notifications for this account (requirement said it needed to be enabled but already enabled by default no change required)
+Enable notifications for this session  (requirement said it needed to be enabled and enabled through notificationEnabled flag)
+Show message in desktop notification (disabled by default but has been enabled by using notificationEnabled flag for all to meet requirement)
+Enable audible notifications for this session (enabled by default and requirement says it needs to be enabled by default when no change has been made, works well, no changes required)
+Clear notifications
+( this option is when you got pending notifications you have not read and you can view these by pressing bell icon on right, if no notification is found bell wont show that button underneath otherwise by default this behavior will work)
+
+The list of rules in incremental order as described in user setting document.
+Notifications where it says noisy means it will send notification with default sound set by homeserver setting, whereas where it says "on" would send notification silently and "off" means do not send notification or notification is inactive/disabled.
+Messages containing my display name (matrix default: "noisy", expected default: "noisy" when exact match is found in display name" "no change has been requested", rule keyword: "contains_display_name")
+Messages containing keywords(matrix default: on, expected default: on and visible, therefore no change has been made)
+Messages containing my username (matrix default: noisy, expected default: "noisy", was visible but hidden now with config )
+Messages containing @room (matrix default: noisy, expected default: "noisy", no change required, rule keyword: ".m.rule.roomnotif")
+Messages in one-to-one chats (matrix default:  noisy, expected default: "off", was visible but hidden now, rule keyword: ".m.rule.room_one_to_one" )
+Messages in group chats (matrix default: silent/on, expected default: "silent/on", keyword: "m.rule.message", no change made)
+Encrypted messages in group chats (matrix default: "on/silent", expected default: "off", " keyword: "m.rule.encrypted")
+Encrypted messages in one-on-one-chat (matrix default: "noisy" expected default: off, keyword: "m.rule.encrypted_room_one_to_one")
+When I'm invited to a room (matrix default: "noisy", expected default: "noisy", no change made)
+Call invitation (matrix default: noisy, expected default: noisy, no change made)
+Messages sent by bot (matrix default: "off", expected default: "off", keyword: "m.rule.suppresses.notices", no change made)
+When rooms are upgraded (matrix default: noisy, expected default:  silent / on,  keyword: "m.rule.tombstone")
+===============================================================
+These notification rules are not in web so they are in android side of features so they did not need changes. In most of cases these required to be turned off and hidden.
+Show encrypted messages in group chat (expected result was 'off' and invisible)
+Turn the screen on for 3 seconds (expected result was 'off' and invisible)
+Notification privacy (expected result was 'off' and invisible)
+Notifications target
+Troubleshoot notifications
+
+Not web features and no changes needed on these. These are part of android features.
+Show decrypted content (expected result was 'off' and invisible but feature is not in web so no change needed)
+Turn the screen on for 3 seconds ( android feature, not available on web)
+Show notification on this device ( feature is not available on web)
+Developer Note:
+Hidden values in email notification setting in coding side has been done by populating array in communicate-config file so in order to check current state of notification, please remove all of these values from array and run yarn start from app-web project.
+
+ "UIFeature.hiddenNotificationRules": [
+            ".m.rule.contains_display_name",
+            ".m.rule.contains_user_name",
+            ".m.rule.roomnotif",
+            ".m.rule.room_one_to_one",
+            ".m.rule.encrypted_room_one_to_one",
+            ".m.rule.message",
+            ".m.rule.encrypted",
+            ".m.rule.invite_for_me",
+            ".m.rule.call",
+            ".m.rule.suppress_notices",
+            ".m.rule.tombstone"
+        ]
+
 Feature: 188661
 Web: As an Authenticated Practitioner, I should be able to personalize the Preference Settings, so that I can control certain system behaviors that will maximize my user experience.
 ============================================================
@@ -282,6 +352,22 @@ Mark all messages as read - This option is not available in help setting.
 Credit.
 By default credit info credits authors of font, emoji at the moment. Credit information is already on screen and set to default. There is no copyright info to refer to at this stage.
 
+Feature: 228970
+Web : As a logged in user when I am logged into lingo web, I am not prompted to enable/disable desktop notification.
+=====================================================================================================================
+By default a desktop notification prompt is shown to user when user is authenticated to lingo web where user can either dismiss notification or set desktop notification to enabled. In communicate web, business rule is to turn this prompt off and enable desktop notification instead
+which would enable notification automatically as soon as user is logged into lingo web. Turning desktop notification sets the key `notifications_hidden` to `true` which will stop prompt being shown on UI by reading this key from local storage. Clearing a local storage would make prompt
+re-appear again. A new flag called `desktopNotificationIsEnforced` is used to enforce desktop notifications to user. Not having this flag would turn on the prompt being shown. Another interesting thing about desktop notification is it also depends on desktop `Notifications and actions` configuration.
+This window can be opened on window by clicking wheel icon on notification popup and clicking (settings -> Notification settings) where you can set how many notifications you would like to show in notification bar. There is option to completely turn off notification setting in window.
+Following options can be manually configured on window machine in settings --> Notification settings.
+
+`Notifications (on/off)` - turns notification on or off on desktop machine, choosing this to be off will override browser enabling notification. This is turned on by default but can be turned off as well.
+`Show notification banners` - This option ticked would show notification banner at bottom right. This is turned on by default.
+`Show notifications in action center` - This option ticked would show notifications list on notification center pane once notification is clicked on left corner at bottom of screen. This is turned on by default.
+`Play a sound when a notification arrives` - This would buzz audible sound on desktop notification.
+`Priority of notification` - This would prioritize notification son top of action bar or above normal priority or below high priority in action center. This is set to top of action center by default.
+These options could be locked down in group policy and not give options to users to select how notification should show in notification center.
+
 Feature: 219810
 Web: As an User, I need the application to display the correct branding, so that I am confident that I am in the correct Application.
 ============================================================================================
@@ -391,5 +477,4 @@ first name initials, its better to show two initials. Also, when role directory 
 required changing avatar initials in search list to contain role category initials which would be first category
 initial and last category initial, therefore this user story has been written in order to include flow for logged in user on authenticated landing homepage.
 - `show_first_last_char_initials_on_avatar` config value has been introduced which is used to control whether or not to show first and last character in avatar, not having this config value set as true in config will default avatar character to initial letter that is found in user's username when user is logged in. A function has been written in `Avatar.ts` file which will show first and lastName initials if name corresponds to formats `firstname.lastname`, `firstname-lastname`, `firstname + space +lastname`, `firstname+comma+lastname`. This function can be extended to include other name formats. For single name avatar will display initial of one word. Not implementing this user story mean it would be hard to apply colors to role search to bring initials of two words. For consistency this user story will give easy change to sync first and last name initials on Lingo web UI avatar.
-
 

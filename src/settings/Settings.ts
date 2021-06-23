@@ -428,10 +428,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
     },
-    [UIFeature.PullUpCompactLayout]: {
-        supportedLevels: LEVELS_UI_FEATURE,
-        default: false,
-    },
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td('Allow Peer-to-Peer for 1:1 calls'),
@@ -764,6 +760,18 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: true,
         controller: new IncompatibleController("feature_spaces"),
     },
+    [UIFeature.ShowSettingFontStyleLayout]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.ShowSettingIRCStyleLayout]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.DefaultFontSize]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: 10
+      },
     [UIFeature.AdvancedSettings]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
@@ -830,7 +838,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     [UIFeature.ShowSimplifiedVersionInformation]: {
         supportedLevels: LEVELS_UI_FEATURE,
-        default: false,
+        default: true,
     },
     [UIFeature.ShowAdvancedAboutInformation]: {
         supportedLevels: LEVELS_UI_FEATURE,
