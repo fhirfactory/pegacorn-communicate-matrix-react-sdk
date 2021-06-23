@@ -366,6 +366,22 @@ Mark all messages as read - This option is not available in help setting.
 Credit.
 By default credit info credits authors of font, emoji at the moment. Credit information is already on screen and set to default. There is no copyright info to refer to at this stage.
 
+Feature: 228970
+Web : As a logged in user when I am logged into lingo web, I am not prompted to enable/disable desktop notification.
+=====================================================================================================================
+By default a desktop notification prompt is shown to user when user is authenticated to lingo web where user can either dismiss notification or set desktop notification to enabled. In communicate web, business rule is to turn this prompt off and enable desktop notification instead
+which would enable notification automatically as soon as user is logged into lingo web. Turning desktop notification sets the key `notifications_hidden` to `true` which will stop prompt being shown on UI by reading this key from local storage. Clearing a local storage would make prompt
+re-appear again. A new flag called `desktopNotificationIsEnforced` is used to enforce desktop notifications to user. Not having this flag would turn on the prompt being shown. Another interesting thing about desktop notification is it also depends on desktop `Notifications and actions` configuration.
+This window can be opened on window by clicking wheel icon on notification popup and clicking (settings -> Notification settings) where you can set how many notifications you would like to show in notification bar. There is option to completely turn off notification setting in window.
+Following options can be manually configured on window machine in settings --> Notification settings.
+
+`Notifications (on/off)` - turns notification on or off on desktop machine, choosing this to be off will override browser enabling notification. This is turned on by default but can be turned off as well.
+`Show notification banners` - This option ticked would show notification banner at bottom right. This is turned on by default.
+`Show notifications in action center` - This option ticked would show notifications list on notification center pane once notification is clicked on left corner at bottom of screen. This is turned on by default.
+`Play a sound when a notification arrives` - This would buzz audible sound on desktop notification.
+`Priority of notification` - This would prioritize notification son top of action bar or above normal priority or below high priority in action center. This is set to top of action center by default.
+These options could be locked down in group policy and not give options to users to select how notification should show in notification center.
+
 Feature: 219810
 Web: As an User, I need the application to display the correct branding, so that I am confident that I am in the correct Application.
 ============================================================================================

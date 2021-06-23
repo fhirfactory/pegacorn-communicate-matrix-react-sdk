@@ -1392,6 +1392,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             console.info("MatrixClient sync state => %s", state);
             if (state !== "PREPARED") { return; }
 
+            if (SdkConfig.get()["desktopNotificationIsEnforced"]) {
+                Notifier.setEnabled(true);       // enables desktop notification
+                Notifier.setPromptHidden(true); // hides the desktop notification prompt ( clearing local storage will make prompt appear again)
+            }
+
             this.firstSyncComplete = true;
             this.firstSyncPromise.resolve();
 
@@ -2006,7 +2011,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 const roleSelectorUrl = roleSelector?.url;//SdkConfig.get()["role_selector_url"];//'/role-selection/#'
 
                 let ref = document.referrer;
-                
+
                 if((!roleSelectorText) || ref?.toLowerCase()?.includes(roleSelectorText))
                 {
                     view = (
