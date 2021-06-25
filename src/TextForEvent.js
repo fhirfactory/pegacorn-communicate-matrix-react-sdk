@@ -20,14 +20,20 @@ import {isValid3pidInvite} from "./RoomInvite";
 import SettingsStore from "./settings/SettingsStore";
 import {ALL_RULE_TYPES, ROOM_RULE_TYPES, SERVER_RULE_TYPES, USER_RULE_TYPES} from "./mjolnir/BanList";
 import {WIDGET_LAYOUT_EVENT_TYPE} from "./stores/widgets/WidgetLayoutStore";
-
+import sdkConfig from './SdkConfig';
 function textForMemberEvent(ev) {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
-    const senderName = ev.sender ? ev.sender.name : ev.getSender();
-    const targetName = ev.target ? ev.target.name : ev.getStateKey();
+    let senderName = ev.sender ? ev.sender.name : ev.getSender();
+    let targetName = ev.target ? ev.target.name : ev.getStateKey();
     const prevContent = ev.getPrevContent();
     const content = ev.getContent();
 
+    if (sdkConfig.get().DisplaySenderAsYou && ev.getStateKey() === MatrixClientPeg.get().getUserId()) {
+        targetName = "you";
+    }
+    if (sdkConfig.get().DisplaySenderAsYou && ev.getSender() === MatrixClientPeg.get().getUserId()) {
+        senderName = "you";
+    }
     const reason = content.reason ? (_t('Reason') + ': ' + content.reason) : '';
     switch (content.membership) {
         case 'invite': {
