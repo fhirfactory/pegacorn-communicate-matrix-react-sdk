@@ -21,6 +21,7 @@ import FlairStore from '../../../stores/FlairStore';
 import {getUserNameColorClass} from '../../../utils/FormattingUtils';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import sdkConfig from '../../../SdkConfig';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 export default class SenderProfile extends React.Component {
     static propTypes = {
         mxEvent: PropTypes.object.isRequired, // event whose sender we're showing
@@ -88,12 +89,13 @@ export default class SenderProfile extends React.Component {
         const {mxEvent} = this.props;
         const colorClass = getUserNameColorClass(mxEvent.getSender());
         let name="";
-        console.log(sdkConfig.DisplaySenderAsYou+"sdkConfig.DisplaySenderAsYou")
+        console.log(sdkConfig.DisplaySenderAsYou+"sdkConfig.DisplaySenderAsYou");
 
-        if(sdkConfig.get().DisplaySenderAsYou)
+        if (sdkConfig.get().DisplaySenderAsYou && mxEvent.getSender() === MatrixClientPeg.get().getUserId()) {
             name = "you";
-        else
+        } else {
             name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
+        }
 
         const {msgtype} = mxEvent.getContent();
 
