@@ -24,7 +24,7 @@ import shouldHideEvent from '../../shouldHideEvent';
 import {wantsDateSeparator} from '../../DateUtils';
 import * as sdk from '../../index';
 import dis from "../../dispatcher/dispatcher";
-
+import sdkConfig from '../../SdkConfig';
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
 import {Layout, LayoutPropType} from "../../settings/Layout";
@@ -1003,7 +1003,10 @@ class CreationGrouper {
 
         let summaryText;
         const roomId = ev.getRoomId();
-        const creator = ev.sender ? ev.sender.name : ev.getSender();
+        let creator = ev.sender ? ev.sender.name : ev.getSender();
+        if (sdkConfig.get().DisplaySenderAsYou && ev.getSender() === MatrixClientPeg.get().getUserId()) {
+            creator = "you";
+        }
         if (DMRoomMap.shared().getUserIdForRoomId(roomId)) {
             summaryText = _t("%(creator)s created this DM.", { creator });
         } else {
