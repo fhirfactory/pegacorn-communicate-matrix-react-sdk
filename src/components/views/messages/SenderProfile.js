@@ -92,7 +92,7 @@ export default class SenderProfile extends React.Component {
         console.log(sdkConfig.DisplaySenderAsYou+"sdkConfig.DisplaySenderAsYou");
 
         if (sdkConfig.get().DisplaySenderAsYou && mxEvent.getSender() === MatrixClientPeg.get().getUserId()) {
-            name = "you";
+            name = "You";
         } else {
             name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
         }
