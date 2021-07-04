@@ -1153,8 +1153,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         job_title = value.job_title ?? null;
                         organisationStructure = value.organisationStructure;
                         memberIsFavorite = (this.state.favorites.indexOf(value.user_id) !== -1) ?? false;
-                        long_name = value.identifiers.map(val => val.type === "LongName" ? (val.value ? val.value: val.leafValue) : null);
-                        short_name = value.identifiers.map(val => val.type === "ShortName" ? (val.value ? val.value: val.leafValue) : null);
+                        long_name = value.identifiers.map(val => val.type === "LONG_NAME" ? (val.value ? val.value: val.leafValue) : null);
+                        short_name = value.identifiers.map(val => val.type === "SHORT_NAME" ? (val.value ? val.value: val.leafValue) : null);
                         personIsLoggedIn = value.practitionerStatus ? value.practitionerStatus["loggedIn"] : false;
                         personIsActive = value.practitionerStatus ? value.practitionerStatus["active"] : false;
 
