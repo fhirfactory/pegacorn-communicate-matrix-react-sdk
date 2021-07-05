@@ -397,8 +397,8 @@ Web: Web: Landing Page Side Menu User Interface Background Colour
 =======================================================================
 - This is a very small user story which was to change color of left panel menu. By Default background color was gray which did not set enough contrast to pass the usability/accessibility test so this has been changed to `rgb(217,217, 217)` which sets background color to dark gray and on contrast testing , it did pass the test.
 
-192963
-Web: As an Authenticated Practitioner, I should be able to Search the Person Directory, so that I can locate a Person and view their details
+192963: Web: As an Authenticated Practitioner, I should be able to Search the Person Directory, so that I can locate a Person and view their details
+192964: Web: As an Authenticated Practitioner, I should be able to view details about a Person, so that I can informed about the Person and initiate communication with the them
 =============================================================================================================================================
 - All the APIs are externalized into config.json file and mapped through config.ts file as variables which are consumed. For more notes on this please read role directory user story (194064) user story.
 - Service directory can be searched through left panel as well as from home page landing page tile which would have text label 'Search People'.
@@ -416,4 +416,17 @@ Web: Web: As an Authenticated Practitioner, I should be able to Search the Servi
 - `showUserPresenceIndicator` flag is effectively applied to Person Directory and Role Directory but has no effect on Service directory as it does not need to show user presence status.
 - `showServiceDirectory` has been used to show/hide service directory search. Not having this flag would return app back to matrix default which wont display service directory tile.
 - `showDirectoryContactViewOnDirectorySearch` flag has been used to show additional functionality of allowing calls from directory search results in service directory. Not having this config will result no call icon displayed on search results UI, on modal window.
+
+192970 Web: As an Authenticated Practitioner, I should be able to add or remove a Role as a Favourite, so that I can control how easily I can access the Role
+==============================================================================================================================================================
+
+194750  Web: As an Authenticated Practitioner, I should be able to view details about a Service, so that I can informed about the Service and initiate communication with the them
+==================================================================================================================================================================================
+Location identifier will be populated automatically instead of short name in production app but we do not have that data in mimic mode so we have discussed that automatically location text will load in production. This needs to be confirmed in production a bit later but even mobile device would not display a real building location 12.x.x format at the moment which comes from IAM.
+Recently viewed search has not been implemented for existing matrix way of remembering search item was by looking up into existing rooms in matrix. We need more work done in terms integrating with backend in order to accomplish this.
+
+194751 Web: As an Authenticated Practitioner, I should be able to add or remove a Service as a Favourite, so that I can control how easily I can access the Service
+====================================================================================================================================================================
+Black start icon has been used for favourite directory search item and white start icon with darkgrey border for not favorited icon has been used.
+
 
