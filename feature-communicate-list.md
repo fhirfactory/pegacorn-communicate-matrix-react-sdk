@@ -407,6 +407,11 @@ Web: Web: Landing Page Side Menu User Interface Background Colour
 - `filter_by_displayName_in_directory` flag has been used to hide filter by name option in directory search. This user story required filter by name be implemented but seeing Android does not currently have this option, temporarily its been parked and hidden. Also, by default backend searches matching records/results by display name originally but that implementation has changed now which means backend does all searches based on long name, short name and so on so there is good chance that this filter will become practical and essential which is not priority for first release of communicate web.
 - `show_matrix_based_paginator` flag has been added in order to hide matrix default paginator which does not do api call to backend and only displays "show more". `Pagination` view has been added to react-sdk which will provide page based pagination by reconstructing API path and sending request to backend.
 - `config.directory` flag has been introduced on UI which handles whether to show or hide cross button in search box for directory. Not having `directory` array in config file which is matrix default and communicate app uses it, would lead to cross button not being available on directory search. Cross button clears search results from search list upon a click.
+- View role from person directory in detailed view but roles presented be made unclickable which is by default. No further work has been done so that user could click a role and view detail of role.
+- View person from role directory search view but person in role detail be made unclickable as well so at present its read only mode.
+In other words :
+1) User can go and do person directory search and find what roles are being fulfilled by that person. A person can have multiple roles selected at given time.
+2) User can go and do role directory search and find who is fulfilling those roles. A role could be fulfilled by multiple persons at same time.
 
 194734
 Web: Web: As an Authenticated Practitioner, I should be able to Search the Service Directory, so that I can locate a Service and view their details
