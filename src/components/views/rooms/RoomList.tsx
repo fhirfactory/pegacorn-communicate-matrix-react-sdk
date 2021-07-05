@@ -72,9 +72,12 @@ interface IState {
 }
 
 const TAG_ORDER: TagID[] = [
+    // -- Custom Tags Directory --
+    config.showRoleDirectory ? DefaultTagID.RoleDirectory : '',
     DefaultTagID.Invite,
     DefaultTagID.Favourite,
     DefaultTagID.DM,
+    config.showServiceDirectory ? DefaultTagID.ServiceDirectory : '',
     DefaultTagID.Untagged,
 
     // -- Custom Tags Placeholder --
@@ -83,17 +86,14 @@ const TAG_ORDER: TagID[] = [
     DefaultTagID.ServerNotice,
     DefaultTagID.Suggested,
     DefaultTagID.Archived,
-
-    // -- Custom Tags Directory --
-
-    DefaultTagID.RoleDirectory
 ];
 const CUSTOM_TAGS_BEFORE_TAG = DefaultTagID.LowPriority;
 const ALWAYS_VISIBLE_TAGS: TagID[] = [
     DefaultTagID.DM,
     DefaultTagID.Untagged,
     // -- Custom Directory Tags --
-    (config.showRoleDirectory ? DefaultTagID.RoleDirectory : '')
+    (config.showRoleDirectory ? DefaultTagID.RoleDirectory : ''),
+    (config.showServiceDirectory ?  DefaultTagID.ServiceDirectory: '')
 ];
 
 interface ITagAesthetics {
@@ -113,7 +113,12 @@ interface ITagAestheticsMap {
 
 // If we have no dialer support, we just show the create chat dialog
 const dmOnAddRoom = (dispatcher?: Dispatcher<ActionPayload>) => {
-    (dispatcher || defaultDispatcher).dispatch({action: 'view_create_chat'});
+    if (config.directory) {
+        (dispatcher || defaultDispatcher).dispatch({action: 'search_people_directory'});
+    } else {
+        (dispatcher || defaultDispatcher).dispatch({action: 'view_create_chat'});
+    }
+
 };
 
 // If we have dialer support, show a context menu so the user can pick between
@@ -167,6 +172,12 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
         isInvite: false,
         defaultHidden: !config.showRoleDirectory,
         addRoomLabel: _td("Search Roles and Start Discussion"),
+    },
+    [DefaultTagID.ServiceDirectory]: {
+        sectionLabel: _td("Services"),
+        isInvite: false,
+        defaultHidden: false,
+        addRoomLabel: _td("Search Services and Start Discussion"),
     },
     [DefaultTagID.Untagged]: {
         sectionLabel: _td("Rooms"),

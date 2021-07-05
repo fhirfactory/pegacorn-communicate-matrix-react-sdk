@@ -392,4 +392,46 @@ required changing avatar initials in search list to contain role category initia
 initial and last category initial, therefore this user story has been written in order to include flow for logged in user on authenticated landing homepage.
 - `show_first_last_char_initials_on_avatar` config value has been introduced which is used to control whether or not to show first and last character in avatar, not having this config value set as true in config will default avatar character to initial letter that is found in user's username when user is logged in. A function has been written in `Avatar.ts` file which will show first and lastName initials if name corresponds to formats `firstname.lastname`, `firstname-lastname`, `firstname + space +lastname`, `firstname+comma+lastname`. This function can be extended to include other name formats. For single name avatar will display initial of one word. Not implementing this user story mean it would be hard to apply colors to role search to bring initials of two words. For consistency this user story will give easy change to sync first and last name initials on Lingo web UI avatar.
 
+225005
+Web: Web: Landing Page Side Menu User Interface Background Colour
+=======================================================================
+- This is a very small user story which was to change color of left panel menu. By Default background color was gray which did not set enough contrast to pass the usability/accessibility test so this has been changed to `rgb(217,217, 217)` which sets background color to dark gray and on contrast testing , it did pass the test.
+
+192963: Web: As an Authenticated Practitioner, I should be able to Search the Person Directory, so that I can locate a Person and view their details
+192964: Web: As an Authenticated Practitioner, I should be able to view details about a Person, so that I can informed about the Person and initiate communication with the them
+=============================================================================================================================================
+- All the APIs are externalized into config.json file and mapped through config.ts file as variables which are consumed. For more notes on this please read role directory user story (194064) user story.
+- Service directory can be searched through left panel as well as from home page landing page tile which would have text label 'Search People'.
+- `showUserPresenceIndicator` flag has been used to render user presence status (online, offline) status. `UserPresence` view renders user status on UI according to context which may switch from people to role depending upon if on client side search is on People or Role.
+- `showPeopleDirectory` flag has been used to add tile on landing page , not setting value to true on config file for this flag would return app defaulting to matrix.
+- `filter_by_displayName_in_directory` flag has been used to hide filter by name option in directory search. This user story required filter by name be implemented but seeing Android does not currently have this option, temporarily its been parked and hidden. Also, by default backend searches matching records/results by display name originally but that implementation has changed now which means backend does all searches based on long name, short name and so on so there is good chance that this filter will become practical and essential which is not priority for first release of communicate web.
+- `show_matrix_based_paginator` flag has been added in order to hide matrix default paginator which does not do api call to backend and only displays "show more". `Pagination` view has been added to react-sdk which will provide page based pagination by reconstructing API path and sending request to backend.
+- `config.directory` flag has been introduced on UI which handles whether to show or hide cross button in search box for directory. Not having `directory` array in config file which is matrix default and communicate app uses it, would lead to cross button not being available on directory search. Cross button clears search results from search list upon a click.
+- View role from person directory in detailed view but roles presented be made unclickable which is by default. No further work has been done so that user could click a role and view detail of role.
+- View person from role directory search view but person in role detail be made unclickable as well so at present its read only mode.
+In other words :
+1) User can go and do person directory search and find what roles are being fulfilled by that person. A person can have multiple roles selected at given time.
+2) User can go and do role directory search and find who is fulfilling those roles. A role could be fulfilled by multiple persons at same time.
+
+194734
+Web: Web: As an Authenticated Practitioner, I should be able to Search the Service Directory, so that I can locate a Service and view their details
+====================================================================================================================================================
+- All the APIs are externalized into config.json file and mapped through config.ts file as variables which are consumed. For more notes on this please read role directory user story (194064) user story.
+- Service directory can be searched through left panel as well as from home page landing page tile which would have text label 'Search Services'.
+- `showUserPresenceIndicator` flag is effectively applied to Person Directory and Role Directory but has no effect on Service directory as it does not need to show user presence status.
+- `showServiceDirectory` has been used to show/hide service directory search. Not having this flag would return app back to matrix default which wont display service directory tile.
+- `showDirectoryContactViewOnDirectorySearch` flag has been used to show additional functionality of allowing calls from directory search results in service directory. Not having this config will result no call icon displayed on search results UI, on modal window.
+
+192970 Web: As an Authenticated Practitioner, I should be able to add or remove a Role as a Favourite, so that I can control how easily I can access the Role
+==============================================================================================================================================================
+
+194750  Web: As an Authenticated Practitioner, I should be able to view details about a Service, so that I can informed about the Service and initiate communication with the them
+==================================================================================================================================================================================
+Location identifier will be populated automatically instead of short name in production app but we do not have that data in mimic mode so we have discussed that automatically location text will load in production. This needs to be confirmed in production a bit later but even mobile device would not display a real building location 12.x.x format at the moment which comes from IAM.
+Recently viewed search has not been implemented for existing matrix way of remembering search item was by looking up into existing rooms in matrix. We need more work done in terms integrating with backend in order to accomplish this.
+
+194751 Web: As an Authenticated Practitioner, I should be able to add or remove a Service as a Favourite, so that I can control how easily I can access the Service
+====================================================================================================================================================================
+Black start icon has been used for favourite directory search item and white start icon with darkgrey border for not favorited icon has been used.
+
 

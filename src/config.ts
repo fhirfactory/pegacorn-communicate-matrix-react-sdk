@@ -70,18 +70,22 @@ export const tabbedViewSecondaryLogoAltText =  tabbedView?.secondaryLogoAltText;
  * navigate to.
  */
 
-// get directory config
-export const directory = config['directory'];
-
 // turn off explore public room
 export const showExplorePublicRooms = config.roomDirectory?.showExplorePublicRooms ?? true;
 
 // matrix default server selection dropdown
 export const showPublicRoomServerSelectionDropdown = config.roomDirectory?.showExplorePublicRoomServerSelectionDropdown ?? true;
 
-// At the bottom of the left hand navigation panel, specify directory related help text (which is always shown), instead of normal 
+// At the bottom of the left hand navigation panel, specify directory related help text (which is always shown), instead of normal
+
+// get directory config
+export const directory = config['directory'];
+
 // conditionally shown text
 export const left_hand_nav_help_text: string = config.left_hand_nav_help_text;
+
+// show favorite icon in directory search
+export const show_favorite_icon_in_directory_search = directory?.show_favorite_icon_in_directory_search ?? false;
 
 /***
  *  role directory config list
@@ -104,19 +108,18 @@ export const showAdvancedDirectorySearchDropdown = role_directory?.showAdvancedD
  */
 export const numberOfRecordsToShowInSearch = directory?.numberOfRecordsToShowInSearch ?? null;
 
-// show favorite icon in directory search
-export const show_favorite_icon_in_directory_search = directory?.show_favorite_icon_in_directory_search ?? false;
-
-export const showServiceDirectory = directory?.showServiceDirectory ?? false;
-
 export const service_directory = directory?.service;
 
-export const service_directory_name = directory?.name;
+export const showServiceDirectory = service_directory.showServiceDirectory ?? false;
+
+export const service_directory_name = service_directory.name;
 
 /**
  * people's directory config list
 */
 export const people_directory = directory?.people;
+
+export const showPeopleDirectory = people_directory?.showPeopleDirectory ?? false;
 
 // APIs
 
@@ -135,6 +138,20 @@ export const search_role_by_displayName = communicate_api_base_path + directory.
 // api to filter by favorites;
 export const search_by_favorite = directory.api.favourites;
 
+// search all services
+export const search_all_services = directory.api.services;
+
+// search service by display name
+export const search_service_by_displayName = communicate_api_base_path + directory.api.search_service_by_displayName;
+
+// search all people
+export const api_search_people = communicate_api_base_path + directory.api.prefix;
+
+// search practitioner by display name
+export const search_people_by_displayName = communicate_api_base_path + directory.api.search_people_by_displayName;
+
+// search service
+export const api_search_service = communicate_api_base_path + directory.api.organization_search_prefix;
 
 /**
  * Avatar
@@ -147,3 +164,26 @@ export const avatarColors = config.avatarColors;
  * Sort alphabetically (currently applied by directory feature but in future it can be applied to many other features)
  */
 export const sortAlphabeticallyInAscendingOrder = config.sort_directory_view_alphabetically;
+
+/**
+ * Show user presence indicators on directory (online, offline status used by people directory and filled/unfilled status used by role directory)
+ * Service directory won't use user presence indicator at the moment.
+ */
+export const showUserPresenceIndicator = directory.showUserPresenceIndicator ?? false;
+
+/**
+ * Call button for service directory UI
+ */
+ export const showDirectoryContactViewOnDirectorySearch = directory.showDirectoryContactViewOnDirectorySearch ?? false;
+
+ /**
+ * Filter directory results by display name keyword entered
+ */
+export const filter_by_displayName_in_directory = directory.filter_by_displayName_in_directory ?? false;
+
+/**
+ * Matrix default paginator "Show more (enabled or disabled)" according to need.
+ * Directory will not use it , instead uses <Paginator> view. Not providing 'true' value
+ * for this config in config.json defaults to matrix current behavior.
+ */
+export const show_matrix_based_paginator = directory.show_matrix_based_paginator ?? true;

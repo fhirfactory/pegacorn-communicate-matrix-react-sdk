@@ -23,7 +23,7 @@ import Modal from './Modal';
 import * as sdk from './';
 import { _t } from './languageHandler';
 import InviteDialog, {KIND_DM, KIND_INVITE} from "./components/views/dialogs/InviteDialog";
-import {KIND_ROLE_DIRECTORY_SEARCH} from "./DirectoryService";
+import {KIND_ROLE_DIRECTORY_SEARCH,KIND_PEOPLE_DIRECTORY_SEARCH, KIND_SERVICE_DIRECTORY_SEARCH} from "./DirectoryService";
 import CommunityPrototypeInviteDialog from "./components/views/dialogs/CommunityPrototypeInviteDialog";
 import {CommunityPrototypeStore} from "./stores/CommunityPrototypeStore";
 
@@ -70,6 +70,24 @@ export function showRoleDirectorySearchDialog(initialText) {
     const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
     Modal.createTrackedDialog(
         'Start Role Search', '', InviteDialog, {kind: KIND_ROLE_DIRECTORY_SEARCH, initialText},
+        /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
+    );
+}
+
+export function showPeopleDirectorySearchDialog(initialText) {
+    // This dialog handles the room creation internally - we don't need to worry about it.
+    const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
+    Modal.createTrackedDialog(
+        'Start People Search', '', InviteDialog, {kind: KIND_PEOPLE_DIRECTORY_SEARCH, initialText},
+        /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
+    );
+}
+
+export function showServiceDirectorySearchDialog(initialText) {
+    // This dialog handles the room creation internally - we don't need to worry about it.
+    const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
+    Modal.createTrackedDialog(
+        'Start Service Search', '', InviteDialog, {kind: KIND_SERVICE_DIRECTORY_SEARCH, initialText},
         /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
     );
 }

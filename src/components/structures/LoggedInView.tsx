@@ -561,6 +561,11 @@ class LoggedInView extends React.Component<IProps, IState> {
         }
     };
 
+    // Takes user to homepage when top banner branding image is clicked
+    _onClickTopBannerLogo() {
+            dis.dispatch({ action: 'view_home_page' });
+    }
+
     /**
      * dispatch a page-up/page-down/etc to the appropriate component
      * @param {Object} ev The key event
@@ -687,7 +692,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 >
                     <ToastContainer />
                     {showTopBanner && <div className='mx_TopBanner'>
-                        <h1></h1>
+                        <h1 onClick={this._onClickTopBannerLogo.bind(this)}></h1>
                     </div>}
                     <DragDropContext onDragEnd={this._onDragEnd}>
                         <div ref={this._resizeContainer} className={bodyClasses}>

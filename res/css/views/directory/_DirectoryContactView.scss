@@ -1,0 +1,67 @@
+.mx_DirectoryContactView_wrapper {
+    display: inline-flex;
+    float: right;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.mx_DirectoryContactView_button {
+    position: relative;
+    margin-left: 1px;
+    margin-right: 1px;
+    cursor: pointer;
+  //  height: 32px;
+    width: 32px;
+    border-radius: 100%;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 4px; // center with parent of 32px
+        left: 11px; // center with parent of 32px
+        height: 24px;
+        width: 24px;
+        background-color: $icon-button-color;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+    }
+
+    &:not(:hover) {
+        background-color: white !important;
+    }
+
+    &:hover {
+        background: rgba($accent-color, 0.1);
+
+        &::before {
+            background-color: $accent-color;
+        }
+    }
+}
+
+.mx_AccessibleButton {
+    margin: 5px;
+}
+
+.mx_DirectoryContactView_explorePrompt_startChat::before {
+    mask-image: url("$(res)/img/element-icons/feedback.svg");
+}
+
+.mx_DirectoryContactView_voiceCallButton::before {
+    mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
+
+    // The call button SVG is padded slightly differently, so match it up to the size
+    // of the other icons
+    mask-size: 20px;
+    mask-position: center;
+}
+
+.mx_DirectoryContactView_videoCallButton::before {
+    mask-image: url('$(res)/img/element-icons/call/video-call.svg');
+}
+
+.mx_InviteDialog_roomTile {
+    &:hover ~ .mx_AuxButton_directoryContactMenu {
+       background-color: #f3f8fd !important;
+    }
+}

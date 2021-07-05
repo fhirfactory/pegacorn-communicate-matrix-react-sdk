@@ -107,6 +107,8 @@
 @import "./views/dialogs/security/_KeyBackupFailedDialog.scss";
 @import "./views/dialogs/security/_RestoreKeyBackupDialog.scss";
 @import "./views/directory/_NetworkDropdown.scss";
+@import "./views/directory/_DirectoryDetailView.scss";
+@import "./views/directory/_DirectoryContactView.scss";
 @import "./views/elements/_AccessibleButton.scss";
 @import "./views/elements/_AddressSelector.scss";
 @import "./views/elements/_AddressTile.scss";
@@ -143,6 +145,8 @@
 @import "./views/elements/_ToggleSwitch.scss";
 @import "./views/elements/_Tooltip.scss";
 @import "./views/elements/_TooltipButton.scss";
+@import "./views/elements/_Pagination.scss";
+@import "./views/elements/_UserPresence.scss";
 @import "./views/elements/_Validation.scss";
 @import "./views/emojipicker/_EmojiPicker.scss";
 @import "./views/groups/_GroupPublicityToggle.scss";

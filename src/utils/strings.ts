@@ -71,6 +71,23 @@ export function capitaliseFirstCharacter(target: String) {
 }
 
 /**
+ * Checks if keyword contains special characters
+ * @param target must be a string which is converted to an array
+ * @returns true for character containing special characters
+*/
+export function keywordContainsSpecialCharacter(target: string): boolean {
+    if (!target) {
+        return false;
+    }
+    let index = 0;
+    let newTarget = Array(target);
+    for (index; index < newTarget.length; index++) {
+        const hasNoSpecialCharacters = !(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\?]/g).test(target[index]);
+        return !hasNoSpecialCharacters;
+    }
+}
+
+/**
  * Copy rich text to user's clipboard
  * It will overwrite user's selection range
  * In certain browsers it may only work if triggered by a user action or may ask user for permissions
