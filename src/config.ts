@@ -79,7 +79,7 @@ export const showExplorePublicRooms = config.roomDirectory?.showExplorePublicRoo
 // matrix default server selection dropdown
 export const showPublicRoomServerSelectionDropdown = config.roomDirectory?.showExplorePublicRoomServerSelectionDropdown ?? true;
 
-// At the bottom of the left hand navigation panel, specify directory related help text (which is always shown), instead of normal 
+// At the bottom of the left hand navigation panel, specify directory related help text (which is always shown), instead of normal
 // conditionally shown text
 export const left_hand_nav_help_text: string = config.left_hand_nav_help_text;
 
@@ -147,3 +147,6 @@ export const avatarColors = config.avatarColors;
  * Sort alphabetically (currently applied by directory feature but in future it can be applied to many other features)
  */
 export const sortAlphabeticallyInAscendingOrder = config.sort_directory_view_alphabetically;
+
+// show logout prompt (matrix default is set to false)
+export const enableSignoutPrompt = config.enableSignoutPrompt ?? false;
