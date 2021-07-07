@@ -22,9 +22,10 @@ import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import RestoreKeyBackupDialog from './security/RestoreKeyBackupDialog';
+import { isE2EEEnabledInWellKnown} from '../../../utils/WellKnownUtils';
 
 export default class LogoutDialog extends React.Component {
-    defaultProps = {
+    static defaultProps = {
         onFinished: function() {},
     };
 
@@ -117,7 +118,8 @@ export default class LogoutDialog extends React.Component {
     }
 
     render() {
-        if (this.state.shouldLoadBackupStatus) {
+        const encryptionIsDefaulted = isE2EEEnabledInWellKnown();
+        if (this.state.shouldLoadBackupStatus && !encryptionIsDefaulted) {
             const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
             const description = <div>

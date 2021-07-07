@@ -56,6 +56,7 @@ import HostSignupAction from "./HostSignupAction";
 import { IHostSignupConfig } from "../views/dialogs/HostSignupDialogTypes";
 import SpaceStore, { UPDATE_SELECTED_SPACE } from "../../stores/SpaceStore";
 import RoomName from "../views/elements/RoomName";
+import { enableSignoutPrompt } from "../../config";
 
 interface IProps {
     isMinimized: boolean;
@@ -215,7 +216,9 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.stopPropagation();
 
         const cli = MatrixClientPeg.get();
-        if (!cli || !cli.isCryptoEnabled() || !(await cli.exportRoomKeys())?.length) {
+        if ((!cli || !cli.isCryptoEnabled() || !(await cli.exportRoomKeys())?.length)
+            && !enableSignoutPrompt
+            ) {
             // log out without user prompt if they have no local megolm sessions
             dis.dispatch({action: 'logout'});
         } else {
@@ -497,7 +500,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         >
             <div className="mx_UserMenu_contextMenu_header">
                 {primaryHeader}
-                {SettingsStore.getValue(UIFeature.ChangeTheme) && 
+                {SettingsStore.getValue(UIFeature.ChangeTheme) &&
 					<AccessibleTooltipButton
 						className="mx_UserMenu_contextMenu_themeButton"
 						onClick={this.onSwitchThemeClick}
