@@ -192,7 +192,7 @@ limitations under the License.
         }
 
         .mx_RoomSublist_resizerHandles_showNButton {
-            flex: 0 0 32px;
+            flex: 0 0 52px;
         }
 
         .mx_RoomSublist_resizerHandles {
@@ -235,7 +235,7 @@ limitations under the License.
         // Update the render() function for RoomSublist if these change
         // Update the ListLayout class for minVisibleTiles if these change.
         height: 24px;
-        padding-bottom: 4px;
+        padding-bottom: 14px;
 
         // We create a flexbox to cheat at alignment
         display: flex;
@@ -294,8 +294,8 @@ limitations under the License.
             .mx_RoomSublist_auxButton {
                 order: 2;
                 visibility: visible;
-                width: 32px !important; // !important to override hover styles
-                height: 32px !important; // !important to override hover styles
+                width: 52px !important; // !important to override hover styles
+                height: 52px !important; // !important to override hover styles
                 margin-left: 0 !important; // !important to override hover styles
                 background-color: $roomlist-button-bg-color;
                 margin-top: 8px;

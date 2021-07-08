@@ -388,7 +388,7 @@ $composer-shadow-color: rgba(0, 0, 0, 0.04);
 .mx_TopBanner h1 {
     background-image: url("/themes/element/img/logos/element-logo.svg");
     background-repeat: no-repeat;
-    background-size: 70px;
+    background-size: 100px;
     background-position-y: center;
     background-position: 20px;
     font-size: 0.5em;
@@ -396,7 +396,7 @@ $composer-shadow-color: rgba(0, 0, 0, 0.04);
     padding-bottom: 5px;
     margin-right: 0.25em;
     transition: max-height 0.25s ease-in;
-    height: 50px
+    height: 80px
 }
 
 // diff highlight colors

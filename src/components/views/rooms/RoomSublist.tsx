@@ -53,7 +53,7 @@ import { ListNotificationState } from "../../../stores/notifications/ListNotific
 import IconizedContextMenu from "../context_menus/IconizedContextMenu";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
-const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
+const RESIZE_HANDLE_HEIGHT = 18; // As defined by CSS
 export const HEADER_HEIGHT = 32; // As defined by CSS
 
 const MAX_PADDING_HEIGHT = SHOW_N_BUTTON_HEIGHT + RESIZE_HANDLE_HEIGHT;

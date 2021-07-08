@@ -519,7 +519,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
         const roomAvatar = <DecoratedRoomAvatar
             room={this.props.room}
-            avatarSize={32}
+            avatarSize={52}
             tag={this.props.tag}
             displayBadge={this.props.isMinimized}
             oobData={({avatarUrl: roomProfile.avatarMxc})}

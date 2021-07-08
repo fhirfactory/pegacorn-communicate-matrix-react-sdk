@@ -174,7 +174,7 @@ export default class RoomHeader extends React.Component {
         if (this.props.room) {
             roomAvatar = <DecoratedRoomAvatar
                 room={this.props.room}
-                avatarSize={32}
+                avatarSize={52}
                 tag={DefaultTagID.Untagged} // to apply room publicity badging
                 oobData={this.props.oobData}
                 viewAvatarOnClick={true}

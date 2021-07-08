@@ -95,8 +95,8 @@ const BaseAvatar = (props: IProps) => {
         title,
         url,
         urls,
-        width = 40,
-        height = 40,
+        width = 60,
+        height = 60,
         resizeMethod = "crop", // eslint-disable-line @typescript-eslint/no-unused-vars
         defaultToInitialLetter = true,
         onClick,
