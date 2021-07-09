@@ -213,7 +213,8 @@ limitations under the License.
 .mx_InviteDialog {
     // Prevent the dialog from jumping around randomly when elements change.
     height: 590px;
-    padding-left: 20px; // the design wants some padding on the left
+    padding-left: 35px; // the design wants some padding on the left
+    padding-right:30px;
 }
 
 .mx_InviteDialog_userSections {
