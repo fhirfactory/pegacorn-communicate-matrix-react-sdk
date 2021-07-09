@@ -55,7 +55,7 @@ limitations under the License.
 
     .mx_InviteDialog_goButton {
         min-width: 48px;
-        margin-left: 10px;
+        margin-left: 20px;
         height: 25px;
         line-height: $font-25px;
     }
@@ -229,6 +229,7 @@ limitations under the License.
 .mx_InviteDialog_helpText,
 .mx_InviteDialog_addressBar {
     margin-right: 45px;
+    margin-bottom:20px;
 }
 
 .mx_InviteDialog_helpText .mx_AccessibleButton_kind_link {
