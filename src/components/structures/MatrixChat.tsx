@@ -40,7 +40,7 @@ import Notifier from '../../Notifier';
 import Modal from "../../Modal";
 import Tinter from "../../Tinter";
 import * as sdk from '../../index';
-import { showRoomInviteDialog, showStartChatInviteDialog } from '../../RoomInvite';
+import { showRoomInviteDialog, showStartChatInviteDialog, showRoleDirectorySearchDialog  } from '../../RoomInvite';
 import * as Rooms from '../../Rooms';
 import linkifyMatrix from "../../linkify-matrix";
 import * as Lifecycle from '../../Lifecycle';
@@ -117,6 +117,8 @@ export enum Views {
     // We are logged out (invalid token) but have our local state again. The user
     // should log back in to rehydrate the client.
     SOFT_LOGOUT,
+    // Show role directory page to search
+    Role_Directory
 }
 
 const AUTH_SCREENS = ["register", "login", "forgot_password", "start_sso", "start_cas"];
@@ -734,6 +736,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case 'view_invite':
                 showRoomInviteDialog(payload.roomId);
+                break;
+            // Directory search (role)
+            case 'search_role_directory':
+               showRoleDirectorySearchDialog(payload.initialText || "");
                 break;
             case 'view_last_screen':
                 // This function does what we want, despite the name. The idea is that it shows
@@ -1994,18 +2000,32 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                  * as using something like redux to avoid having a billion bits of state kicking around.
                  */
                 const LoggedInView = sdk.getComponent('structures.LoggedInView');
-                view = (
-                    <LoggedInView
-                        {...this.props}
-                        {...this.state}
-                        ref={this.loggedInView}
-                        matrixClient={MatrixClientPeg.get()}
-                        onRoomCreated={this.onRoomCreated}
-                        onCloseAllSettings={this.onCloseAllSettings}
-                        onRegistered={this.onRegistered}
-                        currentRoomId={this.state.currentRoomId}
-                    />
-                );
+
+                const roleSelector = SdkConfig.get()["role_selector"];//"role-selection"
+                const roleSelectorText = roleSelector?.text;// SdkConfig.get()["role_selector_name"];//"role-selection"
+                const roleSelectorUrl = roleSelector?.url;//SdkConfig.get()["role_selector_url"];//'/role-selection/#'
+
+                let ref = document.referrer;
+                
+                if((!roleSelectorText) || ref?.toLowerCase()?.includes(roleSelectorText))
+                {
+                    view = (
+                        <LoggedInView
+                            {...this.props}
+                            {...this.state}
+                            ref={this.loggedInView}
+                            matrixClient={MatrixClientPeg.get()}
+                            onRoomCreated={this.onRoomCreated}
+                            onCloseAllSettings={this.onCloseAllSettings}
+                            onRegistered={this.onRegistered}
+                            currentRoomId={this.state.currentRoomId}
+                        />
+                        );
+                }
+                else
+                {
+                    window.location.href = roleSelectorUrl;
+                }
             } else {
                 // we think we are logged in, but are still waiting for the /sync to complete
                 const Spinner = sdk.getComponent('elements.Spinner');

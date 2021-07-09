@@ -40,6 +40,7 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import RoomListNumResults from "../views/rooms/RoomListNumResults";
 import LeftPanelWidget from "./LeftPanelWidget";
 import SpacePanel from "../views/spaces/SpacePanel";
+import * as config from "../../config";
 
 interface IProps {
     isMinimized: boolean;
@@ -379,11 +380,13 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     onVerticalArrow={this.onKeyDown}
                     onEnter={this.onEnter}
                 />
+				{ config.showExplorePublicRooms &&
                 <AccessibleTooltipButton
                     className="mx_LeftPanel_exploreButton"
                     onClick={this.onExplore}
                     title={_t("Explore rooms")}
                 />
+				}
             </div>
         );
     }

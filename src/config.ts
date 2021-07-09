@@ -63,3 +63,87 @@ export const tabbedViewShowSecondaryLogo  = tabbedView?.showSecondaryLogo ?? fal
 export const tabbedViewSecondaryLogoUrl =  tabbedView?.secondaryLogoUrl;
 export const tabbedViewSecondaryLogoAltText =  tabbedView?.secondaryLogoAltText;
 
+/**
+ * Authenticated homepage directory ui flow
+ * 'explore public room options' can be switched off
+ * and many more tiles on homepage for users to click and
+ * navigate to.
+ */
+
+// get directory config
+export const directory = config['directory'];
+
+// turn off explore public room
+export const showExplorePublicRooms = config.roomDirectory?.showExplorePublicRooms ?? true;
+
+// matrix default server selection dropdown
+export const showPublicRoomServerSelectionDropdown = config.roomDirectory?.showExplorePublicRoomServerSelectionDropdown ?? true;
+
+// At the bottom of the left hand navigation panel, specify directory related help text (which is always shown), instead of normal 
+// conditionally shown text
+export const left_hand_nav_help_text: string = config.left_hand_nav_help_text;
+
+/***
+ *  role directory config list
+ */
+export const role_directory = directory?.role;
+
+export const showRoleDirectory = role_directory.showRoleDirectory ?? false;
+
+export const role_directory_feature_name = role_directory?.name;
+
+export const role_directory_description = role_directory?.feature_description;
+
+export const role_directory_placeholder = role_directory?.placeholder;
+
+export const showAdvancedDirectorySearchDropdown = role_directory?.showAdvancedDirectorySearchDropdown ?? false;
+
+
+/***
+ *  service directory config list
+ */
+export const numberOfRecordsToShowInSearch = directory?.numberOfRecordsToShowInSearch ?? null;
+
+// show favorite icon in directory search
+export const show_favorite_icon_in_directory_search = directory?.show_favorite_icon_in_directory_search ?? false;
+
+export const showServiceDirectory = directory?.showServiceDirectory ?? false;
+
+export const service_directory = directory?.service;
+
+export const service_directory_name = directory?.name;
+
+/**
+ * people's directory config list
+*/
+export const people_directory = directory?.people;
+
+// APIs
+
+// base api
+export const communicate_api_base_path = directory?.api.base_path;
+
+// prefix
+export const prefix = directory?.api.prefix;
+
+// search all roles
+export const search_all_roles = communicate_api_base_path + directory?.api?.search_all_roles;
+
+// search roles by a short name
+export const search_role_by_displayName = communicate_api_base_path + directory.api.search_role_by_displayName;
+
+// api to filter by favorites;
+export const search_by_favorite = directory.api.favourites;
+
+
+/**
+ * Avatar
+ */
+export const showFirstLastNameIntialsOnAvatarBackground = config.show_first_last_char_initials_on_avatar ?? false;
+
+export const avatarColors = config.avatarColors;
+
+/**
+ * Sort alphabetically (currently applied by directory feature but in future it can be applied to many other features)
+ */
+export const sortAlphabeticallyInAscendingOrder = config.sort_directory_view_alphabetically;

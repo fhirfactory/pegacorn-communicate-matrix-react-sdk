@@ -51,6 +51,7 @@ import { objectExcluding, objectHasDiff } from "../../../utils/objects";
 import ExtraTile from "./ExtraTile";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 import IconizedContextMenu from "../context_menus/IconizedContextMenu";
+import * as config from "../../../config";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 18; // As defined by CSS
@@ -301,6 +302,16 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         e.stopPropagation();
         if (this.props.onAddRoom) this.props.onAddRoom();
     };
+
+    private onSearchDirectory = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        const currentNodeAriaLabel = e.currentTarget.getAttribute('aria-label');
+        if (currentNodeAriaLabel.includes('Role')) {
+            dis.dispatch({ action: 'search_role_directory' });
+        } else {
+            return;
+        }
+    }
 
     private applyHeightChange(newHeight: number) {
         const heightInTiles = Math.ceil(this.layout.pixelsToTiles(newHeight - this.padding));
@@ -672,6 +683,18 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                             <ContextMenuTooltipButton
                                 tabIndex={tabIndex}
                                 onClick={this.onAddRoomContextMenu}
+                                className="mx_RoomSublist_auxButton"
+                                tooltipClassName="mx_RoomSublist_addRoomTooltip"
+                                aria-label={this.props.addRoomLabel || _t("Add room")}
+                                title={this.props.addRoomLabel}
+                                isExpanded={!!this.state.addRoomContextMenuPosition}
+                            />
+                        );
+                    } else if (config.showRoleDirectory) {
+                        addRoomButton = (
+                            <ContextMenuTooltipButton
+                                tabIndex={tabIndex}
+                                onClick={this.onSearchDirectory}
                                 className="mx_RoomSublist_auxButton"
                                 tooltipClassName="mx_RoomSublist_addRoomTooltip"
                                 aria-label={this.props.addRoomLabel || _t("Add room")}
