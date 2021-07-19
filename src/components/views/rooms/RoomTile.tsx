@@ -51,6 +51,7 @@ import IconizedContextMenu, {
     IconizedContextMenuRadio,
 } from "../context_menus/IconizedContextMenu";
 import { CommunityPrototypeStore, IRoomProfile } from "../../../stores/CommunityPrototypeStore";
+import * as config from "../../../config";
 
 interface IProps {
     room: Room;
@@ -519,7 +520,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
         const roomAvatar = <DecoratedRoomAvatar
             room={this.props.room}
-            avatarSize={52}
+            avatarSize={config.avatarSize}
             tag={this.props.tag}
             displayBadge={this.props.isMinimized}
             oobData={({avatarUrl: roomProfile.avatarMxc})}

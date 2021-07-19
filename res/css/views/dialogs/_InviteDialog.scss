@@ -55,7 +55,7 @@ limitations under the License.
 
     .mx_InviteDialog_goButton {
         min-width: 48px;
-        margin-left: 20px;
+        margin-left: $mx-InviteDialog-goButton-margin-left;
         height: 25px;
         line-height: $font-25px;
     }
@@ -213,8 +213,8 @@ limitations under the License.
 .mx_InviteDialog {
     // Prevent the dialog from jumping around randomly when elements change.
     height: 590px;
-    padding-left: 35px; // the design wants some padding on the left
-    padding-right:30px;
+    padding-left: $mx-InviteDialog-padding-left; // the design wants some padding on the left
+    padding-right:$mx-InviteDialog-padding-right;
 }
 
 .mx_InviteDialog_userSections {
@@ -229,7 +229,7 @@ limitations under the License.
 .mx_InviteDialog_helpText,
 .mx_InviteDialog_addressBar {
     margin-right: 45px;
-    margin-bottom:20px;
+    margin-bottom:$mx-InviteDialog-addressBar-margin-bottom;
 }
 
 .mx_InviteDialog_helpText .mx_AccessibleButton_kind_link {

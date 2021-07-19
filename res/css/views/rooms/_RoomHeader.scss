@@ -22,8 +22,8 @@ limitations under the License.
     .mx_RoomHeader_e2eIcon {
         height: 12px;
         width: 12px;
-        padding-right: 12px;
-        padding-left: 12px;
+        padding-right: $mx-RoomHeader-e2eIcon-padding;
+        padding-left: $mx-RoomHeader-e2eIcon-padding;
         .mx_E2EIcon {
             margin: 0;
             position: absolute;
@@ -39,7 +39,7 @@ limitations under the License.
     display: flex;
     align-items: center;
     min-width: 0;
-    padding: 0 20px 0 50px;
+    padding: 0 $mx-RoomHeader-wrapper-right 0 $mx-RoomHeader-wrapper-left;
 
     .mx_InviteOnlyIcon_large {
         margin: 0;

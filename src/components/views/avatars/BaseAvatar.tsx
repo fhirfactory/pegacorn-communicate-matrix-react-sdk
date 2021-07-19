@@ -26,7 +26,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import {toPx} from "../../../utils/units";
 import { showFirstLastNameIntialsOnAvatarBackground } from '../../../config';
-
+import * as config from "../../../config";
 interface IProps {
     name: string; // The name (first initial used as default)
     idName?: string; // ID for generating hash colours
@@ -96,8 +96,8 @@ const BaseAvatar = (props: IProps) => {
         title,
         url,
         urls,
-        width = 60,
-        height = 60,
+        width = config.avatarBoxSize,
+        height = config.avatarBoxSize,
         resizeMethod = "crop", // eslint-disable-line @typescript-eslint/no-unused-vars
         defaultToInitialLetter = true,
         onClick,
