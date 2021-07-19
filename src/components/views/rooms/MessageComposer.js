@@ -32,11 +32,12 @@ import {UIFeature} from "../../../settings/UIFeature";
 import WidgetStore from "../../../stores/WidgetStore";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
 import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
+import SdkConfig from '../../../SdkConfig';
 
 function ComposerAvatar(props) {
     const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
     return <div className="mx_MessageComposer_avatar">
-        <MemberStatusMessageAvatar member={props.me} width={24} height={24} />
+        <MemberStatusMessageAvatar member={props.me} width={SdkConfig.get().avatarSize} height={SdkConfig.get().avatarSize} />
     </div>;
 }
 

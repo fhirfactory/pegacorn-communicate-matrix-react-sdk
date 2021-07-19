@@ -88,6 +88,11 @@ export const left_hand_nav_help_text: string = config.left_hand_nav_help_text;
  */
 export const role_directory = directory?.role;
 
+export const resizeHandleHeight = config['resizeHandleHeight'];
+
+export const avatarBoxSize = config['avatarBoxSize'];
+export const avatarSize = config['avatarSize'];
+
 export const showRoleDirectory = role_directory.showRoleDirectory ?? false;
 
 export const role_directory_feature_name = role_directory?.name;

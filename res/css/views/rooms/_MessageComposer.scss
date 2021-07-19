@@ -20,8 +20,8 @@ limitations under the License.
     margin: auto;
     border-top: 1px solid $primary-hairline-color;
     position: relative;
-    padding-left: 82px;
-    padding-right: 6px;
+    padding-left: 135px;
+    padding-right: 20px;
 }
 
 .mx_MessageComposer_replaced_wrapper {
@@ -66,6 +66,7 @@ limitations under the License.
 
 .mx_MessageComposer .mx_MessageComposer_avatar .mx_BaseAvatar {
     display: block;
+    margin-left: 24px;
 }
 
 .mx_MessageComposer_composecontrols {

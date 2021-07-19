@@ -32,6 +32,7 @@ import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import RoomTopic from "../elements/RoomTopic";
 import RoomName from "../elements/RoomName";
 import {PlaceCallType} from "../../../CallHandler";
+import SdkConfig from '../../../SdkConfig';
 
 export default class RoomHeader extends React.Component {
     static propTypes = {
@@ -174,7 +175,7 @@ export default class RoomHeader extends React.Component {
         if (this.props.room) {
             roomAvatar = <DecoratedRoomAvatar
                 room={this.props.room}
-                avatarSize={32}
+                avatarSize={SdkConfig.avatarSize}
                 tag={DefaultTagID.Untagged} // to apply room publicity badging
                 oobData={this.props.oobData}
                 viewAvatarOnClick={true}

@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+@import "../../themes/light/css/_light.scss";
 
 .mx_UserMenu {
     // to make the menu button sort of aligned with the explore button below
@@ -71,11 +72,11 @@ limitations under the License.
         .mx_UserMenu_userAvatarContainer {
             position: relative; // to make default avatars work
             margin-right: 8px;
-            height: 32px; // to remove the unknown 4px gap the browser puts below it
+            height: $user-avatar-size; // to remove the unknown 4px gap the browser puts below it
             padding: 3px 0; // to align with and without using doubleName
 
             .mx_UserMenu_userAvatar {
-                border-radius: 32px; // should match avatar size
+                border-radius: $user-avatar-border-radius;
                 object-fit: cover;
             }
         }

@@ -37,7 +37,7 @@ limitations under the License.
         // The combined height must be set in the LeftPanel component for sticky headers
         // to work correctly.
         padding-bottom: 8px;
-        height: 24px;
+        max-height: 24px;
         color: $roomlist-header-color;
 
         .mx_RoomSublist_stickable {
@@ -88,12 +88,11 @@ limitations under the License.
 
         .mx_RoomSublist_auxButton,
         .mx_RoomSublist_menuButton {
-            margin-left: 8px; // should be the same as the notification badge
+            margin-left: 8px;
             position: relative;
             width: 24px;
             height: 24px;
             border-radius: 32px;
-
             &::before {
                 content: '';
                 width: 16px;
@@ -192,7 +191,7 @@ limitations under the License.
         }
 
         .mx_RoomSublist_resizerHandles_showNButton {
-            flex: 0 0 32px;
+            flex: 0 0 $mx-RoomSublist-resizerHandles-showNButton-bottom;
         }
 
         .mx_RoomSublist_resizerHandles {
@@ -235,7 +234,7 @@ limitations under the License.
         // Update the render() function for RoomSublist if these change
         // Update the ListLayout class for minVisibleTiles if these change.
         height: 24px;
-        padding-bottom: 4px;
+        padding-bottom: $mx-RoomSublist-showNButton-padding-bottom;
 
         // We create a flexbox to cheat at alignment
         display: flex;
@@ -294,8 +293,8 @@ limitations under the License.
             .mx_RoomSublist_auxButton {
                 order: 2;
                 visibility: visible;
-                width: 32px !important; // !important to override hover styles
-                height: 32px !important; // !important to override hover styles
+                width: $mx-RoomSublist-auxButton-width!important; // !important to override hover styles
+                height: $mx-RoomSublist-auxButton-height !important; // !important to override hover styles
                 margin-left: 0 !important; // !important to override hover styles
                 background-color: $roomlist-button-bg-color;
                 margin-top: 8px;

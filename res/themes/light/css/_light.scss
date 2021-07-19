@@ -22,14 +22,27 @@ $primary-fg-color: #2e2f32;
 $secondary-fg-color: #737D8C;
 $tertiary-fg-color: #8D99A5;
 $header-panel-bg-color: #f3f8fd;
-
+$user-avatar-size: 32px;
+$mx-InviteDialog-goButton-margin-left:10px;
+$mx-InviteDialog-padding-left:20px;
+$mx-InviteDialog-padding-right:0px;
+$mx-NewRoomIntro-margin-bottom: 64px;
+$mx-RoomHeader-e2eIcon-padding:0px;
+$user-avatar-border-radius: 32px;
+$light-panel-padding-top: 12px;
+$mx-RoomHeader-wrapper-right:10px;
+$mx-RoomHeader-wrapper-left:18px;
+$mx-RoomSublist-auxButton-width:32px;
+$mx-RoomSublist-auxButton-height:32px;
+$mx-InviteDialog-addressBar-margin-bottom:10px;
 // typical text (dark-on-white in light skin)
 $primary-bg-color: #ffffff;
 $muted-fg-color: #61708b; // Commonly used in headings and relevant alt text
-
+$mx-RoomSublist-showNButton-padding-bottom:4px;
+$mx-RoomSublist-resizerHandles-showNButton-bottom:32px;
 // used for dialog box text
 $light-fg-color: #747474;
-
+$mx-Dialog-fixedWidth-max-width:2px;
 // used for focusing form controls
 $focus-bg-color: #dddddd;
 
@@ -388,7 +401,7 @@ $composer-shadow-color: rgba(0, 0, 0, 0.04);
 .mx_TopBanner h1 {
     background-image: url("/themes/element/img/logos/element-logo.svg");
     background-repeat: no-repeat;
-    background-size: 70px;
+    background-size: 100px;
     background-position-y: center;
     background-position: 20px;
     font-size: 0.5em;
@@ -396,7 +409,7 @@ $composer-shadow-color: rgba(0, 0, 0, 0.04);
     padding-bottom: 5px;
     margin-right: 0.25em;
     transition: max-height 0.25s ease-in;
-    height: 50px
+    height: 80px
 }
 
 // diff highlight colors
